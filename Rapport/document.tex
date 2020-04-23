@@ -1,0 +1,626 @@
+\documentclass[french,letterpaper, 12pt]{article}
+\usepackage[top = 1.6cm, left = 2cm, right = 2cm ]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{soulutf8}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage{epigraph}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{subfig}
+\usepackage{xcolor}
+\usepackage{eurosym}
+\usepackage{calc}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage{amsmath}
+\usepackage[Algorithme]{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumerate}
+\usepackage[french]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{etoolbox,refcount}
+\usepackage{listings}
+%
+%%%%%%% Sub librairies
+
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{decorations.pathreplacing,shapes,arrows,positioning}
+\usetikzlibrary{calc} 
+\usetikzlibrary{positioning}
+
+%
+%%%%% Custom commands
+%
+
+
+
+\lstset{
+	keywordstyle=\color{red},
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\itshape\color{gray},
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ffff,
+	rulecolor=\color{black}
+}
+
+%
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
+%
+\newcommand{\newlinealinea}{
+	~\\ \hspace*{0.5cm}}
+%
+\newcommand{\alinea}{
+	\hspace*{0.5cm}}
+%
+\newcommand{\alinealong}{
+	\hspace*{1.1cm}}
+%
+\newcommand{\alignparagraph}{
+	\hspace*{0.6cm}}
+%
+\newcommand{\red}[1]{
+	\textcolor{red}{#1}}
+%
+\newcommand{\green}[1]{
+	\textcolor{green}{#1}}
+%
+\newcommand{\point}{$\bullet\ $}
+%
+\makeatletter
+\newcommand*{\whiten}[1]{\llap{\textcolor{white}{{\the\SOUL@token}}\hspace{#1pt}}}
+\newcommand{\myul}[1]{
+	\underline{\smash{#1}}
+}
+\makeatother
+%
+\setlength{\fboxsep}{2pt}
+%
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+%
+%
+%%%%% Custom text
+%
+%
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother  
+%
+\renewcommand*\sfdefault{phv}
+\renewcommand*\rmdefault{ppl}
+%
+\renewcommand\epigraphflush{flushright}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.7\textwidth}
+%
+\definecolor{titlepagecolor}{cmyk}{0.24,0.92,0.78,0.25}
+\definecolor{red}{cmyk}{0, 0.91, 0.91, 0.20}
+%
+\DeclareFixedFont{\titlefont}{T1}{phv}{\seriesdefault}{n}{0.375in}
+%
+%
+%%%%% Header
+%
+%
+\pagestyle{fancy}
+\lhead{Benjamin André}
+\rhead{MAB2 Sciences Informatiques}
+\cfoot{\thepage}
+%
+%
+%%%%% Title page. The following code is borrowed from: 
+%%%%%       http://tex.stackexchange.com/a/86310/10898
+%
+%
+\newcommand\titlepagedecoration{%
+	\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+	
+	\coordinate (aux1) at ([yshift=-70pt]current page.north east);
+	\coordinate (aux2) at ([yshift=-460pt]current page.north east);
+	\coordinate (aux3) at ([xshift=-6cm]current page.north east);
+	\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+	
+	\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+	\draw
+	(aux1) -- coordinate (a)
+	++(225:5) --
+	++(-45:5.1) coordinate (b);
+	\draw[shorten <= -10pt]
+	(aux3) --
+	(a) --
+	(aux1);
+	\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+	(b) --
+	++(225:2.2) --
+	++(-45:2.2);
+	\end{scope}
+	\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+	(aux4) --
+	++(225:0.8) --
+	++(-45:0.8);
+	\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+	\draw[shorten <= -10pt]
+	(aux2) --
+	++(225:3) coordinate[pos=0.45] (c) --
+	++(-45:3.1);
+	\draw
+	(aux2) --
+	(c) --
+	++(135:2.5) --
+	++(45:2.5) --
+	++(-45:2.5) coordinate[pos=0.3] (d);   
+	\draw 
+	(d) -- +(45:1);
+	\end{scope}
+	\end{tikzpicture}%
+}
+%%%%%%%%%%%%%%%%%%   ALGORITHM %%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\algorithmicrequire}{\textbf{Requis:}}
+\renewcommand{\algorithmicensure}{\textbf{Promet:}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
+\renewcommand{\algorithmicelsif}{\algorithmicelse\ \algorithmicif}
+\renewcommand{\algorithmicendif}{\algorithmicend\ \algorithmicif}
+\renewcommand{\algorithmicfor}{\textbf{pour}}
+\renewcommand{\algorithmicforall}{\textbf{pour chaque}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+\renewcommand{\algorithmicendfor}{\algorithmicend\ \algorithmicfor}
+\renewcommand{\algorithmicwhile}{\textbf{tant que}}
+\renewcommand{\algorithmicendwhile}{\algorithmicend\ \algorithmicwhile}
+\renewcommand{\algorithmicloop}{\textbf{boucle}}
+\renewcommand{\algorithmicendloop}{\algorithmicend\ \algorithmicloop}
+\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{jusqu'à}}
+\renewcommand{\algorithmicprint}{\textbf{afficher}}
+\renewcommand{\algorithmicreturn}{\textbf{retourner}}
+\renewcommand{\algorithmictrue}{\textbf{vrai}}
+\renewcommand{\algorithmicfalse}{\textbf{faux}}
+
+\renewcommand{\algorithmicand}{\textbf{et}}
+\renewcommand{\algorithmicor}{\textbf{ou}}
+
+
+%------------- MY ENVS --------%
+\newcounter{note}[section]
+\newenvironment{note}[1][]
+{	
+	
+	\refstepcounter{note}
+	
+	
+	
+	\begin{center}
+		\begin{tcolorbox}[note]
+			\includegraphics[width=0.5cm]{/home/benjamin/.config/texstudio/templates/user/note}
+			\textbf{\textcolor{lime!30!black}{Note \arabic{section}.\arabic{note}}} :
+			\begin{em}
+			}
+			{
+			\end{em}
+		\end{tcolorbox}	
+	\end{center}
+}
+
+
+
+\newcounter{question}[section]
+\newenvironment{question}[1][]
+{	
+	
+	\refstepcounter{question}
+	
+	
+	
+	\begin{center}
+		\begin{tcolorbox}[question]
+			\includegraphics[width=0.5cm]{/home/benjamin/.config/texstudio/templates/user/question}
+			\textbf{\textcolor{teal}{Question \arabic{section}.\arabic{question}}} :
+		}
+		{
+		\end{tcolorbox}	
+	\end{center}
+}
+
+
+\newcounter{attention}[section]
+\newenvironment{attention}[1][]
+{	
+	
+	\refstepcounter{attention}
+	
+	
+	
+	\begin{center}
+		\begin{tcolorbox}[attention]
+			\includegraphics[width=0.5cm]{/home/benjamin/.config/texstudio/templates/user/attention}
+			\textbf{\textcolor{red}{Attention \arabic{section}.\arabic{attention}}} :
+			\begin{bf}
+			}
+			{
+			\end{bf}
+		\end{tcolorbox}	
+	\end{center}
+}
+
+\newcommand{\todo}[1]{\textcolor{red}{\emph{\textbf{TODO} : #1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcounter{countitems}
+\newcounter{nextitemizecount}
+\newcommand{\setupcountitems}{%
+	\stepcounter{nextitemizecount}%
+	\setcounter{countitems}{0}%
+	\preto\item{\stepcounter{countitems}}%
+}
+\makeatletter
+\newcommand{\computecountitems}{%
+	\edef\@currentlabel{\number\c@countitems}%
+	\label{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\newcommand{\nextitemizecount}{%
+	\getrefnumber{countitems@\number\c@nextitemizecount}%
+}
+\newcommand{\previtemizecount}{%
+	\getrefnumber{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\makeatother    
+\newenvironment{AutoMultiColItemize}{%
+	\ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{3}}{}%
+		\setupcountitems\begin{itemize}}%
+		{\end{itemize}%
+		\unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{corollary}{Corrolaire}[theorem]
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{proof}{Preuve}[theorem]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+	
+	\begin{titlepage}
+		%
+		\noindent
+		%
+		\newgeometry{bottom = 2cm, top = 2.5cm}
+		\begin{center}
+			\includegraphics[scale=1.2]{res/UMONS}\\
+			\vspace*{0.3cm}
+			\includegraphics[scale=0.23]{res/FS_Logo}\\
+			\vspace*{2.5cm}
+			%
+			\titlefont Automates \par
+			%
+		\end{center}
+		\vspace*{3cm}
+		\hfill
+		%
+		\begin{minipage}{0.18\linewidth}
+			\begin{flushright}
+				\rule{0.5pt}{50pt}
+			\end{flushright}
+		\end{minipage}
+		%
+		\begin{minipage}{0.8\linewidth}
+			\begin{flushleft}
+				\textsf{\textbf{Étudiant:}} Benjamin André\\
+				\textsf{\textbf{Directrice:}} Véronique Bruyère\\
+				\today
+			\end{flushleft}
+		\end{minipage}
+		%
+		\vspace*{\fill}                                                             
+		%
+		\begin{center}
+			Faculté des Sciences $\bullet$ Université de Mons $\bullet$ 
+			Place du Parc 20 $\bullet$ B-7000 Mons
+		\end{center}
+		%
+		\titlepagedecoration
+		%
+	\end{titlepage}
+	%
+	%
+	%%%% Tables des matières
+	%
+	%
+	\newgeometry{top = 3cm, left = 2cm, right = 2cm, bottom=2.5cm}
+	\cleardoublepage
+	\tableofcontents
+	\newpage
+	
+	
+	\section{Automates utilisés}\label{sec:automatons}
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A)                    {$q_a$};
+		\node[state]         (B) [below right of=A] {$q_b$};
+		\node[state]         (C) [below left of=A] {$q_c$};
+		\node[accepting, state]         (D) [below right of=B] {$q_d$};
+		\node[state]         (E) [below left of=C]       {$q_e$};
+		\node[state]         (G) [below right of=E]       {$q_g$};
+		\node[state]         (F) [above right of=G]       {$q_f$};
+		
+		\path 	(A) 	edge              node {0} (C)
+		edge              node {1} (B)
+		(B) 	edge              node {0} (D)
+		edge [bend left]  node {1} (F)
+		(C) 	edge              node {0} (E)
+		edge              node {1} (F)
+		(D) 	edge [loop above] node {0,1} (D)
+		(E) 	edge [loop above] node {0,1} (E)
+		(F) 	edge              node {0} (D)
+		edge [bend left]  node {1} (B)
+		(G) 	edge              node {0} (E)
+		edge              node {1} (F);
+		\end{tikzpicture}
+		\caption{Automate $A_B$, exemple personnel}
+	\end{figure}
+
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 5cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state]	(A)					{$q_0$};
+		\node[state]			(B)	[right= of A]	{$q_1$};
+		\node[accepting,state]	(C) [below of=A]	{$q_2$};
+		\node[accepting,state]	(D)	[below of=B]	{$q_3$};
+		\node[accepting,state]	(E)	[below of=C]	{$q_4$};
+		\node[state]			(F)	[below of=D]	{$q_5$};
+		
+		\path
+		(A)	edge	[bend left]		node{0}		(B)
+		(A)	edge					node{1}		(C)
+		(B) edge	[bend left]		node{0}		(A)
+		(B) edge					node{1}		(D)
+		(C)	edge					node{0}		(E)
+		(C)	edge					node[near start]{1}		(F)
+		(D)	edge					node[near start, above]{0}		(E)
+		(D)	edge					node{1}		(F)
+		(E)	edge	[loop below]	node{0,1}	(E)
+		(F)	edge	[loop below]	node{0,1}	(F)
+		
+		; 
+		\end{tikzpicture}
+		\caption{Automate $A_H$, exemple d'un livre de référence\cite{Hopcroft79}}
+	\end{figure}
+	
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state]	(A)					{$q_0$};
+		\node[accepting,state]	(B)	[right= of A]	{$q_1$};
+		\node[state]			(C) [right= of B]	{$q_2$};
+		
+		\path
+		(A)	edge	[bend left]		node{b}		(B)
+		(A)	edge	[loop above]	node{a}		(A)
+		(B) edge	[bend left]		node{a}		(A)
+		(B) edge					node{b}		(C)
+		(C)	edge	[loop above]	node{a,b}	(C)
+		
+		; 
+		\end{tikzpicture}
+		\caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}
+	\end{figure}
+	
+	\section{Bases théoriques}\label{sec:theorie}
+	
+	\subsection{DFA}\label{sub:dfa}
+	Soit un ensemble de symboles $\Sigma$. Soient $\Sigma^* = \{ a_1a_2a_3...a_n | a_1,a_2,a_3,...,a_n \in \Sigma \}$, l'ensemble des mots de taille arbitraire qu'il est possible de former à partir de $\Sigma$ et $|w|, w \in \Sigma$ la longueur de $w$, le nombre de symboles utilisés. Si $|w|=0$, on note $w=\epsilon$.
+	
+	
+	Un automate est défini par $A = (Q, \Sigma, q_0, \delta, F)$ où
+	\begin{itemize}
+		\item $Q$ est un ensemble d'états, différenciés par leur indice $q_1, q_2, ..., q_n$ ou $n = |Q|$.
+		\item $\Sigma$ est un ensemble de symboles
+		\item $q_0 \in Q$ est l'état initial
+		\item $\delta : Q x \Sigma \rightarrow Q$ est la fonction de transition. A partir d'un état de $Q$, en fonction d'un symbole, elle retourne un nouvel état faisant partie de $Q$.
+		\item $F \subseteq Q$ est un ensemble d'état finaux.
+	\end{itemize}
+	 
+	 A définir
+	 \begin{itemize}
+	 	\item Accepter un langage
+	 	\item Congruence à droite
+	 \end{itemize}
+	 
+	\subsection{Théorème de Myhill-Nerode}
+	
+	\begin{theorem}
+		Les 3 énoncés suivants sont équivalents :
+		\begin{enumerate}
+			\item Un langage $L\subseteq\Sigma^*$ est accepté par un DFA
+			\item $L$ est l'union de certaines classes d'équivalence d'index fini respectant une relation d'équivalence et de congruence à droite
+			\item Soit la relation d'équivalence $R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$. $R_L$ est d'index fini.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}La preuve d'équivalence se fait en prouvant chaque implication de façon cyclique :\\
+		
+		$(1)\rightarrow(2)$ Soit un langage $L \subseteq \Sigma^*$ qui est accepté par un automate déterministe fini (ADF) $A$. Soit la relation $R_A : xR_Ay \Leftrightarrow \delta(q_0, x) = \delta(q_0, y)$ qui détermine si deux mots, une fois parcourus dans l'automates, finissent sur le même état.
+		
+		C'est une relation d'équivalence (réflexive, transitive et symétrique), et congruente à droite :
+		
+		\begin{itemize}
+			\item \textbf{Réflexivité :} Soit le mot $x \in \Sigma^*$. Alors, par définition, $xR_Mx \Leftrightarrow \delta(q_0, x) = \delta(q_0, x)$.
+			\item \textbf{Transitivité :} Soient les mots $x,y,z \in \Sigma^*$ tels que $xR_My$ et $yR_Mz$. Alors, $\delta(q_0, x) = \delta(q_0, y) = \delta(q_0, z)$ par la transitivité de l'égalité. Dès lors, $xR_Mz$
+			\item \textbf{Symétrie : } Soient les mots $x,y \in \Sigma^*$ tels que $xR_My$. Comme $\delta(q_0, x) = \delta(q_0, y)$, $\delta(q_0, y) = \delta(q_0, x)$. Donc, $yR_Mx$.
+			\item \textbf{Congruence à droite :} Soient les mots $x,y \in \Sigma^*$ tels que $xR_My$. Soit un mot $w \in \Sigma^*$. $\delta(q_0, xw) = \delta(\delta(q_0,x), w) = \delta(\delta(q_0,y), w) = \delta(q_0, yw)$.
+		\end{itemize}
+		
+		Il peut au plus y avoir une classe d'équivalence par état (valeurs possibles retournées par $\delta$). Ce nombre d'état étant fini dans $M$, $R_M$ est donc d'index fini. Le langage $L$ correspond aux mots menant à un état appartenant à $F$, et $F$ peut être  écrit comme une union d'état, qui correspondent à une classe d'équivalence de $R_M$ qui est bien d'index fini et respectant la congruence à droite.
+		
+		
+		$(2)\rightarrow(3)$ toute relation E de 2 est un refinement de RL du coup chaque c.eq est completement contenue dans une c.Eq de RL. on part de xRMy, cong droite
+		
+		$(3)\rightarrow(1)$ Mq RL cong droite xRLy, utiliser définitions 
+	\end{proof}
+
+
+	\begin{corollary}
+		Possibilité de créer l'automate canonique...
+	\end{corollary}
+
+	 
+	\subsection{Table Filling Algorithm}
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A)                    {$q_a$};
+		\node[state]         (B) [below right of=A] {$q_b$};
+		\node[state]         (C) [below left of=A] {$q_c$};
+		\node[accepting, state]         (D) [below right of=B] {$q_d$};
+		\node[state]         (E) [below left of=C]       {$q_e$};
+		\node[state]         (G) [below right of=E]       {$q_g$};
+		\node[state]         (F) [above right of=G]       {$q_f$};
+		
+		\path 	(A) 	edge              node {0} (C)
+						edge              node {1} (B)
+				(B) 	edge              node {0} (D)
+						edge [bend left]  node {1} (F)
+				(C) 	edge              node {0} (E)
+						edge              node {1} (F)
+				(D) 	edge [loop above] node {0,1} (D)
+				(E) 	edge [loop above] node {0,1} (E)
+				(F) 	edge              node {0} (D)
+						edge [bend left]  node {1} (B)
+				(G) 	edge              node {0} (E)
+						edge              node {1} (F);
+		\end{tikzpicture}
+		\caption{Automate $A_1$}
+	\end{figure}
+	
+		
+	L'état $q_g$ n'est pas atteignable : il peut être simplement supprimé.
+		
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A)                    {$q_a$};
+		\node[state]         (B) [below right of=A] {$q_b$};
+		\node[state]         (C) [below left of=A] {$q_c$};
+		\node[accepting,state]         (D) [below right of=B] {$q_d$};
+		\node[state]         (E) [below left of=C]       {$q_e$};
+		\node[state]         (F) [below right of=C]       {$q_f$};
+		
+		\path 	(A) 	edge              node {0} (C)
+		edge              node {1} (B)
+		(B) 	edge              node {0} (D)
+		edge [bend left]  node {1} (F)
+		(C) 	edge              node {0} (E)
+		edge              node {1} (F)
+		(D) 	edge [loop above] node {0,1} (D)
+		(E) 	edge [loop above] node {0,1} (E)
+		(F) 	edge              node {0} (D)
+		edge [bend left]  node {1} (B);
+		\end{tikzpicture}
+		\caption{Automate $A_2$}
+	\end{figure}
+	
+	
+	\begin{figure}
+		\centering
+		\begin{tabular}{ccccccc}
+			\cline{2-2}
+			\multicolumn{1}{c|}{B} & \multicolumn{1}{c|}{x} &&&&\\
+			\cline{2-3}
+			\multicolumn{1}{c|}{C} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&&&\\
+			\cline{2-4}
+			\multicolumn{1}{c|}{D} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&\\
+			\cline{2-5}
+			\multicolumn{1}{c|}{E} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\\
+			\cline{2-6}
+			\multicolumn{1}{c|}{F} & \multicolumn{1}{c|}{x} & \multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
+			\cline{2-6}
+			\multicolumn{1}{c}{} & A&B&C&D&E\\
+			
+		\end{tabular}
+		\caption{Table filling pour $A_2$, décelant des équivalences d'états}
+	\end{figure}
+	
+	Par l'algorithme de minimisation, on obtient $A_3$. De cet automate, on peut déduire une écriture de $L$ sous forme d'expression régulière : $(1|01)1^*0(0|1)^*$
+		
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A)                    {$q_a$};
+		\node[state]         (B) [below right of=A] {$q_b$};
+		\node[state]         (C) [below left of=A] {$q_c$};
+		\node[accepting, state]         (D) [below right of=B] {$q_d$};
+		\node[state]         (E) [below left of=C]       {$q_e$};
+		
+		\path 	
+		(A) 	edge              node {0} (C)
+				edge              node {1} (B)
+		(B) 	edge              node {0} (D)
+				edge [loop above] node {1} (B)
+		(C) 	edge              node {0} (E)
+				edge              node {1} (B)
+		(D) 	edge [loop above] node {0,1} (D)
+		(E) 	edge [loop above] node {0,1} (E);
+		\end{tikzpicture}
+		\caption{Automate $A_3$}
+	\end{figure}
+
+	\section{Velleda}\label{sec:velleda}
+	Complexité 4.4.2, bad pair pq, rs q et q' vont sur un meme p Attention a bien comprendre le cas de base, utilisation du mot témoin w qui différencie. La contradiction est sur la table pas sur w le plus petit (c'est un élemenet qu'on a introduit, ça nous avance à rien de le contredire)
+
+	Fig 4.13 + Exemple + exemple preuve éq minimaux
+	
+	A rédiger, DFA/Notations, Rédiger, Avec des exemples persos
+	
+	Prouver Reflexif, transitif, symetrique
+	
+	Lire 4.23
+	
+	Important : la notion de congruence à droite
+	
+	Angluin : créer un contre-exemple
+	
+	4.24.3 tout état d'une classe S a une transition vers un état de la classe T par construction de la table
+	
+	
+	\newpage
+	\bibliographystyle{siam}
+	\bibliography{refs.bib}
+	
+\end{document}
