@@ -434,6 +434,51 @@
 	
 	\section{Bases théoriques}\label{sec:theorie}
 	
+	\subsection{Alphabet}
+	
+	Un alphabet, nommé par convention $\Sigma$ est un ensemble fini et non vide de symboles.
+	Voici certains exemples d'alphabets :
+	\begin{itemize}
+		\item $\Sigma = \{0,1,2,3,4,5,6,7,8,9\}$, l'alphabet des chiffres
+		\item $\Sigma = \{a,b,c,...,z,A,B,C,...,Z\}$, l'alphabet latin
+		\item $\Sigma = \{0,1\}$ l'alphabet binaire
+	\end{itemize}
+
+	\subsection{Mots}
+	
+	Comme $\Sigma$ est un ensemble, on peut définir $\Sigma^k$, qui donne des k-uples de symboles, appartenant tous à $\Sigma$.
+	
+	Un mot $w$ de taille $|w|=k$ est un ensemble de symboles provenant de $\Sigma^k$. Dans le cas particulier où $k=0$, on note le mot vide (sans symbole) $w=\epsilon$.
+	
+	De façon générale, $w$ est un mot sur $\Sigma$ si il existe $k$ tel que $w \in \Sigma^k$. Par convention, les mots sont nommés par une lettre minuscule, souvent $w,x,y,z$. 
+	
+	L'ensemble de tous ces mots possible sur $\Sigma$ est noté $\Sigma^*$. Cet ensemble est infini.
+	
+
+	\subsection{Expression régulière}
+			\todo{concatenation}
+	
+	\subsection{Langage}
+	
+	Un langage $L$ est défini sur un alphabet $\Sigma$. $L$ est un ensemble de mots sur cet alphabet : $L \subseteq \Sigma^*$. Comme $\Sigma^*$ contient une infinité de mots, $L$ est susceptible de ne pas être fini non plus.
+	
+	Par exemple, par rapport à tous les mots disponibles avec les lettres de l'alphabet latin ($\Sigma^*$), seulement certains font partie de la langue française ($L$).
+	
+	$L$ peut être défini  :
+	\begin{itemize}
+		\item en énumérant les mots en faisant partie : $L=\{12,35,42,7,0\}$
+		\item via un notation ensembliste : $L=\{0^k1^j|k+j=7\}$ ou $L=\{w|w \text{ est un mot français}\}$
+	\end{itemize}
+	Dans ces deux cas, $\Sigma$ est souvent implicite.
+	
+	\todo{Représentation patate des langages et régulier}
+	
+	Parmi tous les langages possibles, certains possèdent la propriété d'être réguliers. Ceux-ci ont la caractéristique supplémentaire de pouvoir être définis par une expression régulière. Un des conséquences de cette propriété est qu'ils peuvent être représentés par un automate déterministe fini.
+	
+	
+	
+	
+	
 	\subsection{DFA}\label{sub:dfa}
 	Soit un ensemble de symboles $\Sigma$. Soient $\Sigma^* = \{ a_1a_2a_3...a_n | a_1,a_2,a_3,...,a_n \in \Sigma \}$, l'ensemble des mots de taille arbitraire qu'il est possible de former à partir de $\Sigma$ et $|w|, w \in \Sigma$ la longueur de $w$, le nombre de symboles utilisés. Si $|w|=0$, on note $w=\epsilon$.
 	
@@ -601,22 +646,6 @@
 		\caption{Automate $A_3$}
 	\end{figure}
 
-	\section{Velleda}\label{sec:velleda}
-	Complexité 4.4.2, bad pair pq, rs q et q' vont sur un meme p Attention a bien comprendre le cas de base, utilisation du mot témoin w qui différencie. La contradiction est sur la table pas sur w le plus petit (c'est un élemenet qu'on a introduit, ça nous avance à rien de le contredire)
-
-	Fig 4.13 + Exemple + exemple preuve éq minimaux
-	
-	A rédiger, DFA/Notations, Rédiger, Avec des exemples persos
-	
-	Prouver Reflexif, transitif, symetrique
-	
-	Lire 4.23
-	
-	Important : la notion de congruence à droite
-	
-	Angluin : créer un contre-exemple
-	
-	4.24.3 tout état d'une classe S a une transition vers un état de la classe T par construction de la table
 	
 	
 	\newpage
