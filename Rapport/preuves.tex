@@ -1,0 +1,25 @@
+\subsection{Théorème de Myhill-Nerode}
+	
+	\begin{theorem}
+		Les 3 énoncés suivants sont équivalents :
+		\begin{enumerate}
+			\item Un langage $L\subseteq\Sigma^*$ est accepté par un DFA
+			\item $L$ est l'union de certaines classes d'équivalence d'index fini respectant une relation d'équivalence et de congruence à droite
+			\item Soit la relation d'équivalence $R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$. $R_L$ est d'index fini.
+		\end{enumerate}
+	\end{theorem}
+	
+	\begin{proof}La preuve d'équivalence se fait en prouvant chaque implication de façon cyclique :\\
+		
+		$(1)\rightarrow(2)$ 
+		
+		
+		$(2)\rightarrow(3)$ toute relation E de 2 est un refinement de RL du coup chaque c.eq est completement contenue dans une c.Eq de RL. on part de xRMy, cong droite
+		
+		$(3)\rightarrow(1)$ Mq RL cong droite xRLy, utiliser définitions 
+	\end{proof}
+
+
+	\begin{corollary}
+		Possibilité de créer l'automate canonique...
+	\end{corollary}
