@@ -1,3 +1,6 @@
+Cette section repose sur les bases théoriques, principalement sur l'automate et la relation $R_M$, ainsi que le théorème de Myhill-Nérode, pour donner l'algorithme de remplissage de table (Table Filling Algorithme). A partir de celui-ci, les questions de minimisation, équivalence et constructions d'automates sont explorées.
+
+
 \subsection{Table Filling Algorithm}\label{ss:tfa}
 
 Le \emph{Table Filling Algorithm} permet, pour un automate, de déterminer quels états sont équivalents. Il repose sur la définition de la relation $R_M$ définie en \ref{ss:rm}
@@ -88,6 +91,21 @@ La première étape est de remplir la table avec l'algorithme précédant. Tout 
 	\caption{Table filling pour $A_2$, décelant des équivalences d'états}
 	\label{fig:ta2}
 \end{figure}
+
+
+\subsubsection{Complexité}
+
+Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
+
+Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $O(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $O(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $O(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $O(kn^4)$.
+
+Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables. 
+
+Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.O(n^2)=O(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
+
+Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $O(n^2)$, ce qui donne $O(kn^2)$ pour cette exploration.
+
+La complexité totale revient à $O(kn^2)$.
 
 
 

@@ -1,3 +1,5 @@
+Cette section pose les bases théoriques et les conventions nécessaires à la compréhension des sections suivantes. De plus, certaines propriétés importantes sont énoncées et démontrées.
+
 	\subsection{Alphabet}
 	
 	Un alphabet, nommé par convention $\Sigma$ est un ensemble fini et non vide de symboles.
@@ -154,7 +156,7 @@
 	 	\caption{Automate $A_B$, exemple personnel}\label{fig:ab}
 	 \end{figure}
 	 
-	 Le gain de clarté sur la structure se fait par une perte d'efficacité pour suivre les transitions, surtout quand le graphe est complexe et les arcs s'intersectent. De plus, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis à part. $q_0$ et $F$ sont respectivement représenté par la flèche entrante et le double cercle.
+	 Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part. $q_0$ et $F$ sont respectivement représenté par la flèche entrante et le double cercle.
 	 
 	 \subsubsection{Chemin}
 	 
@@ -177,19 +179,20 @@
 	 
 	 \subsubsection{La relation $R_M$}\label{ss:rm}
 	 
-	 Soit un automate $M$. Définissons la relation $R_M$ entre deux états : $$xR_My \iff (\forall w \in \Sigma^*, \hat{\delta}(x,w) \in L_M \iff \hat{\delta}(y,w) \in L_M)$$
+	 Soit un automate $M$. Définissons la relation $R_M$ entre deux états : $$xR_My \iff (\forall w \in \Sigma^*, \hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w) \in F)$$
 	 
-	 Intuitivement, ces deux états sont en relation si tout mot lu à partir de celui-ci mène à la même conclusion sur l'appartenance au langage. Il s'agit en fait d'une relation d'équivalence. En effet, cette relation est :
+	 Intuitivement, ces deux états sont en relation si tout mot lu à partir de celui-ci mène à des états étant simultanément acceptants ou non. Il s'agit d'une relation d'équivalence. En effet, cette relation est :
 	 
 	 \begin{itemize}
-	 	\item \textbf{Réflexive :} Soient un état $x \in Q_M$ et $w \in \Sigma^*$. Alors, $\delta(x,w) \iff \hat{\delta}(x,w)$ et par définition, $xR_Mx$.
-	 	\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \iff \hat{\delta}(y,w)$ et $\hat{\delta}(y,w) \iff \hat{\delta}(z,w)$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \iff \hat{\delta}(z,w)$. On a donc $xR_Mz$.
-	 	\item \textbf{Symétrique : } Soient les états $x,y \in Q_M$ tels que $xR_My$ et un mot $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x, w) \iff \hat{\delta}(y, w)$. En lisant la double implication depuis la droite, on a bien $\hat{\delta}(y, w) \iff \hat{\delta}(x, w)$ et donc $yR_Mx$.
-	 	\item De plus, la relation est \textbf{congruente à droite :} si la relation est vraie pour deux état, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_My$. Soit un symbole $a \in \Sigma$. Par hypothèse, $$\forall w \in \Sigma^*, \hat{\delta}(x, w) \iff \hat{\delta}(y, w)$$
+	 	\item \textbf{Réflexive :} Soient un état $x \in Q_M$ et $w \in \Sigma^*$. Alors, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(x,w) \in F$ et par définition, $xR_Mx$.
+	 	\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Mz$.
+	 	\item \textbf{Symétrique : } Soient les états $x,y \in Q_M$ tels que $xR_My$ et un mot $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x, w)\in F \iff \hat{\delta}(y, w)\in F$. En lisant la double implication depuis la droite, on a bien $\hat{\delta}(y, w) \in F\iff \hat{\delta}(x, w)\in F$ et donc $yR_Mx$.
+	 	\item De plus, la relation est \textbf{congruente à droite :} si la relation est vraie pour deux état, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_My$. Soit un symbole $a \in \Sigma$. Par hypothèse, 
+	 	$$\forall w \in \Sigma^*, \hat{\delta}(x, w) \in F \iff \hat{\delta}(y, w) \in F$$
 	 	C'est donc vrai en particulier pour $w = au, u \in \Sigma*$. Dès lors,
-	 	$$\hat{\delta}(x, au) \iff \hat{\delta}(y, au)$$
-	 	$$\hat{\delta}(\delta(x,a),u) \iff\hat{\delta}(\delta(y,a),u)$$
-	 	$$\hat{\delta}(p,u) \iff \hat{\delta}(q,u)$$
+	 	$$\hat{\delta}(x, au) \in F\iff \hat{\delta}(y, au)\in F$$
+	 	$$\hat{\delta}(\delta(x,a),u) \in F\iff\hat{\delta}(\delta(y,a),u)\in F$$
+	 	$$\hat{\delta}(p,u) \in F\iff \hat{\delta}(q,u)\in F$$
 	 \end{itemize}
 	 
 	 Deux informations importantes découlent des ces caractéristiques : 

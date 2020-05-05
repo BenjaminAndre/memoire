@@ -1,3 +1,8 @@
+Cette section apporte le détail sur la relation de Myhill-Nérode, en prouve les propriétés avant d'en faire l'usage dans le théorème du même nom.
+
+
+
+
 \subsection{Relation de Myhill-Nérode}
 
 Soit un langage $L$ sur un alphabet $\Sigma$.
@@ -36,7 +41,7 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 	
 	\begin{proof}La preuve d'équivalence se fait en prouvant chaque implication de façon cyclique :\\
 		
-		$(1)\rightarrow(2)$ Supposons que (1) soit vrai, c'est à dire que le langage $L$ est accepté par un automate déterministe fini $A$. Considérons la relation d'équivalence $R_M$ étant vraie pour les mots $x,y$ si $\hat{\delta}(q_0,x)=\hat{\delta}(q_0,y)$ (définie en \ref{ss:rm}). Il y a été prouvé qu'elle est congruente à droite. Comme il y a au plus une classe d'équivalence pour $R_M$ par état de $A$. Comme ce nombre d'états est fini, $R_M$ est d'index fini. De plus, $L$ est l'union de classes contenant un mot $w$ tel que $\hat{\delta}(q_0,w) \in F$, (or, ce chemin retourne un état. Il s'agit donc d'une union des classes correspondant aux états acceptants).
+		$(1)\rightarrow(2)$ Supposons que (1) soit vrai, c'est à dire que le langage $L$ est accepté par un automate déterministe fini $A$. Considérons la relation d'équivalence $R_M$ étant vraie pour les mots $x,y$ si $\hat{\delta}(q_0,x)\in F \iff \hat{\delta}(q_0,y)\in F$. Elle a été définie en \ref{ss:rm}. Il y est prouvé qu'elle est congruente à droite. Comme il y a au plus une classe d'équivalence pour $R_M$ par état de $A$. Comme ce nombre d'états est fini, $R_M$ est d'index fini. De plus, $L$ est l'union de classes contenant un mot $w$ tel que $\hat{\delta}(q_0,w) \in F$, (or, ce chemin retourne un état. Il s'agit donc d'une union des classes correspondant aux états acceptants).
 		
 		$(2)\rightarrow(3)$ Montrons que pour toute relation $E$ satisfaisant (2), chaque classe est intégralement contenue dans une seule classe de $R_L$. Ces classes étant d'index fini, c'est un argument suffisant pour déduire que $R_L$ est d'index fini. Considérons $x,y$ tels que $xEy$. Comme $E$ est congruente à droite, pour tout mot $z \in \Sigma^*$, on sait que $xzEyz$. Comme $L$ est un union de ces classes d'équivalence, $xzEyz$ implique que $xz \in L \Leftrightarrow yz \in L$, ce qui revient à $xR_Ly$. Cela signifie que tout mot dans la classe d'équivalence de $x$ définie par $E$ se retrouve dans la même classe d'équivalence que $x$ par $R_L$. Ce qui permet de conclure que chaque classe d'équivalence de $E$ est contenue dans une classe d'équivalence de $R_L$. 
 	
