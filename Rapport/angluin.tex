@@ -1,0 +1,334 @@
+
+L'algorithme d'Angluin repose, en plus des éléments précédents sur quatre concepts :
+
+\begin{itemize}
+	\item Une table d'observation
+	\item La relation $R_O$, se basant sur la table d'observation et semblable à la relation $R_L$
+	\item La propriété de fermeture (closure en anglais)
+	\item La propriété de cohérence (consistence en anglais)
+\end{itemize}
+
+Cette section commence par décrire cette table en \ref{ss:a_tblo}, la relation $R_O$ en \ref{ss:a_ro}, la fermeture en \ref{ss:a_fermeture}, la cohérence en \ref{ss:a_coherence}.
+
+Une fois toutes ces bases posées, une exécution de l'algorithme sur un exemple est proposée en \ref{ss:a_exemple}, suivie du fonctionnement formel de l'algorithme et des preuves sur son exactitude et sa complexité en \ref{ss:a_algo}, \ref{ss:a_proof} et \ref{ss:a_comp}.
+
+
+\subsection{Table d'observation}\label{ss:a_tblo}
+
+\subsection{Relation $R_O$}\label{ss:a_ro}
+
+\subsection{Fermeture}\label{ss:a_fermeture}
+
+La propriété de fermeture (closure) s'exprime mathématiquement par 
+
+$$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
+
+En pratique, pour vérifier cette propriété, il suffit de de suivre cet algorithme, expliqué de façon visuelle sur la table O :
+
+\begin{algorithm}[H]
+	\begin{algorithmic}[1]
+		\ENSURE si la fermeture est respectée ou non
+		
+		\FORALL {élément $w$ de la section $R$}
+		\FORALL {symbole $a$ dans $\Sigma$}		
+			\IF {$wa$ est dans $R$} 
+				\STATE continuer
+			\ELSE
+				\STATE \COMMENT{$wa$ est dans $R.\Sigma$ par construction}
+				\IF {La ligne de $wa$ dans $T$ est différente de celle de $w$}
+					\RETURN Faux
+				\ENDIF
+			\ENDIF
+		\ENDFOR
+		\ENDFOR
+		\RETURN Vrai
+	\end{algorithmic}
+	\caption{Vérification de la fermeture}\label{alg:closure}
+\end{algorithm}
+
+\subsection{Cohérence}\label{ss:a_coherence}
+
+La propriété de cohérence (consistence) se définit mathématiquement comme 
+
+$$ \forall u,v \in R, u R_O v \Rightarrow \forall a \in \Sigma, ua R_O va$$
+
+Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même ligne dans $T$ et vérifier, pour chaque symbole ($a$), s'ils ($ua,va$) ont la même ligne dans $T$.
+
+
+
+\subsection{Exemple}\label{ss:a_exemple}
+Soit l'automate $A_3$ construit à la section \ref{ss:miniauto} sur la minimisation. L'automate $A_4$ recopié ici n'est qu'une isomorphie : les symboles $\{0,1\}$ ont été remplacés par $\{a,b\}$ pour plus de lisibilité dans les tables d'observation.
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+	
+	\tikzstyle{every state}=[circle]
+	
+	\node[initial,state] (A)                    {$q_a$};
+	\node[state]         (B) [below right of=A] {$q_b$};
+	\node[state]         (C) [below left of=A] {$q_c$};
+	\node[accepting, state]         (D) [below right of=B] {$q_d$};
+	\node[state]         (E) [below left of=C]       {$q_e$};
+	
+	\path 	
+	(A) 	edge              node {a} (C)
+	edge              node {b} (B)
+	(B) 	edge              node {a} (D)
+	edge [loop above] node {b} (B)
+	(C) 	edge              node {a} (E)
+	edge              node {b} (B)
+	(D) 	edge [loop above] node {a,b} (D)
+	(E) 	edge [loop above] node {a,b} (E);
+	\end{tikzpicture}
+	\caption{Automate $A_4$}
+\end{figure}
+
+\todo{Marquer la différence entre $R_L$ et $R_O$}
+
+\subsubsection{Première itération}
+
+L'algorithme d'Angluin précise, pour son cas de base, une initialisation de la table $T$ avec les ensembles $R$ et $S$ contenant uniquement $\epsilon$. Le champ $R.\{a,b\}$ ($R.\Sigma$) est rempli via des requête d'appartenance sur les mots $a$ et $b$.
+
+\begin{minipage}{0.5\linewidth}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		$O_0$ & $\epsilon$\\
+		\hline
+		$\epsilon$ & 0\\
+		\hline
+		$a$ & 0\\
+		$b$ & 0\\
+		\hline
+	\end{tabular}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\centering
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		\tikzstyle{every state}=[circle]
+		\node[initial, state] (A) {$[[\epsilon]]$};
+		\path (A) edge [loop above] node {a,b} (A);
+		\end{tikzpicture}
+		\caption*{Automate $O_0$}
+	\end{figure}
+\end{minipage}
+
+
+\vspace{1cm}
+L'étape suivante consiste à vérifier la \emph{closure} de la table d'observation $O_0$. Mathématiquement :
+
+$$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_L v$$
+
+Intuitivement, pour chaque symbole (ici, $\{a,b\}$, et ce sera vrai jusqu'à la dernière itération), tout mot candidat (dans $R$, la partie supérieure de la table) doit se retrouver, complété de ce symbole, dans une classe d'équivalence d'un autre candidat de $R$. Ici, de toute évidence, les mots $a$ et $b$ sont dans la même classe d'équivalence que $\epsilon$. Dès lors, la propriété de \emph{closure} est respectée.
+
+Si la \emph{closure} est respectée, alors la question de la \emph{consistence} (cohérence) se pose. Mathématiquement : 
+
+$$ \forall u,v \in R, u R_L v \Rightarrow \forall a \in \Sigma, ua R_L va$$
+
+Intuitivement, si deux candidats semblent être dans la même classe d'équivalence (leur lignes dans la table supérieure sont identiques), alors pour n'importe quel symbole, les deux nouveaux mots sont également dans une même classe d'équivalence (leur lignes, potentiellement dans la partie inférieure de la table, sont identiques). N'ayant qu'un seul candidat, cette propriété est forcément respectée ($R_L$ est réflexive).
+
+Les deux propriétés étant respectées, les classes d'équivalences sont calculées (trivialement ici), et un automate $O_0$ est proposé à l'enseignant pour vérification.
+
+Sur cette itération, un automate initial a été proposé, et aucun état final ne pouvant être atteint avec un seul symbole, la version est minime.
+
+\subsubsection{Seconde itération}
+
+L'enseignant répond que non, les automates ne sont pas équivalents. Il fourni le contre-exemple $ba$. Comme il est rejeté par $O_0$, cela signifie qu'il est accepté par $A_4$. Une nouvelle table est alors construite, en ajoutant $ba$ et ses préfixes (ici, juste $b$) à $R$. $R.\Sigma$ est calculé et les mots n'ayant pas encore reçu une valeur dans $T$ sont soumis à l'enseignant pour un test d'appartenance.
+\vspace{1cm}
+
+\begin{minipage}{0.25\linewidth}
+	\centering
+	\begin{tabular}{|c|c|}
+		\hline
+		$O_1$ & $\epsilon$\\
+		\hline
+		$\epsilon$ & 0\\
+		\textcolor{red}{$b$} & \textcolor{red}{0}\\
+		\textcolor{red}{$ba$} & \textcolor{red}{1}\\
+		\hline
+		$a$ & 0\\
+		\textcolor{red}{$bb$} & \textcolor{red}{0}\\
+		\textcolor{red}{$baa$} & \textcolor{red}{1}\\
+		\textcolor{red}{$bab$} & \textcolor{red}{1}\\
+		\hline
+	\end{tabular}
+\end{minipage}
+\begin{minipage}{0.25\linewidth}
+	\centering
+	\begin{tabular}{|c|cc|}
+		\hline
+		$O_2$ & $\epsilon$ & \textcolor{red}{$a$}\\
+		\hline
+		$\epsilon$ & 0& \textcolor{red}{0}\\
+		$b$ & 0&\textcolor{red}{1}\\
+		$ba$ & 1&\textcolor{red}{1}\\
+		\hline
+		$a$ & 0&\textcolor{red}{0}\\
+		$bb$ & 0&\textcolor{red}{1}\\
+		$baa$ & 1&\textcolor{red}{1}\\
+		$bab$ & 1&\textcolor{red}{1}\\
+		\hline
+	\end{tabular}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	\centering
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial, state] (A) {$[[\epsilon]]$};
+		\node[state] (B) [right of=A] {$[[b]]$};
+		\node[accepting, state] [right of=B] (C) {$[[ba]]$};
+		
+		\path
+		(A) edge [loop above] node {a} (A)
+		(A) edge node {b} (B)
+		(B) edge node {a} (C)
+		(B) edge [loop above] node {b} (B)
+		(C) edge [loop above] node {a,b} (C);
+		
+		
+		\end{tikzpicture}
+		\caption*{Automate $O_2$}
+	\end{figure}
+\end{minipage}
+
+\vspace{1cm}
+Comme pour la première itération, la \emph{fermeture} est testée, suivie de la \emph{cohérence}. Celle-ci n'est pas respectée : si on considère les mots $\epsilon$ et $b$, qui ont la même ligne dans la table $T$ ($\epsilon R_O b$), le symbole $a$, on obtient les mots $a$ et $ba$ qui n'ont pas la même ligne : ($\not a R_O ba$). Le symbole $a$ est alors ajouté à $S$ et une nouvelle table $O_2$ est calculée.
+
+La fermeture étant déjà vérifiée, la question de la cohérence est reposée, et cette fois-ci elle est vérifiée ; l'automate est construit et proposé à l'enseignant.
+
+Sur cette itération, l'algorithme a reçu le mot $ba$ comme étant accepté. Il a du ajouter $a$ à $S$ pour permettre de différencier certains états. L'automate se voit ajouter les états $[[b]]$ et $[[ba]]$.
+
+\subsubsection{Troisième itération}
+
+Suivant toujours l'algorithme de comparaison d'automates détaillé dans la section \ref{sec:algorithmes}, l'enseignant découvre qu'ils sont différents. 
+
+Il sort le contre-exemple $aaba$. Si c'est un contre-exemple et qu'il est accepté par $O_2$, c'est qu'il ne l'est pas (0) par $A_4$. Une nouvelle table $O_3$ doit être construite.
+
+\begin{minipage}{0.33\linewidth}
+	\centering
+	\begin{tabular}{|c|cc|}
+		\hline
+		$O_3$ & $\epsilon$ & $a$\\
+		\hline
+		$\epsilon$ & 0 &0\\
+		\textcolor{red}{$a$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		$b$&0&1\\
+		\textcolor{red}{$aa$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		$ba$&1&1\\
+		\textcolor{red}{$aab$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		\textcolor{red}{$aaba$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		\hline
+		\textcolor{red}{$ab$}&\textcolor{red}{0}&\textcolor{red}{1}\\
+		$bb$&0&1\\
+		\textcolor{red}{$aaa$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		$baa$&1&1\\
+		$bab$&1&1\\
+		\textcolor{red}{$aabb$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		\textcolor{red}{$aabaa$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		\textcolor{red}{$aabab$}&\textcolor{red}{0}&\textcolor{red}{0}\\
+		\hline
+	\end{tabular}
+\end{minipage}
+\begin{minipage}{0.33\linewidth}
+	\centering
+	\begin{tabular}{|c|cc|}
+		\hline
+		$O_4$ & $\epsilon$ & $a$\\
+		\hline
+		$\epsilon$ & 0 &0\\
+		$a$&0&0\\
+		$b$&0&1\\
+		$aa$&0&0\\
+		\textcolor{red}{$ab$}&\textcolor{red}{0}&\textcolor{red}{1}\\
+		$ba$&1&1\\
+		$aab$&0&0\\
+		$aaba$&0&0\\
+		\hline
+		$bb$&0&1\\
+		$aaa$&0&0\\
+		\textcolor{red}{$aba$}&\textcolor{red}{1}&\textcolor{red}{1}\\
+		\textcolor{red}{$abb$}&\textcolor{red}{0}&\textcolor{red}{1}\\
+		$baa$&1&1\\
+		$bab$&1&1\\
+		$aabb$&0&0\\
+		$aabaa$&0&0\\
+		$aabab$&0&0\\
+		\hline
+	\end{tabular}
+\end{minipage}
+\begin{minipage}{0.33\linewidth}
+	\centering
+	\begin{tabular}{|c|cc|}
+		\hline
+		$O_5$ & $\epsilon$ & $a$\\
+		\hline
+		$\epsilon$ & 0 &0\\
+		$a$&0&0\\
+		$b$&0&1\\
+		$aa$&0&0\\
+		$ab$&0&1\\
+		$ba$&1&1\\
+		$aab$&0&0\\
+		\textcolor{red}{$aba$}&\textcolor{red}{1}&\textcolor{red}{1}\\
+		$aaba$&0&0\\
+		\hline
+		$bb$&0&1\\
+		$aaa$&0&0\\
+		$abb$&0&1\\
+		$baa$&1&1\\
+		$bab$&1&1\\
+		$aabb$&0&0\\
+		\textcolor{red}{$abaa$}&\textcolor{red}{1}&\textcolor{red}{1}\\
+		\textcolor{red}{$abab$}&\textcolor{red}{1}&\textcolor{red}{1}\\
+		$aabaa$&0&0\\
+		$aabab$&0&0\\
+		\hline
+	\end{tabular}
+\end{minipage}
+
+
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial, state] (A) {$[[\epsilon]]$};
+		\node[state] (B) [above right of=A] {$[[a]]$};
+		\node [state] (E) [right of=B] {$[[aa]]$};
+		\node[state] (C) [below right of =A] {$[[b]]$};
+		\node[accepting, state] [right of=C] (D) {$[[ba]]$};
+		
+		\path
+		(A) edge node {a} (B)
+		(A) edge node {b} (C)
+		(B) edge node {b} (C)
+		(B) edge node {a} (E)
+		(C) edge [loop below] node {b} (C)
+		(C) edge node {a} (D)
+		(D) edge [loop above] node {a,b} (D)
+		(E) edge [loop below] node {a,b} (E);
+		
+		\end{tikzpicture}
+		\caption*{Automate $O_5$}
+	\end{figure}
+
+
+Ayant reçu $aaba$, ce mot et tous ses préfixes sont ajoutés à la table. L'extension $R.\Sigma$ est recalculée et la table $O_3$ est construite.
+
+Ensuite, la question de la \emph{fermeture} est posée. Un manquement est détecté : le mot $a$. En effet, en lui ajoutant le symbole $b$, on obtient $ab$ qui n'est ni dans $R$ ni en relation $R_O$ avec $a$. $ab$ est alors ajouté à $R$, et $R.\Sigma$ est étendu. La nouvelle table, $O_4$ est de nouveau testée.
+
+$O_4$ ne respecte pas la fermeture : le mot $ab$, agrémenté du symbole $a$ donne le mot $aba$, qui n'est ni dans $R$ ni en relation avec $ab$. Le mot est ajouté à $R$, et la table est étendue. La nouvelle table, $O_5$ est à la fois fermée et cohérente.
+
+L'automate $O_5$ est alors proposé à l'enseignant pour vérification. Celui-ci est accepté (isomorphe à $A_4$). L'algorithme s'arrête et un automate minimal pour le langage a été construit. 
+
+\subsection{Algorithme}\label{ss:a_algo}
+
+\subsection{Preuve}\label{ss:a_proof}
+
+\subsection{Complexité}\label{ss:a_comp}
