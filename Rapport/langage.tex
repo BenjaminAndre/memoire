@@ -1,0 +1,99 @@
+Cette section pose différents concepts et notations pour arriver à la notion de langage. Celle-ci reprennent les notations proposées par Hopcroft et al. \cite{Hopcroft00}.
+
+
+\subsection{Alphabet}
+
+Un \emph{alphabet}, nommé $\Sigma$ par convention, est un ensemble fini et non vide de \emph{symboles}.
+
+\begin{exemple} Voici trois alphabets : 
+	\begin{itemize}
+		\item $\Sigma = \{0,1,2,3,4,5,6,7,8,9\}$, l'alphabet des chiffres
+		\item $\Sigma = \{a,b,c,...,z,A,B,C,...,Z\}$, l'alphabet latin
+		\item $\Sigma = \{0,1\}$, l'alphabet binaire
+	\end{itemize}
+\end{exemple}
+
+
+\subsection{Mots}
+
+Soit l'alphabet $\Sigma$ et un entier naturel $k$. Un \emph{mot} sur $\Sigma$ est une suite finie de $k$ éléments de $\Sigma$ notée
+$ w = a_1 \dots a_k $.
+
+L'entier $k$ est la \emph{longueur} de ce mot, qui peut être exprimée par $|w|=k$.
+
+\begin{exemple}
+	$w=01110010$ est un mot sur $\Sigma=\{0,1\}$
+\end{exemple}
+
+
+Le \emph{mot vide} est un mot de taille $k=0$, noté $w=\epsilon$.
+
+$\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$.
+	
+L'ensemble de tous les mots possibles sur $\Sigma$ est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
+
+La \emph{concaténation} de deux mots $w=a_1\dots a_k$ et $x=b_1\dots b_j$ est l'opération consistant à créer un nouveau mot $wx$, mot de taille $i=k+j$ s'écrivant $wx=a_1\dots a_kb_1\dots b_j$.
+
+\begin{exemple}
+	Soient les mots $x=41$ et $y=31$. Alors $xy=4131$ et $yx=3141$.
+\end{exemple}
+
+\begin{lemma}
+	$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$. Par définition de la concaténation, tout mot concaténé avec $\epsilon$ retourne le même mot. $\square$
+\end{lemma}
+
+\subsection{Langage}
+
+Un ensemble de mots $L$ de mots sur $\Sigma$ est un \emph{langage} \cite{Hopcroft00}. Alternativement, $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, le langage, noté $L$ peut l'être également.
+
+\begin{exemple} Voici des exemples, utilisant plusieurs modes de définition. $\Sigma$ y est implicite, mais il peut être donné explicitement.
+	\begin{itemize}
+		\item $L=\{12,35,42,7,0\}$, un ensemble défini explicitement
+		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ ne contenant pas $10$. Ici, $L$ est donné par notation ensembliste
+		\item L est donné par "Tous les noms de villes belges.". Ici $L$ est défini en français.
+		\item $\emptyset$ est un langage sur tout alphabet.
+		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
+	\end{itemize}
+\end{exemple}
+		
+\subsection{Expression régulière}
+
+\todo{formaliser, donner une source}
+Une expression régulière est une façon efficace de définir un langage. La construction de l'expression se fait de façon inductive.
+	
+Le cas de base est l'expression $e = a, a \in \Sigma$. Dès lors $L_e = {a}$ où $L_e$ est le langage donné par l'expression $e$.
+	
+Les autres règles sont inductives. Par ordre de priorité :
+\begin{itemize}
+	\item $e = (e_0)$ La mise en évidence. Ici, $L_e = \{w|w \in L_{e_0}\}$
+	\item $e = e_0a, a \in \Sigma$. La concaténation. Ici, $L_e = \{wa|w \in L_{e_0}\}$ \todo{généraliser}
+	\item $e = e_0+e_1$. L'union. Ici, $L_e = L_{e_0} \cup L_{e_1}$
+	\item $e = e_0^*$. La fermeture. Intuitivement, il s'agit de tous les mots qui peuvent être formé par une concaténation de mots définis par $e_0$, éventuellement aucun. Ici, $L_e = \{w_0w_1...w_k | k \in \mathbb{N}, w_0,w_1,...,w_k \in L_{e_0}\}$
+	\item $e = e_0^+$. La fermeture non nulle. Il s'agit de la fermeture mais avec toujours au moins un mot venant du langage défini par $e_0$. Ici, $L_e = \{w_0w_1...w_k | k \in \mathbb{N}^0, w_0,w_1,...,w_k \in L_{e_0}\}$
+\end{itemize}
+	
+Par exemple, on peut écrire l'expression $e_B = (1+01)1^*0(0+1)^*$.\\
+
+\todo{limiter les exemples mais les expliciter}\\
+\begin{minipage}{0.5\linewidth}
+	Les mots suivant appartiennent au langage défini par $e_B$ :
+	\begin{itemize}
+		\item 10
+		\item 010
+		\item 0110
+		\item 0111110
+		\item 0101101
+	\end{itemize}
+\end{minipage}
+\begin{minipage}{0.5\linewidth}
+	Ceux-ci n'en feraient pas partie
+	\begin{itemize}
+		\item 00
+		\item 1
+		\item 01
+		\item 0101
+		\item 11
+	\end{itemize}
+\end{minipage}
+	
+Un langage pouvant être écrit sous la forme d'une expression régulière est appelé langage régulier. Un des conséquences de cette propriété est qu'il peut être représenté par un automate déterministe fini. \todo{a prouver}
