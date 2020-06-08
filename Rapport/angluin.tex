@@ -57,31 +57,7 @@ Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même li
 
 
 \subsection{Exemple}\label{ss:a_exemple}
-Soit l'automate $A_3$ construit à la section \ref{ss:miniauto} sur la minimisation. L'automate $A_4$ recopié ici n'est qu'une isomorphie : les symboles $\{0,1\}$ ont été remplacés par $\{a,b\}$ pour plus de lisibilité dans les tables d'observation.
-\begin{figure}[H]
-	\centering
-	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	
-	\tikzstyle{every state}=[circle]
-	
-	\node[initial,state] (A)                    {$q_a$};
-	\node[state]         (B) [below right of=A] {$q_b$};
-	\node[state]         (C) [below left of=A] {$q_c$};
-	\node[accepting, state]         (D) [below right of=B] {$q_d$};
-	\node[state]         (E) [below left of=C]       {$q_e$};
-	
-	\path 	
-	(A) 	edge              node {a} (C)
-	edge              node {b} (B)
-	(B) 	edge              node {a} (D)
-	edge [loop above] node {b} (B)
-	(C) 	edge              node {a} (E)
-	edge              node {b} (B)
-	(D) 	edge [loop above] node {a,b} (D)
-	(E) 	edge [loop above] node {a,b} (E);
-	\end{tikzpicture}
-	\caption{Automate $A_4$}
-\end{figure}
+Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:miniauto} sur la minimisation.
 
 \todo{Marquer la différence entre $R_L$ et $R_O$}
 

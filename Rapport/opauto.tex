@@ -1,0 +1,333 @@
+\subsection{Équivalence avec une expression régulière}\label{ss:regexeq}
+
+\begin{proposition}
+	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
+\end{proposition}
+
+La preuve de cette proposition nécessite l'introduction de plusieurs notions théoriques telles que les automates non-déterministes finis (et leur variante en $\epsilon$). Elle est disponible dans le manuel de Hopcroft et al.\cite{Hopcroft79}.
+
+
+\subsection{Équivalence d'états}\label{ss:tfa}
+	 
+	 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rm. Celui-ci peut alors être simplifié. Une façon de détecter ces équivalences est de construire un tableau via l'\emph{algorithme de remplissage de tableau}.
+	 
+	 Celui-ci détecte les paires \emph{différenciables}, récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel qu'un chemin $\hdelta(p,w)$ mène à un état acceptant et $\hdelta(q,w)$ mène à un état non-acceptant ou vice-versa. $w$ sert alors de \emph{mot témoin}.
+	 
+	 \todo{Environnement algorithmicx ?}
+	 
+	 \textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$.
+	 
+	 \textbf{Pas de récurrence : } Soient $p,q$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$.
+	 
+	 \begin{theorem}
+	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de tableau, les états sont équivalents (ils respectent la relation \rm).
+	 \end{theorem}
+	 
+	 \begin{proof}
+	 	
+	 Considérons un automate déterministe fini quelconque \automaton. Supposons par l'absurde qu'il existe une paire d'états $\{p,q\}$ tels que :
+	 \begin{enumerate}
+	 		\item $p$ et $q$ ne sont pas distingués par l'algorithme de remplissage de table.
+	 		\item Les états ne sont pas équivalents, $\not pR_M q$. Par extension, il existe un mot témoin $w$ différenciant $p$ et $q$.
+	 \end{enumerate}
+	 	
+	 Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune distinguée par un mot témoin, il doit exister un paire distinguée par le mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court qui les distingue. Dès lors, soit $\hdelta(p,w)$ est acceptant, soit $\hdelta(q,w)$ l'est, mais pas les deux.
+	 	
+	 Ce mot $w$ ne peut pas être $\epsilon$. Auquel cas, la table aurait été remplie dès l'étape d'induction de l'algorithme. La paire $\{p,q\}$ ne serait pas une mauvaise paire, ne respectant pas l'hypothèse 1.
+	 
+	 $w$ n'étant pas $\epsilon$, $ |w| \ge 1$. Considérons les états $r = \delta(p,a_1)$ et $s=\delta(q,a_1)$. Ces états sont différenciés par $a_2a_3\dots a_n$ car $\hdelta(p,w) = \hdelta(r, a_2a_3\dots a_n)$ et $\hdelta(q,w) = \hdelta(s, a_2a_3\dots a_n)$ et $p$ et $q$ sont différenciables.
+	 
+	 Cela signifie qu'il existe un mot plus petit que $w$ qui différencie deux états: le mot $a_2a_3\dots a_n$. Comme on a supposé que $w$ est le mot le plus petit qui différencie une mauvaise paire, $r$ et $s$ ne peuvent pas être une mauvaise paire. Donc, l'algorithme a du découvrir qu'ils sont différenciables.
+	 	
+	 Cependant, le pas de récurrence impose que $\delta(p, a_1)$ et $\delta(q, a_1)$ mènent à deux états différentiables implique que $p$ et $q$ le sont aussi. On a une contradiction de notre hypothèse : $\{p,q\}$ n'est pas une mauvaise paire.
+	 
+	 Ainsi, s'il n'existe pas de mauvaise paire, c'est que chaque paire différenciable est reconnue par l'algorithme.
+	 \end{proof}
+	 
+	 \begin{exemple} Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
+	 
+	 \begin{figure}[H]
+	 	\centering
+	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+	 	
+	 	\tikzstyle{every state}=[circle]
+	 	
+	 	\node[initial,state] (A)                    {$q_0$};
+	 	\node[state]         (B) [below right of=A] {$q_1$};
+	 	\node[state]         (C) [below left of=A] {$q_2$};
+	 	\node[accepting,state]         (D) [below right of=B] {$q_3$};
+	 	\node[state]         (E) [below left of=C]       {$q_4$};
+	 	\node[state]         (F) [below right of=C]       {$q_5$};
+	 	
+	 	\path 	(A) 	edge              node {a} (C)
+	 	edge              node {b} (B)
+	 	(B) 	edge              node {a} (D)
+	 	edge [bend left]  node {b} (F)
+	 	(C) 	edge              node {a} (E)
+	 	edge              node {b} (F)
+	 	(D) 	edge [loop above] node {a,b} (D)
+	 	(E) 	edge [loop above] node {a,b} (E)
+	 	(F) 	edge              node {a} (D)
+	 	edge [bend left]  node {b} (B);
+	 	\end{tikzpicture}
+	 	\caption{Automate $A_2$}\label{fig:a2}
+	 \end{figure}
+	 
+	 La première étape est de remplir la table avec l'algorithme précédant. Tout état est distinguable de $q_3$ : il est le seul état acceptant. 5 cases peuvent déjà êtres cochées. Le reste de la table est remplie par induction.
+	 
+	 \begin{figure}[H]
+	 	\centering
+	 	\begin{tabular}{ccccccc}
+	 		\cline{2-2}
+	 		\multicolumn{1}{c|}{$q_1$} & \multicolumn{1}{c|}{x} &&&&\\
+	 		\cline{2-3}
+	 		\multicolumn{1}{c|}{$q_2$} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&&&\\
+	 		\cline{2-4}
+	 		\multicolumn{1}{c|}{$q_3$} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&\\
+	 		\cline{2-5}
+	 		\multicolumn{1}{c|}{$q_4$} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\\
+	 		\cline{2-6}
+	 		\multicolumn{1}{c|}{$q_5$} & \multicolumn{1}{c|}{x} & \multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
+	 		\cline{2-6}
+	 		\multicolumn{1}{c}{} & $q_0$&$q_1$&$q_2$&$q_3$&$q_4$\\
+	 		
+	 	\end{tabular}
+	 	\caption{Table filling pour $A_2$, décelant des équivalences d'états}
+	 	\label{fig:ta2}
+	 \end{figure}
+	 \end{exemple}
+	 
+	 \subsubsection{Complexité}
+	 
+	 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
+	 
+	 Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $O(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $O(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $O(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $O(kn^4)$.
+	 
+	 Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables. 
+	 
+	 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.O(n^2)=O(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
+	 
+	 Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $O(n^2)$, ce qui donne $O(kn^2)$ pour cette exploration.
+	 
+	 La complexité totale revient à $O(kn^2)$.
+	 
+	 \subsection{Équivalence d'automates}
+	 
+	 Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
+	 
+	 \begin{minipage}{0.4\linewidth}
+	 	\begin{figure}[H]
+	 		\centering
+	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 5cm, semithick, bend angle=10]
+	 		
+	 		\tikzstyle{every state}=[circle]
+	 		
+	 		\node[initial,state]	(A)					{$q_0$};
+	 		\node[state]			(B)	[right= of A]	{$q_1$};
+	 		\node[accepting,state]	(C) [below of=A]	{$q_2$};
+	 		\node[accepting,state]	(D)	[below of=B]	{$q_3$};
+	 		\node[accepting,state]	(E)	[below of=C]	{$q_4$};
+	 		\node[state]			(F)	[below of=D]	{$q_5$};
+	 		
+	 		\path
+	 		(A)	edge	[bend left]		node{a}		(B)
+	 		(A)	edge					node{b}		(C)
+	 		(B) edge	[bend left]		node{a}		(A)
+	 		(B) edge					node{b}		(D)
+	 		(C)	edge					node{a}		(E)
+	 		(C)	edge					node[near start]{b}		(F)
+	 		(D)	edge					node[near start, above]{a}		(E)
+	 		(D)	edge					node{b}		(F)
+	 		(E)	edge	[loop below]	node{a}	(E)
+	 		(E) edge					node{b} (F)
+	 		(F)	edge	[loop below]	node{a,b}	(F)
+	 		
+	 		; 
+	 		\end{tikzpicture}
+	 		\caption{Automate $A_H$, du livre d'Hopcraft et al. de 1979\cite{Hopcroft79} (Fig3.2)}\label{fig:ah}
+	 	\end{figure}
+	 \end{minipage}\hspace{0.2\linewidth}
+	 \begin{minipage}{0.4\linewidth}
+	 	\begin{figure}[H]
+	 		\centering
+	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1cm and 1cm, semithick, bend angle=10]
+	 		
+	 		\tikzstyle{every state}=[circle]
+	 		
+	 		\node[initial,state]	(A)					{$q_6$};
+	 		\node[accepting,state]	(B)	[right= of A]	{$q_7$};
+	 		\node[state]			(C) [right= of B]	{$q_8$};
+	 		
+	 		\path
+	 		(A)	edge					node{b}		(B)
+	 		(A)	edge	[loop above]	node{a}		(A)
+	 		(B) edge					node{b}		(C)
+	 		(B) edge	[loop above]	node{a}		(B)
+	 		(C)	edge	[loop above]	node{a,b}	(C)
+	 		
+	 		; 
+	 		\end{tikzpicture}
+	 		\caption{Automate $A_I$, provenant également de \cite{Hopcroft79}. Les états ont été renommés. }\label{fig:ai}
+	 	\end{figure}
+	 \end{minipage}
+	 
+	 Il est possible de remplir un tableau via l'algorithme éponyme. Pour ce faire, les deux automates sont considérés comme un seul dont les états sont disjoints.
+	 
+	 \begin{figure}[H]
+	 	\centering
+	 	\begin{tabular}{ccccccccc}
+	 		\cline{2-2}
+	 		\multicolumn{1}{c|}{$q_1$}&\multicolumn{1}{c|}{} &&&&&&&\\
+	 		\cline{2-3}
+	 		\multicolumn{1}{c|}{$q_2$}&\multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&&&&&&\\
+	 		\cline{2-4}
+	 		\multicolumn{1}{c|}{$q_3$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&&&&&\\
+	 		\cline{2-5}
+	 		\multicolumn{1}{c|}{$q_4$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&&&&\\
+	 		\cline{2-6}
+	 		\multicolumn{1}{c|}{$q_5$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&&\\
+	 		\cline{2-7}
+	 		\multicolumn{1}{c|}{$q_6$}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&\\
+	 		\cline{2-8}
+	 		\multicolumn{1}{c|}{$q_7$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\\
+	 		\cline{2-9}
+	 		\multicolumn{1}{c|}{$q_8$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
+	 		\cline{2-9}
+	 		\multicolumn{1}{c}{} & $q_0$& $q_1$ & $q_2$ & $q_3$ & $q_4$ & $q_5$ & $q_6$ & $q_7$\\
+	 		
+	 	\end{tabular}
+	 	\caption{Tableau généré par l'application de l'algorithme sur $A_H$ et $A_I$}\label{fig:tahi}
+	 \end{figure}
+	 
+	 De cette table, toujours grâce aux conclusions précédentes, il est possible d'extraire des classes d'équivalences : 
+	 \begin{itemize}
+	 	\item $C_0 = \{q_0, q_1, q_6\}$
+	 	\item $C_1 = \{q_2, q_3, q_4, q_7\}$
+	 	\item $C_2 = \{q_5, q_8\}$
+	 \end{itemize}
+	 
+	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
+	 
+	 
+	 \subsection{Minimisation d'automate}\label{ss:miniauto}
+	 
+	 La minimisation d'automate se fait en deux étapes :
+	 \begin{enumerate}
+	 	\item Se débarrasser de tous les états injoignables : ils ne participent pas à la construction du langage représenté
+	 	\item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate. 
+	 \end{enumerate}
+	 
+	 Ces étapes vont être accompagnées d'un exemple, à savoir l'automate $A_1$ représenté à la figure \ref{fig:a1}.
+	 
+	 L'état $q_6$ n'est pas atteignable : il peut être simplement supprimé. On obtient ainsi l'automate $A_2$ qui a servi d'exemple pour l'algorithme de remplissagede tableau, représenté à la figure \ref{fig:a2}.
+	 
+	 Pour minimiser cet automate $A_2 = (Q, \Sigma, \delta, q_0, F)$, il faut :
+	 \begin{enumerate}
+	 	\item Générer la table de différenciation (qui, pour cet exemple, est à la figure \ref{fig:ta2})
+	 	\item Séparer $Q$ en classes d'équivalences
+	 	\item Construire l'automate canonique $A_3$:
+	 	\begin{itemize}
+	 		\item Soit $S$ une des classes d'équivalence
+	 		\item Soit $\gamma$ la fonction de transition sur $S$. Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $q$ dans $S$, $\delta(q,a) \in T$. Sinon, c'est que deux états $p$ et $q$ dans $S$ menant à différentes classes d'équivalences. Ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. On peut écrire $\gamma(S,a)=T$.
+	 	\end{itemize}
+	 	\item L'état initial de $A_3$ est la classe d'équivalence contenant l'état initial de $A_2$ (dans notre exemple, l'état s'y trouve seul)
+	 	\item Les états acceptants ($F$) de $A_3$ sont les classes d'équivalences qui contenaient des états acceptants de $A_2$.
+	 \end{enumerate}
+	 
+	 La table de la figure \ref{fig:ta2}. Peut servir de base à la construction du nouvel automate suivant cet algorithme.
+	 \begin{figure}[H]
+	 	\centering
+	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+	 	
+	 	\tikzstyle{every state}=[circle]
+	 	
+	 	\node[initial,state] (A)                    {$q_0$};
+	 	\node[state]         (B) [below right of=A] {$q_1$};
+	 	\node[state]         (C) [below left of=A] {$q_2$};
+	 	\node[accepting, state]         (D) [below right of=B] {$q_3$};
+	 	\node[state]         (E) [below left of=C]       {$q_4$};
+	 	
+	 	\path 	
+	 	(A) 	edge              node {a} (C)
+	 	edge              node {b} (B)
+	 	(B) 	edge              node {a} (D)
+	 	edge [loop above] node {b} (B)
+	 	(C) 	edge              node {a} (E)
+	 	edge              node {b} (B)
+	 	(D) 	edge [loop above] node {a,b} (D)
+	 	(E) 	edge [loop above] node {a,b} (E);
+	 	\end{tikzpicture}
+	 	\caption{Automate $A_3$}\label{fig:a3}
+	 \end{figure}
+	 
+	 Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
+	 
+	 \todo{Proof : cet automate est LE automate minimal}
+	 
+	 
+	 
+	 
+	 
+	 
+	 \subsection{Construction d'automate depuis un langage}
+	 
+	 Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
+	 
+	 On peut diviser les mots en 3 ensembles : 
+	 
+	 \begin{itemize}
+	 	\item $W_0$ le sous-ensemble des mots ne finissant pas le symbole $b$
+	 	\item $W_1$ celui des mots finissant par le symbole $b$ mais ne contenant pas $bb$
+	 	\item $W_2$ celui des mots contenant au moins $bb$
+	 \end{itemize}
+	 
+	 Il y a d'autres façons de construire des sous-ensembles, mais celle-ci à l'avantage de rendre la question de l'appartenance à $L_N$ triviale : un mot appartient au second ensemble si et seulement si il fait partie du langage, par définition.
+	 
+	 De plus, tous les éléments d'un sous-ensemble respectent la relation $R_L$ entre eux. ($R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$). Cela en fait des classes d'équivalence sur cette relation.
+	 
+	 Cela peut être démontré pour chaque sous-ensemble :
+	 \begin{itemize}
+	 	\item Soient $x,y \in W_0$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ fini par $b$ mais ne contient pas $bb$, et donc $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
+	 	\item Soient $x,y \in W_1$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ ne commençait pas le symbole $b$ et ne contenait pas $bb$, $yz$ ne contiendra donc pas $bb$, puisque cette chaîne n'est ni dans $z$ ni dans $y$, ni a cheval sur les deux, $z$ ne commençant pas par $b$. Ainsi, $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
+	 	\item Soient $x,y \in W_2$. Soit $z \in \Sigma^*$. Comme $x$ contient déjà $bb$, $x \notin L_N$ et, a fortiori, $xz \notin L_N$. Comme la prémisse est fausse, l'implication $xz \in L \Rightarrow yz \in L$ est vraie. La même logique peut être appliquée à partir de $y$ pour justifier l'implication inverse.
+	 \end{itemize}
+	 
+	 De plus, ces sous-ensembles sont disjoints. Cela peut se prouver en invalidant la relation pour certains éléments entre eux, mais dans ce cas-ci, la propriété est assurée par définition.
+	 
+	 Ceci revient à démontrer que $W_0,W_1,W_2$ sont des classes d'équivalence. De plus, $R_L$ respecte la congruence à droite, comme démontré dans la preuve du théorème de Myhill-Nérode. Ce même théorème donne une méthode pour construire un automate : prendre un représentant pour chaque classe et en faire un état.
+	 
+	 \begin{itemize}
+	 	\item $\Sigma=\{a,b\}$ est connu.
+	 	\item $Q=\{[[\epsilon]]\, [[b]], [[bb]]\} = \{q_\epsilon, q_b, q_{bb}\}$
+	 	\item $q_0 = q_\epsilon$ 
+	 	\item $F = \{q_b\}$ l'union des classes acceptant
+	 	\item $\delta$ défini en utilisant des exemples tirés des classes d'équivalence.
+	 \end{itemize}
+	 
+	 Ce qui donne l'automate de la figure \ref{fig:an}
+	 
+	 \begin{figure}[H]
+	 	\centering
+	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
+	 	
+	 	\tikzstyle{every state}=[circle]
+	 	
+	 	\node[initial,state]	(A)					{$q_\epsilon$};
+	 	\node[accepting,state]	(B)	[right= of A]	{$q_b$};
+	 	\node[state]			(C) [right= of B]	{$q_{bb}$};
+	 	
+	 	\path
+	 	(A)	edge	[bend left]		node{b}		(B)
+	 	(A)	edge	[loop above]	node{a}		(A)
+	 	(B) edge	[bend left]		node{a}		(A)
+	 	(B) edge					node{b}		(C)
+	 	(C)	edge	[loop above]	node{a,b}	(C)
+	 	
+	 	; 
+	 	\end{tikzpicture}
+	 	\caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}\label{fig:an}
+	 \end{figure}
+	 
+	 Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
+	 
+	 

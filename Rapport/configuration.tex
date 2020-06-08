@@ -225,10 +225,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newtheorem{theorem}{Théorème}[section]
-\newtheorem{corollary}{Corrolaire}[theorem]
-\newtheorem{exemple}{Exemple}[section]
-\newtheorem{lemma}{Lemme}[section]
-\newtheorem{proof}{Preuve}[theorem]
+\newtheorem{lemma}[theorem]{Lemme}
+\newtheorem{exemple}[theorem]{Exemple}
+\newtheorem{proposition}[theorem]{Proposition}
 
+
+\newtheorem{proof}{Preuve}[theorem]
+\newtheorem{corollary}[proof]{Corrolaire}
+
+
+\newcommand{\hdelta}{\hat{\delta}}
+\newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }
+\renewcommand{\rm}{$R_M$\ }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

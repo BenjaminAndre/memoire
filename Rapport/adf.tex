@@ -1,488 +1,182 @@
-
+	\subsection{Définition}\label{sub:dfa}
 	
-	
-	\subsection{Automate déterministe fini}\label{sub:dfa}
-	Soit un ensemble de symboles $\Sigma$. Soient $\Sigma^* = \{ a_1a_2a_3...a_n | a_1,a_2,a_3,...,a_n \in \Sigma \}$, l'ensemble des mots de taille arbitraire qu'il est possible de former à partir de $\Sigma$ et $|w|, w \in \Sigma$ la longueur de $w$, le nombre de symboles utilisés. Si $|w|=0$, on note $w=\epsilon$.
-	
-	
-	Un automate est défini par $A = (Q, \Sigma, q_0, \delta, F)$ où
+	Un \emph{automate déterministe fini (ADF)} \automaton est défini comme suit :
 	\begin{itemize}
-		\item $Q$ est un ensemble d'états, différenciés par leur indice $q_1, q_2, ..., q_n$ ou $n = |Q|$.
-		\item $\Sigma$ est un ensemble de symboles
-		\item $q_0 \in Q$ est l'état initial
-		\item $\delta : Q \times \Sigma \rightarrow Q$ est la fonction de transition. A partir d'un état de $Q$, en fonction d'un symbole, elle retourne un nouvel état faisant partie de $Q$.
-		\item $F \subseteq Q$ est un ensemble d'état finaux.
+		\item $Q$ est un ensemble fini d'\emph{états}
+		\item $\Sigma$ est un alphabet
+		\item $q_0 \in Q$ est l'\emph{état initial}
+		\item $\delta : Q \times \Sigma \rightarrow Q$ est la \emph{fonction de transition}. A partir d'un état de $Q$, en fonction d'un symbole, elle retourne un état de $Q$.
+		\item $F \subseteq Q$ est un ensemble d'\emph{états acceptants}.
 	\end{itemize}
+	
+	\begin{exemple}\label{ex:adf}
+		On considère l'automate \automaton défini comme suit :
+		\begin{itemize}
+			\item $Q=\{q_0,q_1,q_2,q_3,q_4,q_5,q_6\}$
+			\item $\Sigma=\{0,1\}$
+			\item $q_0$ est l'état du même nom
+			\item La fonction de transition $\delta$ est décrite par la table \ref{fig:transdelta}. L'intersection d'une ligne reprenant un élément $q \in Q$ et d'une colonne $a \in \Sigma$ donne l'état $\delta(q,a)$.
+			\item $F=\{q_d\}$
+		\end{itemize}
+	
+		\begin{figure}[H]
+			\centering
+			\begin{tabular}{|r||c|c|}
+				\hline
+				&a&b\\
+				\hline\hline
+				$\rightarrow q_0$&$q_2$&$q_1$\\\hline
+				$q_1$&$q_3$&$q_5$\\\hline
+				$q_2$&$q_4$&$q_5$\\\hline
+				$q_3^*$&$q_3$&$q_3$\\\hline
+				$q_4$&$q_4$&$q_4$\\\hline
+				$q_5$&$q_3$&$q_1$\\\hline
+				$q_6$&$q_4$&$q_5$\\\hline
+			\end{tabular}
+			\caption{La table de transitions $\delta$}
+			\label{fig:transdelta}
+		\end{figure}
+	\end{exemple}
 	 
-	 
-	 Exemple :
-	 Soient 
-	 \begin{itemize}
-	 	\item $\Sigma=\{0,1\}$
-	 	\item $Q=\{q_a,q_b,q_c,q_d,q_e,q_f,q_g\}$
-	 	\item $q_0=q_a$
-	 	\item $F=\{q_d\}$
-	 \end{itemize}
+	Via cette notation, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
  	
- 	Pour obtenir un automate, il manque la description de $\delta$. Une façon efficace de noter cette fonction de transition est à l'aide d'une table dont les lignes reprennent des éléments de $Q$, les colonnes des symboles de $\Sigma$, et les cases des éléments de $Q$. Ainsi, on peut lire la relation $\delta : Q \times \Sigma \rightarrow Q$ en prenant une ligne et une colonne.
- 	De plus, via cette notation, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$, on obtient une définition complète d'un automate.
  	
- 	\begin{figure}[H]
- 	\centering
- 	\begin{tabular}{|r||c|c|}
- 		\hline
- 		&0&1\\
- 		\hline\hline
- 		$\rightarrow q_a$&$q_c$&$q_b$\\\hline
- 		$q_b$&$q_d$&$q_f$\\\hline
- 		$q_c$&$q_e$&$q_f$\\\hline
- 		$q_d$&$q_d$&$q_d$\\\hline
- 		$q_e$&$q_e$&$q_e$\\\hline
- 		$q_f$&$q_d$&$q_b$\\\hline
- 		$q_g$&$q_e$&$q_f$\\\hline
- 	\end{tabular}
-	\caption{La table de transitions $\delta_B$}
- 	\end{figure}
-	 L'automate peut aussi être représenté graphiquement : 
-	 
+ 	\subsection{Graphe d'automate déterministe fini}\label{ss:grapheadf}
+ 	
+ 	Le \emph{graphe d'un automate déterministe fini} \automaton est un graphe dirigé construit comme suit :
+ 	
+ 	\begin{itemize}
+ 		\item Chaque nœud du graphe correspond à un état de $Q$
+ 		\item Chaque arc a un symbole de $\Sigma$ comme étiquette. Un arc relie un état $q_0$ à un état $q_1$. Cet arc défini $\delta(q_0,a)=q_1$, un transition de la fonction de transition. Si plusieurs symboles causent une même transition de $q_0$ à $q_1$, il n'y a qu'une seule étiquette sur l'arc, listant ces différents symboles.
+ 		\item L'état initial est mis en évidence par une flèche entrante.
+ 		\item Les états acceptants sont représentés par un double cercle, en opposition au simple cercle des autres nœuds.
+ 	\end{itemize}
+ 	
+ 	\begin{exemple}
+	 Voici le graphe représentant l'automate défini par la table \ref{fig:transdelta}
 	 \begin{figure}[H]
 	 	\centering
 	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
 	 	
 	 	\tikzstyle{every state}=[circle]
 	 	
-	 	\node[initial,state] (A)                    {$q_a$};
-	 	\node[state]         (B) [below right of=A] {$q_b$};
-	 	\node[state]         (C) [below left of=A] {$q_c$};
-	 	\node[accepting, state]         (D) [below right of=B] {$q_d$};
-	 	\node[state]         (E) [below left of=C]       {$q_e$};
-	 	\node[state]         (G) [below right of=E]       {$q_g$};
-	 	\node[state]         (F) [above right of=G]       {$q_f$};
+	 	\node[initial,state] (A)                    {$q_0$};
+	 	\node[state]         (B) [below right of=A] {$q_1$};
+	 	\node[state]         (C) [below left of=A] {$q_2$};
+	 	\node[accepting, state]         (D) [below right of=B] {$q_3$};
+	 	\node[state]         (E) [below left of=C]       {$q_4$};
+	 	\node[state]         (G) [below right of=E]       {$q_6$};
+	 	\node[state]         (F) [above right of=G]       {$q_5$};
 	 	
-	 	\path 	(A) 	edge              node {0} (C)
-	 	edge              node {1} (B)
-	 	(B) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (F)
-	 	(C) 	edge              node {0} (E)
-	 	edge              node {1} (F)
-	 	(D) 	edge [loop above] node {0,1} (D)
-	 	(E) 	edge [loop above] node {0,1} (E)
-	 	(F) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (B)
-	 	(G) 	edge              node {0} (E)
-	 	edge              node {1} (F);
+	 	\path 	(A) 	edge              node {a} (C)
+	 	edge              node {b} (B)
+	 	(B) 	edge              node {a} (D)
+	 	edge [bend left]  node {b} (F)
+	 	(C) 	edge              node {a} (E)
+	 	edge              node {b} (F)
+	 	(D) 	edge [loop above] node {a,b} (D)
+	 	(E) 	edge [loop above] node {a,b} (E)
+	 	(F) 	edge              node {a} (D)
+	 	edge [bend left]  node {b} (B)
+	 	(G) 	edge              node {a} (E)
+	 	edge              node {b} (F);
 	 	\end{tikzpicture}
-	 	\caption{Automate $A_B$, exemple personnel}\label{fig:ab}
+	 	\caption{Automate $A_1$}\label{fig:a1}
 	 \end{figure}
 	 
-	 Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part. $q_0$ et $F$ sont respectivement représenté par la flèche entrante et le double cercle.
+ 	\end{exemple}
+
+	 Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part.
 	 
-	 \subsubsection{Chemin}
+	 \subsection{Chemin}
 	 
-	 Pour faire le lien avec la notion de langage, il doit exister une façon pour l'automate de représenter quels mots sont acceptés ou non.
+	 La \emph{fonction de transition étendue} 
+	 $$\hdelta : Q \times \Sigma^* \rightarrow Q$$
+	 prend en entrée un état de $Q$ et un mot $w$ sur $\Sigma$ et retourne un état de $Q$.
 	 
-	 Pour ce faire, la fonction $\delta$ peut être étendue à un chemin $w$:
-	 
+	 $\hdelta$ est définie de façon récursive par sur $w$:
+	 \paragraph{Cas de base} Il y a deux cas de base:
 	 \begin{itemize}
-	 	\item Si $|w| \leq 1$, $\hat{\delta}(x, w) = \delta(x, w)$
-	 	\item Sinon, c'est que $w$ peut s'écrire $au, u \in \Sigma^*$. Alors, $\hat{\delta}(x,w) = \hat{\delta}(x,au) = \hat{\delta}(\delta(x,a),u)$
+	 	\item $w$ est un mot vide : $\hdelta(q, \epsilon) = q$
+	 	\item $w$ est un symbole : $\hdelta(q, w)$ avec $w=a\in \Sigma$. Alors, le chemin utilise la fonction de transition : $\hdelta(q,a)=\delta(q,a)$.
 	 \end{itemize}
+	 \paragraph{Pas de récurrence} Si $|w|>1$, alors $w=xa$ avec $x$ un mot sur $\Sigma$ et $a$ un symbole de $\Sigma$. Les chemins sur des mots de longueur strictement supérieure à 1 sont définis comme $\hdelta(q,w) = \hdelta(q,xa)= \delta(\hdelta(q,x),a)$.
 	 
-	 \subsubsection{Langage défini par un automate}
+	 Il se peut que $\delta$ ne soit pas définie pour une paire d'arguments. Auquel cas, $\hdelta$ ne l'est pas non plus.\\
 	 
-	 Le langage représenté par un automate $A$ peut alors se définir comme les mots menant de l'état initial a un état acceptant :
+	 Un \emph{chemin} est une application de cette fonction sur un état et un mot.
+	 
+	 \begin{exemple}
+	 	Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $\hdelta(q_0, ab) = \delta(\hdelta(q_0,a),b) = \delta(\delta(q_0,a),b) = \delta(q_2, b)=q_5$.
+	 \end{exemple}
+	 
+	 \subsection{Langage défini par un automate}
+	 
+	 Le langage représenté par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant :
 	 $$
-	 \{w \in \Sigma^* | \hat{\delta}(q_O,w) \in F_A\}
+	 \{w \in \Sigma^* | \hdelta(q_0,w) \in F\}
 	 $$
-	 Ainsi, pour tester l'appartenance d'un mot $w$ à un langage $L$ défini par l'automate $A$, il suffit de test $\hat{\delta}(q_O,w) \in F_A$.
+	 Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$.	 
 	 
-	 \subsubsection{La relation $R_M$}\label{ss:rm}
+	 \subsection{La relation $R_M$}\label{ss:rm}
 	 
-	 Soit un automate $M$. Définissons la relation $R_M$ entre deux états : $$xR_My \iff (\forall w \in \Sigma^*, \hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w) \in F)$$
+	 Soit un automate \automaton. Définissons la relation $R_M$ entre deux états : 
+	 $$xR_My \iff (\forall w \in \Sigma^*,\hdelta(x,w) \in F \iff \hdelta(y,w) \in F)$$
 	 
-	 Intuitivement, ces deux états sont en relation si tout mot lu à partir de celui-ci mène à des états étant simultanément acceptants ou non. Il s'agit d'une relation d'équivalence. En effet, cette relation est :
+	 Intuitivement, ces deux états sont en relation si tout mot lu à partir de celui-ci mène à des états étant simultanément acceptants ou non. 
 	 
-	 \begin{itemize}
-	 	\item \textbf{Réflexive :} Soient un état $x \in Q_M$ et $w \in \Sigma^*$. Alors, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(x,w) \in F$ et par définition, $xR_Mx$.
-	 	\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Mz$.
-	 	\item \textbf{Symétrique : } Soient les états $x,y \in Q_M$ tels que $xR_My$ et un mot $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x, w)\in F \iff \hat{\delta}(y, w)\in F$. En lisant la double implication depuis la droite, on a bien $\hat{\delta}(y, w) \in F\iff \hat{\delta}(x, w)\in F$ et donc $yR_Mx$.
-	 	\item De plus, la relation est \textbf{congruente à droite :} si la relation est vraie pour deux état, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_My$. Soit un symbole $a \in \Sigma$. Par hypothèse, 
+	 \begin{proposition}
+	 	\rm est une relation d'équivalence.
+	 \end{proposition}
+	
+	 \begin{proof} Montrer que \rm est une relation d'équivalence revient à montrer qu'elle est réflexive, transitive et symétrique.
+	 	\begin{itemize}
+	 		\item \textbf{Réflexive :} Soient un état $x \in Q_M$ et $w \in \Sigma^*$. Alors, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(x,w) \in F$ et par définition, $xR_Mx$.
+	 		\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Mz$.
+	 		\item \textbf{Symétrique : } Soient les états $x,y \in Q_M$ tels que $xR_My$ et un mot $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x, w)\in F \iff \hat{\delta}(y, w)\in F$. En lisant la double implication depuis la droite, on a bien $\hat{\delta}(y, w) \in F\iff \hat{\delta}(x, w)\in F$ et donc $yR_Mx$.
+	 	\end{itemize}
+	 \end{proof}
+	 
+	 \begin{corollary}
+	 	\rm sépare les états de $Q$ en classes d'équivalence.
+	 \end{corollary}
+	 
+	 La classe d'équivalence de tous les états en relation \rm avec $q$ (qui sert alors de \emph{représentant}) se note $[[q]]$ ou par une lettre majuscule, typiquement $S$ ou $T$.
+	 
+	 La \emph{congruence à droite} d'une relation $R$ entre des mots sur un alphabet $\Sigma$ est définie comme :
+	 $$
+	 \forall x,y \in \Sigma^*, xRy \Rightarrow \forall a \in \Sigma, xaRya 
+	 $$  
+	 
+	 \begin{proposition}
+	 	\rm est congruente à droite.
+	 \end{proposition}
+	 
+	 \begin{proof}
+	 	Si la relation est vraie pour deux état, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_My$. Soit un symbole $a \in \Sigma$. Par hypothèse, 
 	 	$$\forall w \in \Sigma^*, \hat{\delta}(x, w) \in F \iff \hat{\delta}(y, w) \in F$$
 	 	C'est donc vrai en particulier pour $w = au, u \in \Sigma*$. Dès lors,
 	 	$$\hat{\delta}(x, au) \in F\iff \hat{\delta}(y, au)\in F$$
 	 	$$\hat{\delta}(\delta(x,a),u) \in F\iff\hat{\delta}(\delta(y,a),u)\in F$$
 	 	$$\hat{\delta}(p,u) \in F\iff \hat{\delta}(q,u)\in F$$
-	 \end{itemize}
-	 
-	 Deux informations importantes découlent des ces caractéristiques : 
-	 \begin{enumerate}
-	 	\item Les états forment des classes d'équivalence.
-	 	\item Tout état dans une classe d'équivalence mène, pour un même symbole, à une même classe d'équivalence.
-	 \end{enumerate}
-	 
-	 	\subsubsection{Problème}
-	 Une notion liée aux langages est celle de problème. Ce que nous appelons couramment problème peut être exprimé en terme d'appartenance d'un mot $w$ à un langage $L$ sur un alphabet $\Sigma$.
-	 
-	 Par exemple, prenons l'alphabet $\Sigma=\{0,1,2,3,4,5,6,7,8,9\}$. Considérons ensuite le langage $L = \{w | \text{le nombre représenté par } w \text{ est pair}\}$.
-	 Demander si un mot $w$ appartient à $L$ revient à résoudre le problème sur le test de parité de $w$. (Le cas échéant, soit $w$ ne représente pas un nombre, soit il représente un nombre impair).
-	 
-	 
-	 Cette section repose sur les bases théoriques, principalement sur l'automate et la relation $R_M$, ainsi que le théorème de Myhill-Nérode, pour donner l'algorithme de remplissage de table (Table Filling Algorithme). A partir de celui-ci, les questions de minimisation, équivalence et constructions d'automates sont explorées.
-	 
-	 
-	 \subsection{Table Filling Algorithm}\label{ss:tfa}
-	 
-	 Le \emph{Table Filling Algorithm} permet, pour un automate, de déterminer quels états sont équivalents. Il repose sur la définition de la relation $R_M$ définie en \ref{ss:rm}
-	 
-	 \subsubsection{Construction de la table}
-	 
-	 L'idée est de construire, par induction, une table nous disant pour chaque paire d'état si ceux-ci sont équivalents où non, suivant la relation $R_M$ définie précédemment:
-	 
-	 \textbf{Cas de base :} Si $p$ est un état final et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différentiable.
-	 
-	 \textbf{Induction : } Soient $p,q$ des états tels qu'il existe un symbole $a$ qui donne $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différentiables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot témoin $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ permet de différencier $p$ et $q$.
-	 
-	 \begin{theorem}
-	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de table, les états sont équivalents.
-	 \end{theorem}
-	 
-	 \begin{proof}
-	 	Considérons un automate déterministe fini quelconque $A = (Q, \Sigma, \delta, q_0, F)$, et faisons une preuve par l'absurde.
-	 	
-	 	Supposons qu'il existe une paire d'états $\{p,q\}$ tels que :
-	 	\begin{enumerate}
-	 		\item $p$ et $q$ ne sont pas distingués par l'algorithme de remplissage de table
-	 		\item Les états ne sont pas équivalents, c'est à dire différentiables.
-	 	\end{enumerate}
-	 	
-	 	L'hypothèse deux implique qu'il existe un mot $w \in \Sigma^*$ tel que de $\hat{\delta}(p,w)$ et $\hat{\delta}(q,w)$ un et un seul soit un état final.
-	 	
-	 	Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune distinguée par un mot témoin, il doit exister un paire distinguée par le mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court qui les distingue. Encore une fois, un seul de $\hat{\delta}(p,w)$ et $\hat{\delta}(q,w)$ est acceptant.
-	 	
-	 	Ce mot $w$ ne peut pas être $\epsilon$. Auquel cas, la table aurait été remplie dès l'étape d'induction de l'algorithme.
-	 	
-	 	Ce mot $w$ doit forcément être de taille $\ge 1$ s'il n'est pas $\epsilon$. Considérons $r = \delta(p,a_1)$ et $s=\delta(q,a_1)$. Ces états sont différenciés par $a_2a_3\dots a_n$ puisque cette chaîne mène aux mêmes états que $\hat{\delta}(p,w)$ et $\hat{\delta}(q,w)$. Mais dans ce cas, cela signifie qu'il existe un mot plus petit que $w$ qui différencie deux états. Comme on a supposé que $w$ est le mot le plus petit qui différencie une mauvaise paire, $r$ et $s$ ne peuvent pas être une bad pair. Donc, l'algorithme a du découvrir qu'ils sont différentiables.
-	 	
-	 	Mais le pas d'induction stipule clairement que comme $\delta(p, a_1)$ et $\delta(q, a_1)$ mènent à deux états différentiables, $p$ et $q$ le sont aussi. On a une contradiction sur l'existence des mauvaises paires.
-	 	
-	 	Ainsi, s'il n'y en a pas, c'est que chaque paire différentiable est reconnue par l'algorithme.
 	 \end{proof}
+ 
+ 	\begin{corollary}
+ 		Pour chaque symbole, toutes les transitions sortant d'une classe d'équivalence mènent à une même classe d'équivalence :
+ 		$\forall a \in \Sigma, \exists T, \forall q \in S, \delta(q,a)\in T$ avec $T$ une classe d'équivalence.
+ 	\end{corollary}
 	 
 	 
-	 \subsubsection{Exemple}
+	 \subsection{Automate et problème de décision}
 	 
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	 	
-	 	\tikzstyle{every state}=[circle]
-	 	
-	 	\node[initial,state] (A)                    {$q_a$};
-	 	\node[state]         (B) [below right of=A] {$q_b$};
-	 	\node[state]         (C) [below left of=A] {$q_c$};
-	 	\node[accepting,state]         (D) [below right of=B] {$q_d$};
-	 	\node[state]         (E) [below left of=C]       {$q_e$};
-	 	\node[state]         (F) [below right of=C]       {$q_f$};
-	 	
-	 	\path 	(A) 	edge              node {0} (C)
-	 	edge              node {1} (B)
-	 	(B) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (F)
-	 	(C) 	edge              node {0} (E)
-	 	edge              node {1} (F)
-	 	(D) 	edge [loop above] node {0,1} (D)
-	 	(E) 	edge [loop above] node {0,1} (E)
-	 	(F) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (B);
-	 	\end{tikzpicture}
-	 	\caption{Automate $A_2$}\label{fig:a2}
-	 \end{figure}
+	 Une notion liée aux langages est celle de \emph{problème}. Une forme de problème est celle dite de \emph{décision} : une question à laquelle la réponse est oui ou non.
 	 
-	 La première étape est de remplir la table avec l'algorithme précédant. Tout état est distinguable de $q_d$ : il est le seul état final. 5 cases peuvent déjà êtres cochées. Le reste de la table est remplie par induction.
+	 Ces problèmes de décision peuvent être exprimés en terme d'appartenance d'un mot à un langage.
 	 
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tabular}{ccccccc}
-	 		\cline{2-2}
-	 		\multicolumn{1}{c|}{B} & \multicolumn{1}{c|}{x} &&&&\\
-	 		\cline{2-3}
-	 		\multicolumn{1}{c|}{C} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&&&\\
-	 		\cline{2-4}
-	 		\multicolumn{1}{c|}{D} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&\\
-	 		\cline{2-5}
-	 		\multicolumn{1}{c|}{E} & \multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\\
-	 		\cline{2-6}
-	 		\multicolumn{1}{c|}{F} & \multicolumn{1}{c|}{x} & \multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
-	 		\cline{2-6}
-	 		\multicolumn{1}{c}{} & A&B&C&D&E\\
-	 		
-	 	\end{tabular}
-	 	\caption{Table filling pour $A_2$, décelant des équivalences d'états}
-	 	\label{fig:ta2}
-	 \end{figure}
+	 Par exemple, prenons l'alphabet des chiffres $\Sigma=\{0,1,2,3,4,5,6,7,8,9\}$. Considérons ensuite le langage $L = \{w | \text{le nombre représenté par } w \text{ est pair}\}$.
+	 
+	 Demander si un nombre est pair peut alors être traduit par l'appartenance d'un mot le représentant à $L$. Si le langage peut être représenté par un automate déterministe fini, la réponse peut être trouvée par l'exécution de celui-ci.
 	 
 	 
-	 \subsubsection{Complexité}
-	 
-	 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
-	 
-	 Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $O(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $O(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $O(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $O(kn^4)$.
-	 
-	 Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables. 
-	 
-	 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.O(n^2)=O(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
-	 
-	 Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $O(n^2)$, ce qui donne $O(kn^2)$ pour cette exploration.
-	 
-	 La complexité totale revient à $O(kn^2)$.
-	 
-	 
-	 
-	 
-	 \subsection{Minimisation d'automate}\label{ss:miniauto}
-	 
-	 La minimisation d'automate se fait en deux étapes :
-	 \begin{enumerate}
-	 	\item Se débarrasser de tous les états injoignables : ils ne participent pas à la construction du langage représenté
-	 	\item Grâce aux équivalences d'états trouvées grâce au TFA déifni au point \ref{ss:tfa}, construire un nouvel automate. 
-	 \end{enumerate}
-	 
-	 Ces étapes vont être accompagnées d'un exemple, à savoir l'automate $A_1$ représenté à la figure \ref{fig:a1}.
-	 
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	 	
-	 	\tikzstyle{every state}=[circle]
-	 	
-	 	\node[initial,state] (A)                    {$q_a$};
-	 	\node[state]         (B) [below right of=A] {$q_b$};
-	 	\node[state]         (C) [below left of=A] {$q_c$};
-	 	\node[accepting, state]         (D) [below right of=B] {$q_d$};
-	 	\node[state]         (E) [below left of=C]       {$q_e$};
-	 	\node[state]         (G) [below right of=E]       {$q_g$};
-	 	\node[state]         (F) [above right of=G]       {$q_f$};
-	 	
-	 	\path 	(A) 	edge              node {0} (C)
-	 	edge              node {1} (B)
-	 	(B) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (F)
-	 	(C) 	edge              node {0} (E)
-	 	edge              node {1} (F)
-	 	(D) 	edge [loop above] node {0,1} (D)
-	 	(E) 	edge [loop above] node {0,1} (E)
-	 	(F) 	edge              node {0} (D)
-	 	edge [bend left]  node {1} (B)
-	 	(G) 	edge              node {0} (E)
-	 	edge              node {1} (F);
-	 	\end{tikzpicture}
-	 	\caption{Automate $A_1$}\label{fig:a1}
-	 \end{figure}
-	 
-	 L'état $q_g$ n'est pas atteignable : il peut être simplement supprimé. On obtient ainsi l'automate $A_2$ qui a servi d'exemple pour le TFA, représenté à la figure \ref{fig:a2}.
-	 
-	 \subsubsection{Minimisation par table de différenciation}
-	 
-	 Pour minimiser l'automate $A_2 = (Q, \Sigma, \delta, q_0, F)$, il faut :
-	 \begin{enumerate}
-	 	\item Générer la table de différenciation (qui, pour cet exemple, est à la figure \ref{fig:ta2})
-	 	\item Séparer $Q$ en classes d'équivalences
-	 	\item Construire l'automate canonique $A_3$:
-	 	\begin{itemize}
-	 		\item Soit $S$ une des classes d'équivalence
-	 		\item Soit $\gamma$ la fonction de transition sur $S$. Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $q$ dans $S$, $\delta(q,a) \in T$. Sinon, c'est que deux états $p$ et $q$ dans $S$ menant à différentes classes d'équivalences. Ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. On peut écrire $\gamma(S,a)=T$.
-	 	\end{itemize}
-	 	\item L'état initial de $A_3$ est la classe d'équivalence contenant l'état initial de $A_2$ (dans notre exemple, l'état s'y trouve seul)
-	 	\item Les états finaux ($F$) de $A_3$ sont les classes d'équivalences qui contenaient des états acceptants de $A_2$.
-	 \end{enumerate}
-	 
-	 La table de la figure \ref{fig:ta2}. Peut servir de base à la construction du nouvel automate suivant cet algorithme.
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	 	
-	 	\tikzstyle{every state}=[circle]
-	 	
-	 	\node[initial,state] (A)                    {$q_a$};
-	 	\node[state]         (B) [below right of=A] {$q_b$};
-	 	\node[state]         (C) [below left of=A] {$q_c$};
-	 	\node[accepting, state]         (D) [below right of=B] {$q_d$};
-	 	\node[state]         (E) [below left of=C]       {$q_e$};
-	 	
-	 	\path 	
-	 	(A) 	edge              node {0} (C)
-	 	edge              node {1} (B)
-	 	(B) 	edge              node {0} (D)
-	 	edge [loop above] node {1} (B)
-	 	(C) 	edge              node {0} (E)
-	 	edge              node {1} (B)
-	 	(D) 	edge [loop above] node {0,1} (D)
-	 	(E) 	edge [loop above] node {0,1} (E);
-	 	\end{tikzpicture}
-	 	\caption{Automate $A_3$}
-	 \end{figure}
-	 
-	 Une expression régulière ($(1+01)1^*0(0+1)^*$) peut être déduite pour $L$ grâce à cet automate.
-	 
-	 
-	 \subsection{Équivalence d'automates}
-	 
-	 Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
-	 
-	 \begin{minipage}{0.4\linewidth}
-	 	\begin{figure}[H]
-	 		\centering
-	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 5cm, semithick, bend angle=10]
-	 		
-	 		\tikzstyle{every state}=[circle]
-	 		
-	 		\node[initial,state]	(A)					{$q_0$};
-	 		\node[state]			(B)	[right= of A]	{$q_1$};
-	 		\node[accepting,state]	(C) [below of=A]	{$q_2$};
-	 		\node[accepting,state]	(D)	[below of=B]	{$q_3$};
-	 		\node[accepting,state]	(E)	[below of=C]	{$q_4$};
-	 		\node[state]			(F)	[below of=D]	{$q_5$};
-	 		
-	 		\path
-	 		(A)	edge	[bend left]		node{0}		(B)
-	 		(A)	edge					node{1}		(C)
-	 		(B) edge	[bend left]		node{0}		(A)
-	 		(B) edge					node{1}		(D)
-	 		(C)	edge					node{0}		(E)
-	 		(C)	edge					node[near start]{1}		(F)
-	 		(D)	edge					node[near start, above]{0}		(E)
-	 		(D)	edge					node{1}		(F)
-	 		(E)	edge	[loop below]	node{0}	(E)
-	 		(E) edge					node{1} (F)
-	 		(F)	edge	[loop below]	node{0,1}	(F)
-	 		
-	 		; 
-	 		\end{tikzpicture}
-	 		\caption{Automate $A_H$, exemple d'un livre de référence\cite{Hopcroft79} (Fig3.2)}\label{fig:ah}
-	 	\end{figure}
-	 \end{minipage}\hspace{0.2\linewidth}
-	 \begin{minipage}{0.4\linewidth}
-	 	\begin{figure}[H]
-	 		\centering
-	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1cm and 1cm, semithick, bend angle=10]
-	 		
-	 		\tikzstyle{every state}=[circle]
-	 		
-	 		\node[initial,state]	(A)					{$q_6$};
-	 		\node[accepting,state]	(B)	[right= of A]	{$q_7$};
-	 		\node[state]			(C) [right= of B]	{$q_8$};
-	 		
-	 		\path
-	 		(A)	edge					node{1}		(B)
-	 		(A)	edge	[loop above]	node{0}		(A)
-	 		(B) edge					node{1}		(C)
-	 		(B) edge	[loop above]	node{0}		(B)
-	 		(C)	edge	[loop above]	node{0,1}	(C)
-	 		
-	 		; 
-	 		\end{tikzpicture}
-	 		\caption{Automate $A_I$, provenant également de \cite{Hopcroft79} }\label{fig:ai}
-	 	\end{figure}
-	 \end{minipage}
-	 
-	 Ces deux automates sont-ils équivalents ? Grâce à l'algorithme de remplissage de table précédant, il est possible de tester l'équivalence d'états. Pour cela, il suffit de considérer les deux automates précédents comme un seul.
-	 
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tabular}{ccccccccc}
-	 		\cline{2-2}
-	 		\multicolumn{1}{c|}{$q_1$}&\multicolumn{1}{c|}{} &&&&&&&\\
-	 		\cline{2-3}
-	 		\multicolumn{1}{c|}{$q_2$}&\multicolumn{1}{c|}{x} &\multicolumn{1}{c|}{x}&&&&&&\\
-	 		\cline{2-4}
-	 		\multicolumn{1}{c|}{$q_3$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&&&&&\\
-	 		\cline{2-5}
-	 		\multicolumn{1}{c|}{$q_4$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&&&&\\
-	 		\cline{2-6}
-	 		\multicolumn{1}{c|}{$q_5$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&&\\
-	 		\cline{2-7}
-	 		\multicolumn{1}{c|}{$q_6$}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&&\\
-	 		\cline{2-8}
-	 		\multicolumn{1}{c|}{$q_7$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\\
-	 		\cline{2-9}
-	 		\multicolumn{1}{c|}{$q_8$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
-	 		\cline{2-9}
-	 		\multicolumn{1}{c}{} & $q_0$& $q_1$ & $q_2$ & $q_3$ & $q_4$ & $q_5$ & $q_6$ & $q_7$\\
-	 		
-	 	\end{tabular}
-	 	\caption{Table Filling, décelant des équivalences d'états entre les deux automates}\label{fig:tahi}
-	 \end{figure}
-	 
-	 De cette table, toujours grâce aux conclusions précédentes, il est possible d'extraire des classes d'équivalences : 
-	 \begin{itemize}
-	 	\item $C_0 = \{q_0, q_1, q_6\}$
-	 	\item $C_1 = \{q_2, q_3, q_4, q_7\}$
-	 	\item $C_2 = \{q_5, q_8\}$
-	 \end{itemize}
-	 
-	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant de cet état sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
-	 
-	 
-	 
-	 \subsection{Construction d'automate depuis un langage}
-	 
-	 Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
-	 
-	 On peut diviser les mots en 3 ensembles : 
-	 
-	 \begin{itemize}
-	 	\item $W_0$ le sous-ensemble des mots ne finissant pas le symbole $b$
-	 	\item $W_1$ celui des mots finissant par le symbole $b$ mais ne contenant pas $bb$
-	 	\item $W_2$ celui des mots contenant au moins $bb$
-	 \end{itemize}
-	 
-	 Il y a d'autres façons de construire des sous-ensembles, mais celle-ci à l'avantage de rendre la question de l'appartenance à $L_N$ triviale : un mot appartient au second ensemble si et seulement si il fait partie du langage, par définition.
-	 
-	 De plus, tous les éléments d'un sous-ensemble respectent la relation $R_L$ entre eux. ($R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$). Cela en fait des classes d'équivalence sur cette relation.
-	 
-	 Cela peut être démontré pour chaque sous-ensemble :
-	 \begin{itemize}
-	 	\item Soient $x,y \in W_0$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ fini par $b$ mais ne contient pas $bb$, et donc $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
-	 	\item Soient $x,y \in W_1$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ ne commençait pas le symbole $b$ et ne contenait pas $bb$, $yz$ ne contiendra donc pas $bb$, puisque cette chaîne n'est ni dans $z$ ni dans $y$, ni a cheval sur les deux, $z$ ne commençant pas par $b$. Ainsi, $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
-	 	\item Soient $x,y \in W_2$. Soit $z \in \Sigma^*$. Comme $x$ contient déjà $bb$, $x \notin L_N$ et, a fortiori, $xz \notin L_N$. Comme la prémisse est fausse, l'implication $xz \in L \Rightarrow yz \in L$ est vraie. La même logique peut être appliquée à partir de $y$ pour justifier l'implication inverse.
-	 \end{itemize}
-	 
-	 De plus, ces sous-ensembles sont disjoints. Cela peut se prouver en invalidant la relation pour certains éléments entre eux, mais dans ce cas-ci, la propriété est assurée par définition.
-	 
-	 Ceci revient à démontrer que $W_0,W_1,W_2$ sont des classes d'équivalence. De plus, $R_L$ respecte la congruence à droite, comme démontré dans la preuve du théorème de Myhill-Nérode. Ce même théorème donne une méthode pour construire un automate : prendre un représentant pour chaque classe et en faire un état.
-	 
-	 \begin{itemize}
-	 	\item $\Sigma=\{a,b\}$ est connu.
-	 	\item $Q=\{[[\epsilon]]\, [[b]], [[bb]]\} = \{q_\epsilon, q_b, q_{bb}\}$
-	 	\item $q_0 = q_\epsilon$ 
-	 	\item $F = \{q_b\}$ l'union des classes acceptant
-	 	\item $\delta$ défini en utilisant des exemples tirés des classes d'équivalence.
-	 \end{itemize}
-	 
-	 Ce qui donne l'automate de la figure \ref{fig:an}
-	 
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
-	 	
-	 	\tikzstyle{every state}=[circle]
-	 	
-	 	\node[initial,state]	(A)					{$q_\epsilon$};
-	 	\node[accepting,state]	(B)	[right= of A]	{$q_b$};
-	 	\node[state]			(C) [right= of B]	{$q_{bb}$};
-	 	
-	 	\path
-	 	(A)	edge	[bend left]		node{b}		(B)
-	 	(A)	edge	[loop above]	node{a}		(A)
-	 	(B) edge	[bend left]		node{a}		(A)
-	 	(B) edge					node{b}		(C)
-	 	(C)	edge	[loop above]	node{a,b}	(C)
-	 	
-	 	; 
-	 	\end{tikzpicture}
-	 	\caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}\label{fig:an}
-	 \end{figure}
-	 
-	 Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
 	 
 	 
