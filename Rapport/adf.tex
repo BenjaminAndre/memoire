@@ -5,7 +5,7 @@
 		\item $Q$ est un ensemble fini d'\emph{états}
 		\item $\Sigma$ est un alphabet
 		\item $q_0 \in Q$ est l'\emph{état initial}
-		\item $\delta : Q \times \Sigma \rightarrow Q$ est la \emph{fonction de transition}. A partir d'un état de $Q$, en fonction d'un symbole, elle retourne un état de $Q$.
+		\item $\delta : Q \times \Sigma \rightarrow Q$ est la \emph{fonction de transition}. A partir d'un état $q$ de $Q$, en fonction d'un symbole $a$, elle retourne un état de $Q$ : $\delta(q,a)$. Cette transition est dite \emph{transition sur $a$}.
 		\item $F \subseteq Q$ est un ensemble d'\emph{états acceptants}.
 	\end{itemize}
 	
@@ -114,7 +114,7 @@
 	 
 	 Le langage représenté par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant :
 	 $$
-	 \{w \in \Sigma^* | \hdelta(q_0,w) \in F\}
+	 L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\}
 	 $$
 	 Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$.	 
 	 

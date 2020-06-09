@@ -1,11 +1,10 @@
 \subsection{Définition}
 
-Une automate non-déterministe fini est une variété d'automate similaire aux ADF, moyennant quelques modifications. Un automate non-déterministe fini s'écrit:
+Une automate non-déterministe fini est une variété d'automate similaire aux ADF, moyennant quelques modifications. Un automate non-déterministe fini s'écrit également:
 	$$
 	A=(Q,\Sigma, \delta, q_0, F)
 	$$
-avec : 
-
+mais avec :
 \begin{itemize}
 	\item $Q$ un ensemble fini d'états
 	\item $\Sigma$ un alphabet
@@ -14,11 +13,14 @@ avec :
 	\item $\delta : Q \times \Sigma \cup \{\epsilon\} \rightarrow 2^Q$ où $2^Q$ est \emph{l'ensemble des parties} de $Q$. Cela signifie qui la fonction $\delta$ retourne un ensemble d'états de $Q$
 \end{itemize}
 
-Les automates non-déterministes finis peuvent être classés en deux groupes :
+Dans la littérature \cite{??} les automates non-déterministes finis sont divisés en deux groupes :
 \begin{enumerate}
-	\item Ceux pour lequel au moins une transition de $\delta$ est définie pour $\epsilon$, notés $\epsilon$\emph{-ANF}.
-	\item Ceux pour lequel aucune transition n'est définie pour $\epsilon$. En pratique, la définition de delta devient $\delta : Q \times \Sigma \rightarrow 2^Q$. Ils sont notés \emph{ANF}
+	\item Ceux pour lequel au moins une transition de $\delta$ est définie pour $\epsilon$.
+	\item Ceux pour lequel aucune transition n'est définie pour $\epsilon$. En pratique, la définition de delta devient $\delta : Q \times \Sigma \rightarrow 2^Q$.
 \end{enumerate}
+N'étant pas le sujet de ce document, ces deux ne reçoivent aucune distinction et sont tous deux notés ANF pour automate non-déterministe fini. Une transition sur $\epsilon$ est susceptible d'être définie pour tout ANF. 
+
+
 
 \begin{exemple}\label{ex:anf}
 	 De la même façon que pour l'exemple \ref{ex:adf} de la section \ref{sub:dfa}, considérons un automate \automaton défini comme suit :
@@ -31,7 +33,7 @@ Les automates non-déterministes finis peuvent être classés en deux groupes :
 	\item $F=\{q_2\}$
 \end{itemize}
 
-$A$ est un NFA ; une colonne supplémentaire sert à représenter la transition sur $\epsilon$.
+$A$ est un ANF ; une colonne supplémentaire sert à représenter la transition sur $\epsilon$.
 	
 \begin{figure}[H]
 	\centering
@@ -72,7 +74,7 @@ De plus, $A$ peut être représenté par un graphe suivant la même méthodologi
 
 \subsection{Fermeture sur $\epsilon$}
 
-Pour chaque état $q$ d'un ANF, un ensemble d'état peut être atteint sans lire de symbole. Il s'agit de l'état en question et de tous ceux pouvant être atteint uniquement par des transitions sur $\epsilon$. Cet ensemble s'appelle la \emph{fermeture sur epsilon}, ECLOSE($q$), et peut être construit récursivement.
+Pour chaque état $q$ d'un ANF, un ensemble d'états peut être atteint sans lire de symbole. Il s'agit de l'état en question et de tous ceux pouvant être atteint uniquement par des transitions sur $\epsilon$. Cet ensemble s'appelle la \emph{fermeture sur epsilon} : ECLOSE($q$). Il peut être construit récursivement.
 
 Soit un automate \automaton. Soit $q$ un état dans $Q$.
 
@@ -89,11 +91,32 @@ Soit un automate \automaton. Soit $q$ un état dans $Q$.
 \end{exemple}
 
 
-\todo{chemin anf avec epsilon OUI : indispensable pour que la preuve fonctionen}
+\subsection{Chemin}
 
-\subsection{Transformation d'$\epsilon$-ANF à ADF}\label{ss:eanfadf}
+La notion de fermeture permet de faciliter l'expression d'une fonction de transition étendue pour un ANF, ce qui permet d'exprimer des chemins et donc le langage.
 
-Cette section présente une méthode permettant de créer un ADF à partir d'un $\epsilon$-ANF. Ceci fait, l'automate résultant peut être requalifié comme ANF.
+Soit un ANF \automaton. La fonction de transition étendue $\hdelta$ retourne un ensemble d'états atteints par la lecture d'un mot depuis un état : $\hdelta(q,w)$ est un ensemble d'états atteignables par un chemin formant le mot $w$, avec éventuellement des transitions sur $\epsilon$.
+
+$\hdelta$ vaut, de façon récursive sur le mot $w$ pour un état $q$:
+
+\paragraph{Cas de base} $\hdelta(q,\epsilon)$=ECLOSE($q$). ECLOSE permet de calculer l'ensemble des états atteints uniquement par des transitions sur $\epsilon$, ce qui correspond à ce cas de base
+
+\paragraph{Pas de récurrence} Supposons que $w=xa$. $a$ est le dernier symbole de $w$ et $\hdelta(q,x)$ est défini par récurrence. Alors, pour obtenir $\hdelta(q,w)$ :
+\begin{enumerate}
+	\item Posons $\{p_1,p_2,\dots, p_k\}=\hdelta(q,x)$. Ce sont les états atteints par la lecture de $x$, certains ont potentiellement été atteints par des transitions sur $\epsilon$.
+	\item Posons $\{r_1,r_2,\dots, r_m\} = \bigcup_{i=1}^k\delta(p_i, a)$. Ce sont les nouveaux états atteints par la lecture de $a$. Comme $\delta$ retourne un ensemble, l'union permet de regrouper les états en un seul ensemble.
+	\item Finalement, $\hdelta(q,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Cette étape de fermeture permet d'ajouter les états décrivant la lecture de $w$ suivie de transition sur $\epsilon$, ce qui exprime toujours le mot $w$. 
+\end{enumerate}
+
+
+Le langage exprimé par un ANF \automaton est alors défini par :
+$$
+	L(A) = \{w \in \Sigma^*| \hdelta(q_0, w) \cap F \neq \emptyset\}
+$$
+
+\subsection{Transformation d'ANF à ADF}\label{ss:eanfadf}
+
+Cette section présente une méthode permettant de créer un ADF à partir d'un ANF. 
 
 Soit un ANF $E=(Q_E, \Sigma, \delta_E, q_0, F_E)$. Alors l'ADF équivalent
 $$
@@ -176,26 +199,26 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
 
 \begin{theorem}
-	Un langage $L$ peut être représenté par un $\epsilon$-ANF si et seulement si il peut l'être par un ADF.
+	Un langage $L$ peut être représenté par un ANF si et seulement si il peut l'être par un ADF.
 \end{theorem}
 
 \begin{proof}
 	 Soit $L$ un langage. Cette preuve étant une double implication, chacune peut être prouvée séparément.
 	
-	($\Leftarrow$) $L$ peut être représenté par un ADF $\implies$ $L$ peut être représenté par un $\epsilon$-ANF. Supposons qu'un automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ représente $L$ : $L(D)=L$. 
-	L'$\epsilon$-ANF $E=(Q_E, \Sigma, \delta_E, q_E, F_E)$ correspondant est construit comme suit :
+	($\Leftarrow$) $L$ peut être représenté par un ADF $\implies$ $L$ peut être représenté par un ANF. Supposons qu'un automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ représente $L$ : $L(D)=L$. 
+	L'ANF $E=(Q_E, \Sigma, \delta_E, q_E, F_E)$ correspondant est construit comme suit :
 	
 	\begin{itemize}
 		\item $Q_E=\{\{q\}|q\in Q_D\}$
-		\item $\delta_E$ contient les transitions de $D$ modifiée. Les objets retournés deviennent des ensembles d'états, c'est-à-dire, si $\delta_D(q,a)=p$ alors $\delta_E(q,a)=\{p\}$. De plus, pour chaque état $q\in Q_D$, $\delta_E(q,\epsilon)=\emptyset$. 
+		\item $\delta_E$ contient les transitions de $D$ modifiées. Les objets retournés deviennent des ensembles d'états. C'est-à-dire, si $\delta_D(q,a)=p$ alors $\delta_E(q,a)=\{p\}$. De plus, pour chaque état $q\in Q_D$, $\delta_E(q,\epsilon)=\emptyset$. 
 		\item $q_E=\{q_0\}$
 		\item $F_E=\{\{q\}| q\in F\}$
 	\end{itemize}
 	 
-	 Dès lors, les transitions sont les mêmes entre $D$ et $E$, mais $E$ précise explicitement qu'il n'y a pas de transition sur $\epsilon$. Comme $E$ représente le même langage, un $\epsilon$-ANF représente $L$.
+	 Dès lors, les transitions sont les mêmes entre $D$ et $E$, mais $E$ précise explicitement qu'il n'y a pas de transition sur $\epsilon$. Comme $E$ représente le même langage, un ANF représente $L$.
 	
 	
-	($\Rightarrow$) $L$ peut être représenté par un $\epsilon$-ANF $\implies$ $L$ peut être représenté par un ADF. Soit l'automate $E=(Q_E, \Sigma, \delta_E, q_0, F_E)$. Supposons qu'il représente $L$ ($L=L(E)$). Considérons l'automate obtenu par la transformation détaillée à la section précédente \ref{ss:eanfadf} :
+	($\Rightarrow$) $L$ peut être représenté par un ANF $\implies$ $L$ peut être représenté par un ADF. Soit l'automate $E=(Q_E, \Sigma, \delta_E, q_0, F_E)$. Supposons qu'il représente $L$ ($L=L(E)$). Considérons l'automate obtenu par la transformation détaillée à la section précédente \ref{ss:eanfadf} :
 	$$
 	D=(Q_D, \Sigma, \delta_D, q_D, F_D)
 	$$
@@ -204,15 +227,14 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	
 	\paragraph{Cas de base} Si $|w|=0$, $w=\epsilon$. $\hdelta_E(q_0,\epsilon)=$ ECLOSE($q$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta_E(q_0,\epsilon)$.
 	
-	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta_E(q_0,x)$. Notons cet ensemble comme $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un $\epsilon$-NFA, $\hdelta_E(q_0,w)$ est obtenu en :
+	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta_E(q_0,x)$. Notons cet ensemble comme $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta_E(q_0,w)$ est obtenu en :
 	
 	\begin{enumerate}
-		contenu...
+		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta_E(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
+		\item Alors $\hdelta_E(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
 	\end{enumerate}
 	
-	
-	
-	
+	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\hdelta_E(q_0,w)$.	
 	
 \end{proof}
 
