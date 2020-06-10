@@ -4,7 +4,384 @@
 	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
 \end{proposition}
 
-La preuve de cette proposition nécessite l'introduction de plusieurs notions théoriques telles que les automates non-déterministes finis (et leur variante en $\epsilon$). Elle est disponible dans le manuel de Hopcroft et al.\cite{Hopcroft79}.
+Cette proposition étant une double implication, elle est vraie si les deux implications le sont. Soit un langage $L$.
+
+
+\begin{theorem}
+	Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
+\end{theorem}
+\begin{proof}
+	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés.
+	
+	Posons $E_{ij}^k$ l'expression régulière exprimant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A)                    {$1$};
+		\node[state]         (B) [right of=A] {$2$};
+		\node[state]         (C)  [right of=B] {$3$};
+		\node[accepting, state]         (D)  [right of=C] {$4$};
+		\node[state]         (E)  [right of=D]       {$5$};
+		
+		\path
+		(A) edge [bend left=45] node{a} (C)
+		(A) edge  node{b} (B)
+		
+		(B) edge [bend left=45] node{a} (A)
+		(B) edge node{b} (C)
+		
+		(C) edge [bend left=45,dashed] node{a} (E)
+		(C) edge [loop below] node{b} (C)
+		
+		(D) edge [loop below,dashed] node{a,b} (D)
+		(E) edge [,dashed] node{a,b} (D)
+		
+		;
+		\end{tikzpicture}
+		\caption{Exemple : automate mettant $E_{1,3}^3$ en évidence}\label{fig:proofeijk}
+	\end{figure}
+
+	
+	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Dans cet exemple, $E_{5,4}^3$ tolère la transition de $5$ à $4$ bien que supérieure à $k$ : ce ne sont pas des intermédiaires. Construisons le langage par induction sur les états autorisés.
+	
+	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté. La première possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté aux possibilités si $i=j$.
+	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :	
+	
+	Pour chaque paire $i$, $j$ :
+	\begin{itemize}
+		\item Il n'existe pas de symbole $a$ tel que $\delta(i,a)=j$. Alors, $R_{ij}^0=\emptyset (+\epsilon)$
+		\item Il existe un unique symbole $a$ tel que  $\delta(i,a)=j$. Alors, $R_{ij}^0=a(+\epsilon)$
+		\item Il existe des symboles $a_1,a_2,\dots,a_k$ tels que $\forall l \in \{1,\dots, k\}, \delta(i,a_l)=j$. Alors, $R_{ij}^0=a_1+a_2+\dots+a_k(+\epsilon)$
+	\end{itemize}
+	
+	\paragraph{Pas de récurrence} Supposons qu'il existe un chemin allant de $i$ à $j$ ne passant par aucun état ayant un numéro supérieur à $k$.	La première possibilité est que le-dit chemin ne passe pas par $k$. Alors, le mot représenté par ce chemin fait partie du langage de $E_{ij}^{k-1}$. Seconde possibilité, le chemin passe par $k$ une ou plusieurs fois comme représenté à la figure \ref{fig:ikjpath}.
+	
+	\begin{figure}[H]\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+	
+	\tikzstyle{every state}=[circle]
+	
+	\node[state] (A) {$i$};
+	\node[state] (B) [right of=A] {$k$};
+	\node[state] (C) [right of=B] {$k$};
+	\node[state] (D) [right of=C] {$k$};
+	\node[state] (E) [right of=D] {$k$};
+	\node[state] (F) [right of=E] {$j$};
+	
+	\path
+	(A) edge [snake] (B)
+	(B) edge [snake] (C)
+	(C) edge [snake] (D)
+	(D) edge [snake] (E)
+	(E) edge [snake] (F)	
+	;
+	
+	\draw[-] (0.3,-0.8) arc (-100:-80:4.5) ;
+	\draw[-] (2.24,-0.8) arc (-100:-80:16) ;
+	\draw[-] (8.3,-0.8) arc (-100:-80:4.5) ;
+	
+	
+	\node[draw=none] at (1.25,-1.4) {Dans $E_{ik}^{k-1}$};
+	\node[draw=none] at (5.25,-1.4) {Mots dans $E_{kk}^{k-1}$};
+	\node[draw=none] at (9.25,-1.4) {Dans $E_{kj}^{k-1}$};
+	
+	\end{tikzpicture}
+	\caption{Un chemin de $i$ à $j$ peut être découpé en différent segment en fonction de $k$}\label{fig:ikjpath}
+	\end{figure}
+
+	Auquel cas, ces chemins sont composés d'une sous-chemin donnant un mot dans $E_{ik}^{k-1}$, suivi d'un sous-chemin donnant un ou plusieurs mots dans $E_{kk}^{k-1}$ et finalement un mot dans $E_{kj}^{k-1}$.
+	
+	En combinant les expressions des deux types, on obtient :
+	$$
+	E_{ij}^k = E_{ij}^{k-1}+E_{ik}^{k-1}(E_{kk}^{k-1})*E_{kj}^{k-1}
+	$$
+	
+	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
+\end{proof}
+
+\begin{exemple}
+	Construction d'une expression régulière à partir de l'automate de la figure suivante :
+	
+	\begin{figure}[H]\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state] (A) {$1$};
+		\node[accepting,state] (B) [right of=A] {$2$};
+		
+		\path
+		(A) edge [bend left=20] node{0} (B)
+		(B) edge [bend left=20] node{0} (A)
+		
+		(A) edge [loop above] node{1} (A)
+		(B) edge [loop above] node{1} (B)
+		;
+		
+		\end{tikzpicture}
+		\caption{Un automate acceptant tout mot ayant un nombre impair de $0$}
+	\end{figure}
+	
+	La construction par récurrence commençant avec $k=0$ le processus peut être représenté par des tableaux correspondant à différents $k$ de façon croissante.
+	
+	\paragraph{Première itération} Dans la première itération, chaque expression se résume à un des trois cas de base, avec éventuellement $\epsilon$ si $i=j$ pour l'expression analysée.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|l|c|}
+			\hline
+			 & Cas de base\\
+			\hline
+			$E_{11}^0$& $1+\epsilon$\\
+			$E_{12}^0$& $0$\\
+			$E_{21}^0$& $0$\\
+			$E_{22}^0$& $1+\epsilon$\\
+			\hline		
+		\end{tabular}
+	\end{figure}
+
+	\paragraph{Seconde itération} Ensuite, l'état $1$ est autorisé comme état intermédiaire : $k=1$. Ayant potentiellement un état intermédiaire, la formule de récurrence est utilisée.
+	
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|l|c|c|c|}
+			\hline
+			 & Formule de récurrence & Détail & Simplification\\
+			\hline
+			$E_{11}^1$& $E_{11}^0 + E_{11}^0(E_{11}^0)^*E_{11}^0$&
+			$(1+\epsilon)+(1+\epsilon)(1+\epsilon)^*(1+\epsilon)$ & $1^*$\\
+			$E_{12}^1$& $E_{12}^0 + E_{11}^0(E_{11}^0)^*E_{12}^0$&
+			$0+(1+\epsilon)(1+\epsilon)^*0$ & $1^*0$ \\
+			$E_{21}^1$& $E_{21}^0 + E_{21}^0(E_{11}^0)^*E_{11}^0$&
+			$0+0(1+\epsilon)^*(1+\epsilon)$& $01^*$\\
+			$E_{22}^1$& $E_{22}^0 + E_{21}^0(E_{11}^0)^*E_{12}^0$&
+			$(1+\epsilon)+0(1+\epsilon)^*0$ & $1+01^*0$\\
+			\hline		
+		\end{tabular}
+	\end{figure}
+	
+	
+	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire.
+	
+	\begin{figure}[H]
+		\hspace{-5mm}\begin{tabular}{|l|c|c|c|}
+			\hline
+			 & Formule de récurrence & Détail & Simplification\\
+			\hline
+			$E_{11}^2$& $E_{11}^1 + E_{12}^1(E_{22}^1)^*E_{21}^1$&
+			$1^*+1^*0(1+01^*0)^*01^*$&$1^*+1^*0(1+01^*0)^*01^*$\\
+			$E_{12}^2$& $E_{12}^1 + E_{12}^1(E_{22}^1)^*E_{22}^1$&
+			$1^*0+1^*0(1+01^*0)^*(1+01^*0)$&$1^*0(1+01^*0)^*$\\
+			$E_{21}^2$& $E_{21}^1 + E_{22}^1(E_{22}^1)^*E_{21}^1$&
+			$01^*+(1+01^*0)(1+01^*0)^*01^*$&$(1+01^*0)^*01^*$\\
+			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&
+			$(1+01^*0)+(1+01^*0)(1+01^*0)^*(1+01^*0)$&$(1+01^*0)^*$\\
+			\hline		
+		\end{tabular}
+	\end{figure}
+	
+	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $L(1^*0(1+01^*0)^*)=L$.
+	
+	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.	
+	
+\end{exemple}
+
+
+	
+\begin{theorem}
+	($\Leftarrow$) Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
+\end{theorem}
+
+
+\begin{proof}
+	Comme tout ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
+	
+	Soit $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
+	\begin{enumerate}
+		\item Il y a un unique état acceptant
+		\item Aucune transition ne mène à l'état initial
+		\item Aucune transition ne part de l'état acceptant
+	\end{enumerate}
+	
+	
+	
+	
+	\paragraph{Cas de base}	Les ANF de la figure \ref{fig:regexadfbase} représentent les automates correspondant aux trois cas de base.
+	
+	\begin{figure}[H]
+	
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+		
+		\path
+		(A) edge  node{$\epsilon$} (B)
+		;		
+		\node[draw, fit=(A) (B)] {};
+			
+		\end{tikzpicture}
+		\caption{$L=\{\epsilon\}$}
+	\end{subfigure}
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+		
+		\node[draw, fit=(A) (B)] {};
+		
+		\end{tikzpicture}
+		\caption{$L=\emptyset$}
+	\end{subfigure}
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+		
+		\tikzstyle{every state}=[circle]
+		
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+		
+		\path
+		(A) edge  node{$a$} (B)
+		;		
+		\node[draw, fit=(A) (B)] {};
+		
+		\end{tikzpicture}
+		\caption{$L=\{a\}$}
+	\end{subfigure}
+
+	\caption{Blocs de base pour la construction d'un automate à partir d'une expression régulière}
+	\label{fig:regexadfbase}
+	\end{figure}
+	
+	
+	En effet, l'automate (a) correspond à l'expression $\epsilon$ : le seul arc de l'état initial à un état final est $\epsilon$. L'automate (b) ne propose pas d'arc atteignant l'état final. Aucun mot n'appartient au langage d'où la construction de $\emptyset$. Finalement, (c) propose un arc pour $a$, donnant le seul mot $a$ comme faisant partie du langage, faisant de $a$ une expression régulière équivalente. De plus, ces automates respectent bien l'invariant de récurrence proposé.
+	
+	\paragraph{Pas de récurrence} Les ANF \emph{abstraits} de la figure \ref{fig:regexadfrec} représentent la façon dont un automate peut être construit récursivement en fonction des règles de récurrence des expressions régulières. Ces ANF sont abstraits car le contenu d'un bloc $R$ ou $S$ n'est pas représenté explicitement. Cependant, celui-ci respecte les invariants de récurrence.
+	
+	\begin{figure}[H]
+			
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+				
+				\tikzstyle{every state}=[circle]
+				
+				\node[initial,state,scale=0.5] (A) {};
+				\node[state,scale=0.5] (B) [right of=A] {};
+				\node[state,scale=0.5] (C) [right of=B] {};			
+				\node[accepting,state,scale=0.5] (D) [right of=C] {};
+				
+				\node[draw=none] (K) [right= 0.5cm of B] {$E$};
+				
+				\path
+				(A) edge  node{$\epsilon$} (B)
+				(C) edge  node{$\epsilon$} (D)
+				
+				(C) edge[bend right=90]  node{$\epsilon$} (B)
+				(A) edge[bend right=40]  node{$\epsilon$} (D)
+				
+				;		
+				
+				
+				\node[draw, fit=(B) (C)] {};
+				
+				\end{tikzpicture}
+				\caption{$L=L(E)^*$}
+			\end{subfigure}\newline\vspace{1cm}
+			
+			
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+				
+				\tikzstyle{every state}=[circle]
+				
+				\node[initial,state,scale=0.5] (A) {};
+				\node[state, scale=0.5] (B) [right of=A] {};
+				\node[state, scale=0.5] (C) [right of=B] {};			
+				\node[accepting,state,scale=0.5] (D) [right of=C] {};
+				
+				
+				\node[draw=none] (K) [right= 0.5cm of A] {$E$};
+				\node[draw=none] (L) [right= 0.5cm of C] {$F$};
+				
+				\path
+				(B) edge  node{$\epsilon$} (C)
+				;
+				
+				
+				\node[draw, fit=(A) (B)] {};
+				\node[draw, fit=(C) (D)] {};
+				
+				
+				
+				\end{tikzpicture}
+				\caption{$L=L(E)L(F)$}
+			\end{subfigure}\newline\vspace{1cm}
+			
+			
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+			\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+			
+			\tikzstyle{every state}=[circle]
+			
+			\node[initial,state,scale=0.5] (A) {};
+			
+			\node[state,scale=0.5] (B) [above right of=A] {};
+			\node[state,scale=0.5] (C) [below right of=A] {};
+			
+			\node[draw=none] (K) [right= 0.5cm of B] {$E$};
+			\node[draw=none] (L) [right= 0.5cm of C] {$F$};
+			
+			\node[state,scale=0.5] (D) [right of=B] {};
+			\node[state,scale=0.5] (E) [right of=C] {};
+			
+			\node[accepting,state,scale=0.5] (F) [below right of=D] {};
+			
+			\path
+			(A) edge  node{$\epsilon$} (B)
+			(A) edge  node{$\epsilon$} (C)
+				
+			(D) edge  node{$\epsilon$} (F)
+			(E) edge  node{$\epsilon$} (F)
+			;		
+			\node[draw, fit=(B)(D)] {};
+			\node[draw, fit=(C)(E)] {};
+			
+			\end{tikzpicture}
+			\caption{$L=L(E)+L(F)$}
+		\end{subfigure}
+	
+		
+	
+		
+		
+		\caption{Enchaînement de blocs pour une construction récursive}
+		\label{fig:regexadfrec}
+	\end{figure}
+	
+	Les quatre règles de récurrence sur une expression régulière permettent de construire les automates:
+	\begin{itemize}
+		\item Pour une expression régulière de forme $(E)$, le langage $L(E)$ étant équivalent à $L((E))$, l'automate construit pour $E$ reste valable.
+		\item L'expression régulière est de forme $E^*$. Par induction, il existe un automate exprimant le même langage que $E$. L'automate pour $E^*$ est construit comme en (a). Cet automate comprend un arc $\epsilon$ de l'état initial à l'état acceptant pour représenté le cas $E^0$. Ensuite, un arc $\epsilon$ permet de concaténer plus chemins dans $E$, donnant des mots représentés par $E^1$,$E^2$,$E^3$,... Le tout complétant l'ensemble des mots possibles des $L(E)^*$. On a bien $L(E^*)=L(E)^*$.
+		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) représente bien, selon la définition d'un expression régulière $L(EF)=L(E)L(F)$.
+		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expression $E$ et $F$. Par cette construction, en particulier les transitions sur $\epsilon$, permettent à $c$ de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors, en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
+	\end{itemize}
+	
+	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
+	
+\end{proof}
+
+
 
 
 \subsection{Équivalence d'états}\label{ss:tfa}

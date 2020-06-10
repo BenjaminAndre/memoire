@@ -118,19 +118,19 @@ $$
 
 Cette section présente une méthode permettant de créer un ADF à partir d'un ANF. 
 
-Soit un ANF $E=(Q_E, \Sigma, \delta_E, q_0, F_E)$. Alors l'ADF équivalent
+Soit un ANF \automaton. Alors l'ADF équivalent
 $$
 D=(Q_D, \Sigma, \delta_D, q_D, F_D)
 $$
 est défini par :
 \begin{itemize}
-	\item $Q_D = \{S | S \subseteq Q_E \text{ et } S \text{ est \emph{fermé sur epsilon}}\}$. Concrètement, $Q_D$ est l'ensemble des partie des $Q_E$ fermées sur $\epsilon$. Cette fermeture s'écrit $S$=ECLOSE(S), ce qui signifie que chaque transition sur $\epsilon$ depuis un état de $S$ mène à un état également dans $S$. L'ensemble $\emptyset$ est fermé sur $\epsilon$.
-	\item $q_D$=ECLOSE($q_0$). L'état initial de $D$ est l'ensemble des états dans la fermeture sur $\epsilon$ des états de $E$.
-	\item $F_D= \{S|S \in Q_D \text{ et } S \cap F_E \neq \emptyset\}$ contient les ensembles dont au moins un état est acceptant pour $E$.
+	\item $Q_D = \{S | S \subseteq Q \text{ et } S \text{ est \emph{fermé sur epsilon}}\}$. Concrètement, $Q_D$ est l'ensemble des partie des $Q$ fermées sur $\epsilon$. Cette fermeture s'écrit $S$=ECLOSE(S), ce qui signifie que chaque transition sur $\epsilon$ depuis un état de $S$ mène à un état également dans $S$. L'ensemble $\emptyset$ est fermé sur $\epsilon$.
+	\item $q_D$=ECLOSE($q_0$). L'état initial de $D$ est l'ensemble des états dans la fermeture sur $\epsilon$ des états de $A$.
+	\item $F_D= \{S|S \in Q_D \text{ et } S \cap F \neq \emptyset\}$ contient les ensembles dont au moins un état est acceptant pour $A$.
 	\item $\delta_D(S,a)$ est construit, $\forall a \in \Sigma, \forall S \in Q_D$ par :
 		\begin{enumerate}
 			\item Soit $S=\{p_1, p_2,\dots,p_k\}$.
-			\item Calculer $\bigcup_{i=1}^k\delta_E(p_i,a)$. Renommer cet ensemble en $\{r_1, r_2, \dots, r_m\}$.
+			\item Calculer $\bigcup_{i=1}^k\delta(p_i,a)$. Renommer cet ensemble en $\{r_1, r_2, \dots, r_m\}$.
 			\item Alors $\delta_D(S,a)=\bigcup_{j=1}^m\text{ECLOSE(}r_j\text{)}$.
 		\end{enumerate}
 \end{itemize}
@@ -192,13 +192,13 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	(H) edge [loop above] node{c} (H)	
 	;
 	\end{tikzpicture}
-	\caption{Automate $D$. De par la construction par les parties de $Q_E$, le nombre de partie est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé.}\label{fig:dndf}
+	\caption{Automate $D$. De par la construction par les parties de $Q$, le nombre de partie est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé.}\label{fig:dndf}
 \end{figure}
 \end{exemple}
 
 
 
-\begin{theorem}
+\begin{theorem}\label{anf-dnf}
 	Un langage $L$ peut être représenté par un ANF si et seulement si il peut l'être par un ADF.
 \end{theorem}
 
@@ -206,35 +206,35 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	 Soit $L$ un langage. Cette preuve étant une double implication, chacune peut être prouvée séparément.
 	
 	($\Leftarrow$) $L$ peut être représenté par un ADF $\implies$ $L$ peut être représenté par un ANF. Supposons qu'un automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ représente $L$ : $L(D)=L$. 
-	L'ANF $E=(Q_E, \Sigma, \delta_E, q_E, F_E)$ correspondant est construit comme suit :
+	L'ANF \automaton correspondant est construit comme suit :
 	
 	\begin{itemize}
-		\item $Q_E=\{\{q\}|q\in Q_D\}$
-		\item $\delta_E$ contient les transitions de $D$ modifiées. Les objets retournés deviennent des ensembles d'états. C'est-à-dire, si $\delta_D(q,a)=p$ alors $\delta_E(q,a)=\{p\}$. De plus, pour chaque état $q\in Q_D$, $\delta_E(q,\epsilon)=\emptyset$. 
-		\item $q_E=\{q_0\}$
-		\item $F_E=\{\{q\}| q\in F\}$
+		\item $Q=\{\{q\}|q\in Q_D\}$
+		\item $\delta$ contient les transitions de $D$ modifiées. Les objets retournés deviennent des ensembles d'états. C'est-à-dire, si $\delta_D(q,a)=p$ alors $\delta(q,a)=\{p\}$. De plus, pour chaque état $q\in Q_D$, $\delta(q,\epsilon)=\emptyset$. 
+		\item $q_0=\{q_D\}$
+		\item $F=\{\{q\}| q\in F_D\}$
 	\end{itemize}
 	 
-	 Dès lors, les transitions sont les mêmes entre $D$ et $E$, mais $E$ précise explicitement qu'il n'y a pas de transition sur $\epsilon$. Comme $E$ représente le même langage, un ANF représente $L$.
+	 Dès lors, les transitions sont les mêmes entre $D$ et $A$, mais $A$ précise explicitement qu'il n'y a pas de transition sur $\epsilon$. Comme $A$ représente le même langage, un ANF représente $L$.
 	
 	
-	($\Rightarrow$) $L$ peut être représenté par un ANF $\implies$ $L$ peut être représenté par un ADF. Soit l'automate $E=(Q_E, \Sigma, \delta_E, q_0, F_E)$. Supposons qu'il représente $L$ ($L=L(E)$). Considérons l'automate obtenu par la transformation détaillée à la section précédente \ref{ss:eanfadf} :
+	($\Rightarrow$) $L$ peut être représenté par un ANF $\implies$ $L$ peut être représenté par un ADF. Soit l'automate \automaton. Supposons qu'il représente $L$ ($L=L(A)$). Considérons l'automate obtenu par la transformation détaillée à la section précédente \ref{ss:eanfadf} :
 	$$
 	D=(Q_D, \Sigma, \delta_D, q_D, F_D)
 	$$
-	Montrons que $L(D)=L(E)$. Pour ce faire, montrons que les fonctions de transition étendues sont équivalentes. Auquel cas, les chemins sont équivalents et donc les langages également.
-	Montrons que $\hdelta_E(q_0,w)=\hdelta_D(q_D,w)$ pour tout mot $w$, par récurrence sur $w$.
+	Montrons que $L(D)=L(A)$. Pour ce faire, montrons que les fonctions de transition étendues sont équivalentes. Auquel cas, les chemins sont équivalents et donc les langages également.
+	Montrons que $\hdelta(q_0,w)=\hdelta_D(q_D,w)$ pour tout mot $w$, par récurrence sur $w$.
 	
-	\paragraph{Cas de base} Si $|w|=0$, $w=\epsilon$. $\hdelta_E(q_0,\epsilon)=$ ECLOSE($q$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta_E(q_0,\epsilon)$.
+	\paragraph{Cas de base} Si $|w|=0$, $w=\epsilon$. $\hdelta(q_0,\epsilon)=$ ECLOSE($q$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta(q_0,\epsilon)$.
 	
-	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta_E(q_0,x)$. Notons cet ensemble comme $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta_E(q_0,w)$ est obtenu en :
+	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta(q_0,x)$. Notons cet ensemble comme $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta(q_0,w)$ est obtenu en :
 	
 	\begin{enumerate}
-		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta_E(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
-		\item Alors $\hdelta_E(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
+		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
+		\item Alors $\hdelta(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
 	\end{enumerate}
 	
-	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\hdelta_E(q_0,w)$.	
+	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\hdelta(q_0,w)$.	
 	
 \end{proof}
 
