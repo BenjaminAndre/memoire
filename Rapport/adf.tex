@@ -116,7 +116,35 @@
 	 $$
 	 L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\}
 	 $$
-	 Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$.	 
+	 Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$. L'algorithme \ref{alg:adfmembership} représente cette appartenance pour un mot.
+	 
+	 
+	 
+	 \begin{algorithm}[H]
+	 	\begin{algorithmic}[1]
+	 		\REQUIRE un mot $w$, un automate \automaton représentant $L$
+	 		\ENSURE si $w$ appartient à $L$
+	 		
+	 		\STATE $q_{c} \leftarrow q_0$ \COMMENT{$q_c$ est l'état courant}
+	 		
+	 		\WHILE {$|w| > 0$}
+	 		\STATE décomposer $w$ en $ax$ avec $a\in\Sigma$ et $x$ le reste du mot
+	 		\STATE $q_c \leftarrow \delta(q_c,a)$ \COMMENT{passage à l'état suivant}
+	 		\STATE $w \leftarrow x$
+	 		\ENDWHILE
+	 		
+	 		\RETURN si $q_c$ appartient à $F$
+	 	\end{algorithmic}
+	 	\caption{Appartenance d'un mot à un langage défini par un automate}\label{alg:adfmembership}
+	 \end{algorithm}
+ 
+ 	\begin{complexity}
+ 		Si $|w|=n$, l'algorithme \ref{alg:adfmembership} est en $\mathcal{O}(n)$. En effet, les étapes 1 et 7 sont en temps constant. La boucle de l'étape 2 est parcourue $n$ fois (la taille étant diminuée de 1 exactement à chaque itération). Le test de 2 et les opérations de 3 et 5 peuvent être faites en temps constant (par exemple, en voyant w comme une queue). L'étape 4, déterminante, peut être effectuée en temps constant également, par exemple avec l'utilisation d'un tableau de transition.
+	
+	\end{complexity}
+	 
+	 
+	 
 	 
 	 \subsection{La relation $R_M$}\label{ss:rm}
 	 

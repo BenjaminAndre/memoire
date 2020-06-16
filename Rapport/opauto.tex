@@ -103,6 +103,17 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
 \end{proof}
 
+\begin{complexity}
+	Soit un ADF \automaton comportant $n$ états. La complexité peut se décomposer en deux facteurs : la longueur d'une expression régulière et le nombre de celles-ci.
+	
+	A chacune des $n$ itérations (ajoutant progressivement des nouveaux états admis pour état intermédiaire), la longueur de l'expression peut quadrupler : elle est exprimée par 4 facteurs. Ainsi, après $n$ étapes, cette expression peut être de taille $\mathcal{O}(4^n)$.
+	
+	Le nombre d'expressions à construire, lui, est décomposable en deux facteurs également : le nombre d'itérations et celui de paires $i,j$ possibles. Le premier facteur est $n$, quand aux paires, leur nombre s'exprime par $n^2$. $n^3$ expressions sont construites.
+	
+	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle, la première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.	
+\end{complexity}
+
+
 \begin{exemple}
 	Construction d'une expression régulière à partir de l'automate de la figure suivante :
 	
@@ -381,7 +392,16 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	
 \end{proof}
 
-
+\begin{complexity}
+	Soit une expression régulière $E$ de longueur $n$ représentant un langage $L$. Si un \emph{arbre syntaxique} est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
+	\begin{itemize}
+		\item Cas de base : $n$ ANFs sont créés. Cependant, chacun est constitué de 2 états et au plus 1 transition. Ces nombres sont des constantes. Ce cas de base est effectué en $\mathcal{O}(n*3)=\mathcal{O}(n)$
+		\item Récurrence : L'arbre syntaxique requiert au plus $n$ lectures d'opération de récurrence pour fusionner les $n$ ANF en un seul. Cependant, chacune de ses opération implique au plus la création de 2 états et 4 arcs. Ces nombres sont des constantes. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
+	\end{itemize}
+	
+	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section \ref{sec:anf} peut quand à elle être exponentielle. 
+	
+\end{complexity}
 
 
 \subsection{Équivalence d'états}\label{ss:tfa}
@@ -585,6 +605,10 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 
 	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
 	 
+	 \todo{complexité}
+	 
+	 \todo{thm : transitivité equivalence selon remp table}
+	 
 	 
 	 \subsection{Minimisation d'automate}\label{ss:miniauto}
 	 
@@ -639,7 +663,9 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 
 	 Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
 	 
-	 \todo{Proof : cet automate est LE automate minimal}
+	 \todo{thm 4.24 (S->T)}
+	 
+	 \todo{Proof 4.26 : cet automate est LE automate minimal}
 	 
 	 
 	 

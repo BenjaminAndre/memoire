@@ -192,7 +192,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	(H) edge [loop above] node{c} (H)	
 	;
 	\end{tikzpicture}
-	\caption{Automate $D$. De par la construction par les parties de $Q$, le nombre de partie est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé.}\label{fig:dndf}
+	\caption{Automate $D$. De par la construction par les parties de $Q$, le nombre de parties est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé. De même $\emptyset$ est souvent omis pour clarifier la représentation.}\label{fig:dndf}
 \end{figure}
 \end{exemple}
 
@@ -227,15 +227,37 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	
 	\paragraph{Cas de base} Si $|w|=0$, $w=\epsilon$. $\hdelta(q_0,\epsilon)=$ ECLOSE($q$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta(q_0,\epsilon)$.
 	
-	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta(q_0,x)$. Notons cet ensemble comme $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta(q_0,w)$ est obtenu en :
+	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta(q_0,x)$. Ce sont bien les mêmes objets car $\hdelta_D$ retourne un état de $D$ qui correspond à un ensemble d'états de $A$. Notons celui-ci $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta(q_0,w)$ est obtenu en :
 	
 	\begin{enumerate}
 		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
 		\item Alors $\hdelta(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
 	\end{enumerate}
 	
-	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\hdelta(q_0,w)$.	
+	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\bigcup_{j=1}^k$ECLOSE($p_j$)$=\hdelta(q_0,w)$. 
+	
+	On a bien $\hdelta_D(q_D,w)=\hdelta(q_0,w)$. Les langages sont équivalents.
 	
 \end{proof}
 
+\begin{complexity}
+	
+	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler.
+	
+	\begin{itemize}
+		\item ECLOSE : Pour chacun des $n$ états, il y a au plus $n^2$ transitions à suivre sur $\epsilon$ pour construire la fermeture. Ceci représente le cas où tous les états sont reliés avec tous les autres par des transitions sur $\epsilon$. Le coût de cet algorithme est dès lors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$.
+		
+		\item Construction : Posons $s$ le nombre d'états dans l'ADF (qui, dans le pire des cas vaut $s=2^n$ par la construction des sous-ensembles). La création d'un état est en temps $\mathcal{O}(n)$, correspondant au plus à $n$ états de l'ANF. Pour ce qui est des transitions, pour chacun des $s$ nouveaux états, ECLOSE contient au plus $n$ éléments. Chacune des $n^2$ transitions de l'ADF sont alors suivies pour chaque symbole $a\in\Sigma$. Le coût de construction d'une transition est alors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$ auquel vient s'ajouter $\mathcal{O}(n^2)$, négligeable, pour l'union de l'ensemble obtenu.
+	\end{itemize}
+	
+	La complexité totale est $\mathcal{O}(n^3) + s * \mathcal{O}(n^3) = \mathcal{O}(s*n^3) = \mathcal{O}(2^n*n^3)$.
+	Le détail est donné sur $s$ car, comme mentionné par Hopcroft et Al. \cite{Hopcroft00}, en pratique le nombre de l'état dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$.
+	
+\end{complexity}
 
+
+\begin{complexity}
+	La conversion d'un ADF \automaton vers un ANF consiste au remplacement d'états par des ensembles d'états. Si l'ADF contient $n$ états, cette étape est en $\mathcal{O}(n)$. De plus, une colonne pour $\epsilon$ doit être ajoutée à la table de transition (pour la fonction $\delta$), et ce pour chacun des états. Cette étape se fait également en $\mathcal{O}(n)$.
+	
+	La complexité totale d'une conversion d'un ADF vers un ANF est en $\mathcal{O}(n)$.
+\end{complexity}
