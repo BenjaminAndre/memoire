@@ -494,21 +494,23 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \end{figure}
 	 \end{exemple}
 	 
-	 \subsubsection{Complexité}
+	 \begin{complexity}
 	 
 	 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
 	 
-	 Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $O(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $O(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $O(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $O(kn^4)$.
+	 Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $\mathcal{O}(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $\mathcal{O}(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $\mathcal{O}(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $\mathcal{O}(kn^4)$.
 	 
 	 Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables. 
 	 
-	 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.O(n^2)=O(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
+	 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.\mathcal{O}(n^2)=\mathcal{O}(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
 	 
-	 Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $O(n^2)$, ce qui donne $O(kn^2)$ pour cette exploration.
+	 Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $\mathcal{O}(n^2)$, ce qui donne $\mathcal{O}(kn^2)$ pour cette exploration.
 	 
-	 La complexité totale revient à $O(kn^2)$.
+	 La complexité totale revient à $\mathcal{O}(kn^2)$.
+	 \end{complexity}
 	 
-	 \subsection{Équivalence d'automates}
+	 
+	 \subsection{Équivalence d'automates}\label{ss:eqauto}
 	 
 	 Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
 	 
@@ -605,9 +607,13 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 
 	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
 	 
-	 \todo{complexité}
+	 \begin{complexity}
+	 	Reposant sur la construction de la table d'équivalence d'états, la complexité est en $\mathcal{O}(kn^2)$, avec $k$ la taille de l'alphabet et $n$ le nombre d'états. L'étape supplémentaire, la lecture de cette table, est en temps constant et n'impacte pas la complexité.
+	 \end{complexity}
 	 
-	 \todo{thm : transitivité equivalence selon remp table}
+	 
+	 Les différentes notions liées à l'égalité : les propriétés de réflexivité, transitivité et symétrie ont été démontrées dans la section \ref{ss:rm}.
+	 
 	 
 	 
 	 \subsection{Minimisation d'automate}\label{ss:miniauto}
@@ -618,60 +624,86 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate. 
 	 \end{enumerate}
 	 
-	 Ces étapes vont être accompagnées d'un exemple, à savoir l'automate $A_1$ représenté à la figure \ref{fig:a1}.
+	 Soit un automate déterministe fini \automaton. Les états non-atteignables peuvent être supprimés de $Q$ et de $\delta$.
 	 
-	 L'état $q_6$ n'est pas atteignable : il peut être simplement supprimé. On obtient ainsi l'automate $A_2$ qui a servi d'exemple pour l'algorithme de remplissagede tableau, représenté à la figure \ref{fig:a2}.
-	 
-	 Pour minimiser cet automate $A_2 = (Q, \Sigma, \delta, q_0, F)$, il faut :
+	 Pour minimiser cet automate, il faut :
 	 \begin{enumerate}
-	 	\item Générer la table de différenciation (qui, pour cet exemple, est à la figure \ref{fig:ta2})
+	 	\item Générer la table de différenciation.
 	 	\item Séparer $Q$ en classes d'équivalences
-	 	\item Construire l'automate canonique $A_3$:
+	 	\item Construire l'automate canonique $C=(Q_C,\Sigma, \delta_C, q_C, F_C)$:
 	 	\begin{itemize}
-	 		\item Soit $S$ une des classes d'équivalence
-	 		\item Soit $\gamma$ la fonction de transition sur $S$. Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $q$ dans $S$, $\delta(q,a) \in T$. Sinon, c'est que deux états $p$ et $q$ dans $S$ menant à différentes classes d'équivalences. Ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. On peut écrire $\gamma(S,a)=T$.
+	 		\item Soit $S$ une des classes d'équivalence obtenues par la table de différenciation.
+	 		\item Ajouter $S$ à $Q_C$ et à $F_C$ si $S$ contient un état acceptant : $q\in S, q\in F$.
+	 		\item Si $S$ contient $q_0$ l'état initial de $A$, alors $S$ est $q_C$ l'état initial de $C$.
+	 		\item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Si ce n'est pas le cas, c'est que deux états $p$ et $q$ dans $S$ mènent à différentes classes d'équivalences. Or, ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. On peut écrire $\delta_C(S,a)=T$. Pour rappel, la fonction $\delta$ est définie pour tout état et tout symbole. Rien n'empêche $T=S$.
 	 	\end{itemize}
-	 	\item L'état initial de $A_3$ est la classe d'équivalence contenant l'état initial de $A_2$ (dans notre exemple, l'état s'y trouve seul)
-	 	\item Les états acceptants ($F$) de $A_3$ sont les classes d'équivalences qui contenaient des états acceptants de $A_2$.
 	 \end{enumerate}
 	 
-	 La table de la figure \ref{fig:ta2}. Peut servir de base à la construction du nouvel automate suivant cet algorithme.
-	 \begin{figure}[H]
-	 	\centering
-	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+	 
+	 \begin{exemple}
 	 	
-	 	\tikzstyle{every state}=[circle]
+	 	Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
 	 	
-	 	\node[initial,state] (A)                    {$q_0$};
-	 	\node[state]         (B) [below right of=A] {$q_1$};
-	 	\node[state]         (C) [below left of=A] {$q_2$};
-	 	\node[accepting, state]         (D) [below right of=B] {$q_3$};
-	 	\node[state]         (E) [below left of=C]       {$q_4$};
+	 	Le tableau de la figure \ref{fig:ta2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
+	 	$A_3$.
 	 	
-	 	\path 	
-	 	(A) 	edge              node {a} (C)
-	 	edge              node {b} (B)
-	 	(B) 	edge              node {a} (D)
-	 	edge [loop above] node {b} (B)
-	 	(C) 	edge              node {a} (E)
-	 	edge              node {b} (B)
-	 	(D) 	edge [loop above] node {a,b} (D)
-	 	(E) 	edge [loop above] node {a,b} (E);
-	 	\end{tikzpicture}
-	 	\caption{Automate $A_3$}\label{fig:a3}
-	 \end{figure}
+	 	En appliquant l'algorithme, qui peut se résumer intuitivement à fusionner les états équivalents, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.	 	
+	 	
+	 	\begin{figure}[H]
+	 		\centering
+	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+	 		
+	 		\tikzstyle{every state}=[circle]
+	 		
+	 		\node[initial,state] (A)                    {$q_0$};
+	 		\node[state]         (B) [below right of=A] {$q_1$};
+	 		\node[state]         (C) [below left of=A] {$q_2$};
+	 		\node[accepting, state]         (D) [below right of=B] {$q_3$};
+	 		\node[state]         (E) [below left of=C]       {$q_4$};
+	 		
+	 		\path 	
+	 		(A) 	edge              node {a} (C)
+	 		edge              node {b} (B)
+	 		(B) 	edge              node {a} (D)
+	 		edge [loop above] node {b} (B)
+	 		(C) 	edge              node {a} (E)
+	 		edge              node {b} (B)
+	 		(D) 	edge [loop above] node {a,b} (D)
+	 		(E) 	edge [loop above] node {a,b} (E);
+	 		\end{tikzpicture}
+	 		\caption{Automate $A_3$}\label{fig:a3}
+	 	\end{figure}
+	 	
+	 	Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
+	 \end{exemple}
 	 
-	 Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
 	 
-	 \todo{thm 4.24 (S->T)}
-	 
-	 \todo{Proof 4.26 : cet automate est LE automate minimal}
-	 
-	 
-	 
-	 
-	 
-	 
+	 \begin{theorem}
+	 	Soit un ADF $A$ et soit $C$ l'automate construit par cet algorithme de minimisation. Aucun automate équivalent à $A$ n'a moins d'états que $C$. De plus, chaque automate ayant autant d'états que $C$ peut être transformé en celui-ci par homomorphisme.
+	 \end{theorem}
+ 
+ 
+ 	\begin{proof}
+ 		Prouvons que l'algorithme de minimisation fourni un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage)
+ 		Soient un ADF $A$ et $C$ l'automate obtenu par l'algorithme de minimisation. Posons que $C$ comporte $k$ états.
+ 		
+ 		Par l'absurde, supposons qu'il existe $M$ un ADF minimisé équivalent à $A$ mais comptant moins d'états que $C$. Posons qu'il en comporte $l<k$.
+ 		Appliquons l'algorithme de remplissage de table sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différentiables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symboles sont eux aussi équivalent. Le cas contraire impliquerait que états initiaux sont différentiables, ce qui n'est pas le cas.
+ 		De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
+ 		Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents, et que par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
+ 		Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différentiables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$. 		
+ 	\end{proof}
+ 
+ 	\begin{proof}
+ 		Prouvons que tout automate minimal pour un langage est $C$, à un isomorphisme sur les noms des états près.
+ 		
+ 		Soit $A$ un ADF pour un langage $L$. Soient $C$ un ADF obtenu par l'algorithme de minimisation et $M$ un automate minimal comportant autant d'états que $C$.
+ 		
+ 		Comme mentionné dans la preuve précédente, il doit y avoir une équivalence 1 à 1 entre chaque état de $C$ et de $M$. (Au minimum 1 et au plus 1). De plus, aucun état de $M$ ne peut être équivalent à 2 états de $C$, selon le même argument.
+ 		
+ 		Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états. 		 
+ 	\end{proof}
+ 
 	 \subsection{Construction d'automate depuis un langage}
 	 
 	 Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
