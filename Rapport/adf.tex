@@ -9,7 +9,7 @@
 		\item $F \subseteq Q$ est un ensemble d'\emph{états acceptants}.
 	\end{itemize}
 	
-	\begin{exemple}\label{ex:adf}
+	\begin{example}\label{ex:adf}
 		On considère l'automate \automaton défini comme suit :
 		\begin{itemize}
 			\item $Q=\{q_0,q_1,q_2,q_3,q_4,q_5,q_6\}$
@@ -36,7 +36,7 @@
 			\caption{La table de transitions $\delta$}
 			\label{fig:transdelta}
 		\end{figure}
-	\end{exemple}
+	\end{example}
 	 
 	Via cette notation, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
  	
@@ -52,7 +52,7 @@
  		\item Les états acceptants sont représentés par un double cercle, en opposition au simple cercle des autres nœuds.
  	\end{itemize}
  	
- 	\begin{exemple}
+ 	\begin{example}
 	 Voici le graphe représentant l'automate défini par la table \ref{fig:transdelta}
 	 \begin{figure}[H]
 	 	\centering
@@ -84,7 +84,7 @@
 	 	\caption{Automate $A_1$}\label{fig:a1}
 	 \end{figure}
 	 
- 	\end{exemple}
+ 	\end{example}
 
 	 Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part.
 	 
@@ -106,9 +106,9 @@
 	 
 	 Un \emph{chemin} est une application de cette fonction sur un état et un mot.
 	 
-	 \begin{exemple}
+	 \begin{example}
 	 	Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $\hdelta(q_0, ab) = \delta(\hdelta(q_0,a),b) = \delta(\delta(q_0,a),b) = \delta(q_2, b)=q_5$.
-	 \end{exemple}
+	 \end{example}
 	 
 	 \subsection{Langage défini par un automate}
 	 
@@ -163,6 +163,7 @@
 	 		\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Mz$.
 	 		\item \textbf{Symétrique : } Soient les états $x,y \in Q_M$ tels que $xR_My$ et un mot $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x, w)\in F \iff \hat{\delta}(y, w)\in F$. En lisant la double implication depuis la droite, on a bien $\hat{\delta}(y, w) \in F\iff \hat{\delta}(x, w)\in F$ et donc $yR_Mx$.
 	 	\end{itemize}
+ 		\hfill$\square$
 	 \end{proof}
 	 
 	 \begin{corollary}
@@ -187,9 +188,11 @@
 	 	$$\hat{\delta}(x, au) \in F\iff \hat{\delta}(y, au)\in F$$
 	 	$$\hat{\delta}(\delta(x,a),u) \in F\iff\hat{\delta}(\delta(y,a),u)\in F$$
 	 	$$\hat{\delta}(p,u) \in F\iff \hat{\delta}(q,u)\in F$$
-	 \end{proof}
+
+	\hfill$\square$	 
+ \end{proof}
  
- 	\begin{corollary}
+ 	\begin{corollary}\label{col:st}
  		Pour chaque symbole, toutes les transitions sortant d'une classe d'équivalence mènent à une même classe d'équivalence :
  		$\forall a \in \Sigma, \exists T, \forall q \in S, \delta(q,a)\in T$ avec $T$ une classe d'équivalence.
  	\end{corollary}

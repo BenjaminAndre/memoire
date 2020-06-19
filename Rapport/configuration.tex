@@ -26,7 +26,12 @@
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{subcaption}
-\usepackage{ntheorem}
+\usepackage[framed, amsthm, hyperref,standard,thmmarks]{ntheorem}
+\usepackage{lmodern}
+
+
+
+
 %
 %%%%%%% Sub librairies
 
@@ -227,17 +232,17 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\newtheorem{theorem}{Théorème}[section]
-\newtheorem{lemma}[theorem]{Lemme}
-\newtheorem{exemple}[theorem]{Exemple}
-\newtheorem{proposition}[theorem]{Proposition}
 
-
-\newtheorem{proof}{Preuve}[theorem]
-\newtheorem{corollary}[proof]{Corrolaire}
-
-
+\theoremstyle{definition}
 \newtheorem*{complexity}{Complexité}
+
+\renewtheorem{proof}{Preuve}
+
+\renewtheorem{theorem}{Théorème}
+\renewtheorem{example}{Exemple}
+\renewtheorem{lemma}{Lemme}
+\renewtheorem{corollary}{Corollaire}
+\renewtheorem{proposition}{Proposition}
 
 \newcommand{\hdelta}{\hat{\delta}}
 \newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }

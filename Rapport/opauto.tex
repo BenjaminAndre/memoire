@@ -101,6 +101,8 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	$$
 	
 	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
+	
+	\hfill$\square$
 \end{proof}
 
 \begin{complexity}
@@ -114,7 +116,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 \end{complexity}
 
 
-\begin{exemple}
+\begin{example}
 	Construction d'une expression régulière à partir de l'automate de la figure suivante :
 	
 	\begin{figure}[H]\centering
@@ -199,7 +201,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	
 	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.	
 	
-\end{exemple}
+\end{example}
 
 
 	
@@ -390,6 +392,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	
 	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
 	
+	\hfill$\square$
 \end{proof}
 
 \begin{complexity}
@@ -409,8 +412,6 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rm. Celui-ci peut alors être simplifié. Une façon de détecter ces équivalences est de construire un tableau via l'\emph{algorithme de remplissage de tableau}.
 	 
 	 Celui-ci détecte les paires \emph{différenciables}, récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel qu'un chemin $\hdelta(p,w)$ mène à un état acceptant et $\hdelta(q,w)$ mène à un état non-acceptant ou vice-versa. $w$ sert alors de \emph{mot témoin}.
-	 
-	 \todo{Environnement algorithmicx ?}
 	 
 	 \textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$.
 	 
@@ -439,9 +440,11 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 Cependant, le pas de récurrence impose que $\delta(p, a_1)$ et $\delta(q, a_1)$ mènent à deux états différentiables implique que $p$ et $q$ le sont aussi. On a une contradiction de notre hypothèse : $\{p,q\}$ n'est pas une mauvaise paire.
 	 
 	 Ainsi, s'il n'existe pas de mauvaise paire, c'est que chaque paire différenciable est reconnue par l'algorithme.
+	 
+	 \hfill$\square$
 	 \end{proof}
 	 
-	 \begin{exemple} Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
+	 \begin{example} Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
 	 
 	 \begin{figure}[H]
 	 	\centering
@@ -492,7 +495,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\caption{Table filling pour $A_2$, décelant des équivalences d'états}
 	 	\label{fig:ta2}
 	 \end{figure}
-	 \end{exemple}
+	 \end{example}
 	 
 	 \begin{complexity}
 	 
@@ -635,12 +638,12 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		\item Soit $S$ une des classes d'équivalence obtenues par la table de différenciation.
 	 		\item Ajouter $S$ à $Q_C$ et à $F_C$ si $S$ contient un état acceptant : $q\in S, q\in F$.
 	 		\item Si $S$ contient $q_0$ l'état initial de $A$, alors $S$ est $q_C$ l'état initial de $C$.
-	 		\item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Si ce n'est pas le cas, c'est que deux états $p$ et $q$ dans $S$ mènent à différentes classes d'équivalences. Or, ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. On peut écrire $\delta_C(S,a)=T$. Pour rappel, la fonction $\delta$ est définie pour tout état et tout symbole. Rien n'empêche $T=S$.
+	 		\item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Si ce n'est pas le cas, c'est que deux états $p$ et $q$ dans $S$ mènent à différentes classes d'équivalences. Or, ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. Ce fait est déjà mentionné dans le corollaire \ref{col:st}. On peut écrire $\delta_C(S,a)=T$. Pour rappel, la fonction $\delta$ est définie pour tout état et tout symbole. Rien n'empêche $T=S$.
 	 	\end{itemize}
 	 \end{enumerate}
 	 
 	 
-	 \begin{exemple}
+	 \begin{example}
 	 	
 	 	Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
 	 	
@@ -675,7 +678,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\end{figure}
 	 	
 	 	Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
-	 \end{exemple}
+	 \end{example}
 	 
 	 
 	 \begin{theorem}
@@ -691,7 +694,9 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
  		Appliquons l'algorithme de remplissage de table sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différentiables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symboles sont eux aussi équivalent. Le cas contraire impliquerait que états initiaux sont différentiables, ce qui n'est pas le cas.
  		De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
  		Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents, et que par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
- 		Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différentiables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$. 		
+ 		Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différentiables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$. 
+ 		
+ 		\hfill$\square$		
  	\end{proof}
  
  	\begin{proof}
@@ -701,7 +706,9 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
  		
  		Comme mentionné dans la preuve précédente, il doit y avoir une équivalence 1 à 1 entre chaque état de $C$ et de $M$. (Au minimum 1 et au plus 1). De plus, aucun état de $M$ ne peut être équivalent à 2 états de $C$, selon le même argument.
  		
- 		Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états. 		 
+ 		Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états. 		
+ 		
+ 		\hfill$\square$ 
  	\end{proof}
  
 	 \subsection{Construction d'automate depuis un langage}

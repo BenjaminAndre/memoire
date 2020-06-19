@@ -22,7 +22,7 @@ N'étant pas le sujet de ce document, ces deux ne reçoivent aucune distinction 
 
 
 
-\begin{exemple}\label{ex:anf}
+\begin{example}\label{ex:anf}
 	 De la même façon que pour l'exemple \ref{ex:adf} de la section \ref{sub:dfa}, considérons un automate \automaton défini comme suit :
 	
 \begin{itemize}
@@ -70,7 +70,7 @@ De plus, $A$ peut être représenté par un graphe suivant la même méthodologi
 	\end{tikzpicture}
 	\caption{Automate $A$}\label{fig:eanf}
 \end{figure}
-\end{exemple}
+\end{example}
 
 \subsection{Fermeture sur $\epsilon$}
 
@@ -82,13 +82,13 @@ Soit un automate \automaton. Soit $q$ un état dans $Q$.
 
 \paragraph{Pas de récurrence} Si $p$ est dans ECLOSE($q$) et qu'il existe un état $r$ tel quel $r\in\delta(p,\epsilon)$, alors $r$ est dans ECLOSE($q$)
 
-\begin{exemple}\label{ex:anfclosure} Considérons l'automate $A$ de l'exemple \ref{ex:anf}. Les différentes fermetures peuvent être calculées :
+\begin{example}\label{ex:anfclosure} Considérons l'automate $A$ de l'exemple \ref{ex:anf}. Les différentes fermetures peuvent être calculées :
 	\begin{itemize}
 		\item ECLOSE($q_0$) = $\{q_0,q_1,q_2\}$. En effet, $q_0$ appartient à sa fermeture, selon le cas de base. Aussi, $q_1,q_2\in\delta(q_0, \epsilon)$
 		\item ECLOSE($q_1$)=$\{q_1\}$ par le cas de base.
 		\item ECLOSE($q_2$)=$\{q_2\}$ par le cas de base.
 	\end{itemize}
-\end{exemple}
+\end{example}
 
 
 \subsection{Chemin}
@@ -136,7 +136,7 @@ est défini par :
 \end{itemize}
 
 
-\begin{exemple} Considérons l'automate \automaton de l'exemple \ref{ex:anf} et les fermetures calculées dans l'exemple \ref{ex:anfclosure}.
+\begin{example} Considérons l'automate \automaton de l'exemple \ref{ex:anf} et les fermetures calculées dans l'exemple \ref{ex:anfclosure}.
 
 Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
@@ -194,7 +194,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	\end{tikzpicture}
 	\caption{Automate $D$. De par la construction par les parties de $Q$, le nombre de parties est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé. De même $\emptyset$ est souvent omis pour clarifier la représentation.}\label{fig:dndf}
 \end{figure}
-\end{exemple}
+\end{example}
 
 
 
@@ -238,6 +238,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	
 	On a bien $\hdelta_D(q_D,w)=\hdelta(q_0,w)$. Les langages sont équivalents.
 	
+	\hfill$\square$
 \end{proof}
 
 \begin{complexity}

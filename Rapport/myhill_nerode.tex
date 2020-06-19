@@ -25,6 +25,8 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 		\item $R_L$ est transitive. Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
 		\item $R_L$ est congruente à droite. Soient $x,y \in \Sigma^*$ tels que $xR_Ly$. Soit $a \in \Sigma$. Par hypothèse, $ xz \in L \Leftrightarrow yz \in L$ pour tout $z \in \Sigma^*$. Cela doit donc être vrai en particulier pour le mot $z=aw$ avec $w$ quelconque. En remplaçant dans l'hypothèse, on obtient  $ xaw \in L \Leftrightarrow yaw \in L$. Ce qui montre que $xaR_Lya$.
 	\end{itemize}
+
+\hfill$\square$
 \end{proof}
 
 
@@ -49,6 +51,7 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 		$(3)\rightarrow(1)$ Considérons la relation $R_L$ définie précédemment, et déduisons-en $Q'$ les classes d'équivalence sur $L$ et $[[x]]$ l'élément(la classe) de $Q'$ qui contient $x$. Puisque $R_L$ a été démontré comme congruent à droite, on peut définir des transitions : $\delta'([[x]],a) = [[xa]]$. En choisissant un élément $y$ dans $[[x]]$ (ce qui signifie que $xR_Ly$), on obtient $\delta'([[x]],a)=[[ya]]$. Sauf que par définition, $xR_Ly$ signifie qu'en y ajoutant n'importe quel mot $z$, $xz$ et $yz$ appartiennent tous deux où non à $L$. C'est vrai en particulier pour $z=az'$. Ainsi, $xaz'$ et $yaz'$ appartiennent tous deux à $L$ ou non. Ce qui signifie que $xaR_Lya$ et donc $[[xa]]=[[ya]]$. Posons $q_0'=[[\epsilon]]$ et $F' = \{[[x]]|x \in L\}$. Tous ces éléments forment l'automate $M'=(Q', \Sigma, \delta', q_0', F')$. Il est déterministe par la définition de $\delta'$, fini car $Q'$ est fini par construction (le nombre de classes d'équivalence est fini). De plus, il accepte $L$ puisque $\delta'(q_0',x)=[[x]]$, ce qui signifie que $x \in L(M')$ si et seulement si $[[x]] \in F'$, qui a été défini comme tel.
 		
 		
+		\hfill$\square$
 	\end{proof}
 
 
