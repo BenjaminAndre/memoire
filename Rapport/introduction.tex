@@ -1,2 +1,36 @@
-Troisième version du document.
+Quatrième version du document.
 \todo{Construire une introduction}
+
+\subsection*{Contenu du mail introductif}
+
+\paragraph{Objectif}
+
+Le but ultime du mémoire serait de comprendre l’approche de l’article "Actively learning to verify safety for FIFO automata" \cite{Vardhan04} et de reproduire une partie des expérimentations. 
+
+Les différentes étapes seraient
+\begin{itemize}
+	\item te rappeler la notion d’automate fini (voir cours de compilation et de calculabilité et complexité)
+	\item comprendre la notion d’automate fini minimal
+	\item comprendre l’algorithme L* d’Angluin pour l’apprentissage d’un automate
+	\item implémenter l'algorithme de Vardhan pour tester les résultats
+\end{itemize}
+
+
+\paragraph{Contexte}
+
+Un professeur connaît un automate A. Un élève veut l'apprendre en posant deux types de questions, celles de \emph{membership} et d'\emph{equivalence}. Si on a un automate équivalent, on peut utiliser un algorithme pour obtenir l'automate minimal qui calcule le même langage que A.
+
+Cet algorithme A* (ou variantes) a plein d'applications, notamment décrites dans l'article \cite{Vardhan04}. On y considères des automates FIFO, plus généraux. (\emph{de ce que j'ai compris, ils sont équivalent à des automates avec un nombre d'état infini}). Pour ceux-ci, on voudrait savoir si les configurations calculées à partir de l’état initial évitent certaines mauvaises configurations.
+
+Vu la puissance des automates FIFO, il est algorithmiquement impossible de calculer toutes les configurations atteignables à partir de l’état initial. (\emph{ce qui serait cohérent avec ma compréhension})
+
+L’idée est alors de calculer (par apprentissage) un automate fini qui est une sur-approximation de cet ensemble de configurations et ensuite de tester si oui ou non on peut éviter les mauvaises configurations.
+
+
+\subsection{Reformulation du but général}
+
+Il existe les automates FIFO, qui ont des canaux pouvant contenir une infinité de symboles. Ceux-ci sont équivalents à des automates sans canaux mais avec un nombre infini d'états. Ceux-ci peuvent être utilisés pour faire du model checking, c'est-à-dire s'assurer de ne pas atteindre certains états peut importe la suite d'instructions.
+
+Comme il n'est pas possible de résoudre 
+
+

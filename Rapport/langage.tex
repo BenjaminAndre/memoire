@@ -4,7 +4,7 @@ Cette section pose différents concepts et notations pour arriver à la notion d
 
 Un \emph{alphabet}, nommé $\Sigma$ par convention, est un ensemble fini et non vide de \emph{symboles}.
 
-\begin{example} Voici trois alphabets : 
+\begin{example}[Alphabets] Voici trois alphabets : 
 	\begin{itemize}
 		\item $\Sigma = \{0,1,2,3,4,5,6,7,8,9\}$, l'alphabet des chiffres
 		\item $\Sigma = \{a,b,c,...,z,A,B,C,...,Z\}$, l'alphabet latin
@@ -19,7 +19,7 @@ Soit l'alphabet $\Sigma$ et un entier naturel $k$. Un \emph{mot} sur $\Sigma$ es
 
 L'entier $k$ est la \emph{longueur} de ce mot aussi notée $|w|=k$.
 
-\begin{example}
+\begin{example}[Mot]
 	$w=01110010$ est un mot sur $\Sigma=\{0,1\}$
 \end{example}
 
@@ -32,15 +32,15 @@ L'ensemble de tous les mots possibles sur $\Sigma$ est noté $\Sigma^* = \bigcup
 
 La \emph{concaténation} de deux mots $w=a_1a_2\dots a_k$ et $x=b_1b_2\dots b_j$ est l'opération consistant à créer un nouveau mot $wx=a_1a_2\dots a_kb_1b_2\dots b_j$ de longueur $i=k+j$.
 
-\begin{example}
+\begin{example}[Concaténation]
 	Soient les mots $x=41$ et $y=31$. Alors $xy=4131$ et $yx=3141$.
 \end{example}
 
-\begin{lemma}
+\begin{lemma}[$\epsilon$ et la concaténation]
 	$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$.
 \end{lemma}
 
-\begin{proof}
+\begin{proof}[$\epsilon$ et la concaténation]
 	Par définition de la concaténation, tout mot concaténé avec $\epsilon$ retourne le même mot. 
 	\hfill$\square$
 \end{proof}
@@ -51,7 +51,7 @@ La \emph{concaténation} de deux mots $w=a_1a_2\dots a_k$ et $x=b_1b_2\dots b_j$
 
 Un ensemble de mots sur $\Sigma$ est un \emph{langage} \cite{Hopcroft00}, noté $L$.$L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
 
-\begin{example} Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
+\begin{example}[Définition d'un langage] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
 	\begin{itemize}
 		\item $L=\{12,35,42,7,0\}$, un ensemble défini explicitement
 		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro,un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
@@ -98,7 +98,7 @@ Les autres langages réguliers sont construits suivant différentes règles d'in
 	\item Si $E$ et $F$ sont des expressions régulières, $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est commutative et la priorité est à gauche.
 \end{itemize}
 	
-\begin{example}
+\begin{example}[Expression régulière]
 	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui représente le langage $L$.\\
 	\begin{itemize}
 		\item \textbf{ba} fait partie de $L$. En effet, en développant $E$ avec des choix sur les unions et le degré d'une fermeture, on obtient  $E= (b)b^0a(a+b)^0 = b\epsilon a \epsilon = ba$.

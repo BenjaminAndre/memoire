@@ -1,4 +1,8 @@
 \documentclass[french,letterpaper, 12pt]{article}
+
+
+
+
 \usepackage[top = 1.6cm, left = 2cm, right = 2cm ]{geometry}
 \usepackage[pdftex]{graphicx}
 \usepackage{soulutf8}
@@ -26,10 +30,9 @@
 \usepackage{listings}
 \usepackage{amssymb}
 \usepackage{subcaption}
-\usepackage[framed, amsthm, hyperref,standard,thmmarks]{ntheorem}
+\usepackage[standard,thref, framed, hyperref,standard,thmmarks]{ntheorem}
 \usepackage{lmodern}
-
-
+\usepackage{thmtools}
 
 
 %
@@ -232,17 +235,31 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\theoremstyle{plain}
 
-\theoremstyle{definition}
-\newtheorem*{complexity}{Complexité}
 
-\renewtheorem{proof}{Preuve}
+\renewtheorem{theorem}{Théorème}[section]
+\renewtheorem{lemma}[theorem]{Lemme}
+\renewtheorem{proposition}[theorem]{Proposition}
 
-\renewtheorem{theorem}{Théorème}
+
+\theoremstyle{break}
+
+\newtheorem{algo}{Algorithme}[section]
+
+\theoremheaderfont{\normalfont\smallskip\normalsize\itshape\bfseries}
+\theorembodyfont{\normalfont\normalsize}
+
+
+
+\renewtheorem{proof}{Preuve}[theorem]
 \renewtheorem{example}{Exemple}
-\renewtheorem{lemma}{Lemme}
-\renewtheorem{corollary}{Corollaire}
-\renewtheorem{proposition}{Proposition}
+\renewtheorem{corollary}{Corollaire}[theorem]
+
+
+\newtheorem{algoproof}{Preuve}[algo]
+\newtheorem{complexity}[algoproof]{Complexité}
+
 
 \newcommand{\hdelta}{\hat{\delta}}
 \newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }

@@ -22,7 +22,7 @@ N'étant pas le sujet de ce document, ces deux ne reçoivent aucune distinction 
 
 
 
-\begin{example}\label{ex:anf}
+\begin{example}[Automate non-déterministe fini]\label{ex:anf}
 	 De la même façon que pour l'exemple \ref{ex:adf} de la section \ref{sub:dfa}, considérons un automate \automaton défini comme suit :
 	
 \begin{itemize}
@@ -82,7 +82,7 @@ Soit un automate \automaton. Soit $q$ un état dans $Q$.
 
 \paragraph{Pas de récurrence} Si $p$ est dans ECLOSE($q$) et qu'il existe un état $r$ tel quel $r\in\delta(p,\epsilon)$, alors $r$ est dans ECLOSE($q$)
 
-\begin{example}\label{ex:anfclosure} Considérons l'automate $A$ de l'exemple \ref{ex:anf}. Les différentes fermetures peuvent être calculées :
+\begin{example}[ECLOSE]\label{ex:anfclosure} Considérons l'automate $A$ de l'exemple \ref{ex:anf}. Les différentes fermetures peuvent être calculées :
 	\begin{itemize}
 		\item ECLOSE($q_0$) = $\{q_0,q_1,q_2\}$. En effet, $q_0$ appartient à sa fermeture, selon le cas de base. Aussi, $q_1,q_2\in\delta(q_0, \epsilon)$
 		\item ECLOSE($q_1$)=$\{q_1\}$ par le cas de base.
@@ -136,7 +136,7 @@ est défini par :
 \end{itemize}
 
 
-\begin{example} Considérons l'automate \automaton de l'exemple \ref{ex:anf} et les fermetures calculées dans l'exemple \ref{ex:anfclosure}.
+\begin{example}[Transformation ANF vers ADF] Considérons l'automate \automaton de l'exemple \ref{ex:anf} et les fermetures calculées dans l'exemple \ref{ex:anfclosure}.
 
 Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
@@ -198,7 +198,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
 
 
-\begin{theorem}\label{anf-dnf}
+\begin{theorem}[ANF $\Leftrightarrow$ ADF]\label{anf-dnf}
 	Un langage $L$ peut être représenté par un ANF si et seulement si il peut l'être par un ADF.
 \end{theorem}
 
@@ -241,7 +241,9 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	\hfill$\square$
 \end{proof}
 
-\begin{complexity}
+\stepcounter{algo}%TODO because we don't exactly have an algorithm here
+
+\begin{complexity}[Conversion ANF vers ADF]
 	
 	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler.
 	
@@ -257,7 +259,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 \end{complexity}
 
 
-\begin{complexity}
+\begin{complexity}[Conversion ADF vers ANF]
 	La conversion d'un ADF \automaton vers un ANF consiste au remplacement d'états par des ensembles d'états. Si l'ADF contient $n$ états, cette étape est en $\mathcal{O}(n)$. De plus, une colonne pour $\epsilon$ doit être ajoutée à la table de transition (pour la fonction $\delta$), et ce pour chacun des états. Cette étape se fait également en $\mathcal{O}(n)$.
 	
 	La complexité totale d'une conversion d'un ADF vers un ANF est en $\mathcal{O}(n)$.

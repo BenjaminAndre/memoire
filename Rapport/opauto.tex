@@ -1,13 +1,13 @@
 \subsection{Équivalence avec une expression régulière}\label{ss:regexeq}
 
-\begin{proposition}
+\begin{proposition}[ADF et expression régulière]
 	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
 \end{proposition}
 
 Cette proposition étant une double implication, elle est vraie si les deux implications le sont. Soit un langage $L$.
 
 
-\begin{theorem}
+\begin{theorem}[ADF $\implies$ expression régulière]
 	Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
 \end{theorem}
 \begin{proof}
@@ -104,7 +104,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	
 	\hfill$\square$
 \end{proof}
-
+\stepcounter{algo}
 \begin{complexity}
 	Soit un ADF \automaton comportant $n$ états. La complexité peut se décomposer en deux facteurs : la longueur d'une expression régulière et le nombre de celles-ci.
 	
@@ -116,7 +116,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 \end{complexity}
 
 
-\begin{example}
+\begin{example}[Construction d'une expression régulière]
 	Construction d'une expression régulière à partir de l'automate de la figure suivante :
 	
 	\begin{figure}[H]\centering
@@ -205,7 +205,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 
 
 	
-\begin{theorem}
+\begin{theorem}[Expression régulière $\implies$ ADF]
 	($\Leftarrow$) Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
 \end{theorem}
 
@@ -394,7 +394,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	
 	\hfill$\square$
 \end{proof}
-
+\stepcounter{algo}
 \begin{complexity}
 	Soit une expression régulière $E$ de longueur $n$ représentant un langage $L$. Si un \emph{arbre syntaxique} est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
 	\begin{itemize}
@@ -417,7 +417,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 
 	 \textbf{Pas de récurrence : } Soient $p,q$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$.
 	 
-	 \begin{theorem}
+	 \begin{theorem}[Table d'équivalence]
 	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de tableau, les états sont équivalents (ils respectent la relation \rm).
 	 \end{theorem}
 	 
@@ -444,7 +444,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \hfill$\square$
 	 \end{proof}
 	 
-	 \begin{example} Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
+	 \begin{example}[Table d'équivalence] Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
 	 
 	 \begin{figure}[H]
 	 	\centering
@@ -496,7 +496,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\label{fig:ta2}
 	 \end{figure}
 	 \end{example}
-	 
+	 \stepcounter{algo}
 	 \begin{complexity}
 	 
 	 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
@@ -609,7 +609,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \end{itemize}
 	 
 	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
-	 
+	 \stepcounter{algo}
 	 \begin{complexity}
 	 	Reposant sur la construction de la table d'équivalence d'états, la complexité est en $\mathcal{O}(kn^2)$, avec $k$ la taille de l'alphabet et $n$ le nombre d'états. L'étape supplémentaire, la lecture de cette table, est en temps constant et n'impacte pas la complexité.
 	 \end{complexity}
@@ -681,7 +681,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \end{example}
 	 
 	 
-	 \begin{theorem}
+	 \begin{theorem}[Minimalité de l'automate réduit]
 	 	Soit un ADF $A$ et soit $C$ l'automate construit par cet algorithme de minimisation. Aucun automate équivalent à $A$ n'a moins d'états que $C$. De plus, chaque automate ayant autant d'états que $C$ peut être transformé en celui-ci par homomorphisme.
 	 \end{theorem}
  

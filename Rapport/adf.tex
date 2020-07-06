@@ -9,7 +9,7 @@
 		\item $F \subseteq Q$ est un ensemble d'\emph{états acceptants}.
 	\end{itemize}
 	
-	\begin{example}\label{ex:adf}
+	\begin{example}[Automate déterministe fini]\label{ex:adf}
 		On considère l'automate \automaton défini comme suit :
 		\begin{itemize}
 			\item $Q=\{q_0,q_1,q_2,q_3,q_4,q_5,q_6\}$
@@ -52,7 +52,7 @@
  		\item Les états acceptants sont représentés par un double cercle, en opposition au simple cercle des autres nœuds.
  	\end{itemize}
  	
- 	\begin{example}
+ 	\begin{example}[Graphe d'automate]
 	 Voici le graphe représentant l'automate défini par la table \ref{fig:transdelta}
 	 \begin{figure}[H]
 	 	\centering
@@ -106,7 +106,7 @@
 	 
 	 Un \emph{chemin} est une application de cette fonction sur un état et un mot.
 	 
-	 \begin{example}
+	 \begin{example}[Chemin]
 	 	Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $\hdelta(q_0, ab) = \delta(\hdelta(q_0,a),b) = \delta(\delta(q_0,a),b) = \delta(q_2, b)=q_5$.
 	 \end{example}
 	 
@@ -119,8 +119,7 @@
 	 Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$. L'algorithme \ref{alg:adfmembership} représente cette appartenance pour un mot.
 	 
 	 
-	 
-	 \begin{algorithm}[H]
+	 \begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:adfmembership}
 	 	\begin{algorithmic}[1]
 	 		\REQUIRE un mot $w$, un automate \automaton représentant $L$
 	 		\ENSURE si $w$ appartient à $L$
@@ -135,10 +134,9 @@
 	 		
 	 		\RETURN si $q_c$ appartient à $F$
 	 	\end{algorithmic}
-	 	\caption{Appartenance d'un mot à un langage défini par un automate}\label{alg:adfmembership}
-	 \end{algorithm}
+ 	\end{algo}
  
- 	\begin{complexity}
+ 	\begin{complexity}[Lecture d'un mot par un automate]
  		Si $|w|=n$, l'algorithme \ref{alg:adfmembership} est en $\mathcal{O}(n)$. En effet, les étapes 1 et 7 sont en temps constant. La boucle de l'étape 2 est parcourue $n$ fois (la taille étant diminuée de 1 exactement à chaque itération). Le test de 2 et les opérations de 3 et 5 peuvent être faites en temps constant (par exemple, en voyant w comme une queue). L'étape 4, déterminante, peut être effectuée en temps constant également, par exemple avec l'utilisation d'un tableau de transition.
 	
 	\end{complexity}
@@ -153,11 +151,11 @@
 	 
 	 Intuitivement, ces deux états sont en relation si tout mot lu à partir de celui-ci mène à des états étant simultanément acceptants ou non. 
 	 
-	 \begin{proposition}
+	 \begin{proposition}[$R_M$]
 	 	\rm est une relation d'équivalence.
 	 \end{proposition}
 	
-	 \begin{proof} Montrer que \rm est une relation d'équivalence revient à montrer qu'elle est réflexive, transitive et symétrique.
+	 \begin{proof}[$R_M$ est une relation d'équivalence] Montrer que \rm est une relation d'équivalence revient à montrer qu'elle est réflexive, transitive et symétrique.
 	 	\begin{itemize}
 	 		\item \textbf{Réflexive :} Soient un état $x \in Q_M$ et $w \in \Sigma^*$. Alors, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(x,w) \in F$ et par définition, $xR_Mx$.
 	 		\item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_My$ et $yR_Mz$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Mz$.
@@ -177,11 +175,11 @@
 	 \forall x,y \in \Sigma^*, xRy \Rightarrow \forall a \in \Sigma, xaRya 
 	 $$  
 	 
-	 \begin{proposition}
+	 \begin{proposition}[Congruence de \rm]
 	 	\rm est congruente à droite.
 	 \end{proposition}
 	 
-	 \begin{proof}
+	 \begin{proof}[Congruence de \rm]
 	 	Si la relation est vraie pour deux état, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_My$. Soit un symbole $a \in \Sigma$. Par hypothèse, 
 	 	$$\forall w \in \Sigma^*, \hat{\delta}(x, w) \in F \iff \hat{\delta}(y, w) \in F$$
 	 	C'est donc vrai en particulier pour $w = au, u \in \Sigma*$. Dès lors,
