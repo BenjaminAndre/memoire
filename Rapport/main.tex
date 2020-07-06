@@ -1,0 +1,42 @@
+\include{configuration}
+
+\newcommand{\student}{Benjamin André}
+\newcommand{\grade}{MAB2 Sciences Informatiques}
+\newcommand{\director}{Véronique Bruyère}
+\renewcommand{\title}{Automates}
+\renewcommand{\date}{\today}
+
+\begin{document}
+	
+	\include{couverture}	
+	
+	\tableofcontents
+	\newpage
+	
+	\section*{Environnements théoriques}
+	\theoremlisttype{allname}
+	\listtheorems{lemma,proposition,theorem,corrolary,proof}
+	
+	\section*{Exemples}
+	\theoremlisttype{allname}
+	\listtheorems{example}
+	
+	\section*{Environnements algorithmiques}
+	\theoremlisttype{allname}
+	\listtheorems{algo,algoproof,complexity}
+	
+	\newpage
+	
+	\section{Introduction}\label{sec:intro}\input{introduction}
+	
+	
+	\section{Langage}\label{sec:langage}\input{lang}
+	\section{Automate Fini}\label{sec:automaton}\input{automaton}
+	\section{Table Filling Algorithm}\label{sec:tfa}\input{tfa}
+	\section{Algorithme d'Angluin}\label{sec:angluin}\input{angl}
+	
+	\newpage
+	\bibliographystyle{siam}
+	\bibliography{refs.bib}
+	
+\end{document}

@@ -31,6 +31,9 @@ L’idée est alors de calculer (par apprentissage) un automate fini qui est une
 
 Il existe les automates FIFO, qui ont des canaux pouvant contenir une infinité de symboles. Ceux-ci sont équivalents à des automates sans canaux mais avec un nombre infini d'états. Ceux-ci peuvent être utilisés pour faire du model checking, c'est-à-dire s'assurer de ne pas atteindre certains états peut importe la suite d'instructions.
 
-Comme il n'est pas possible de résoudre 
+\subsection{Utilité des sections}
+
+Dans la section \ref{sec:langage}, les notions de langage sont posées. Elles sont ensuite utilisées dans la section \ref{sec:automaton} sur les automates. L'algorithme "Table Filling" de la section \ref{sec:tfa} se base sur ces automates et permet de minimiser et répondre à la requête d'équivalence. Cette requête d'équivalence est une des deux requêtes necéssaire au fonctionnement de l'algorithme d'angluin de la section \ref{sec:angluin}.
+
 
 
