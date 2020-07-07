@@ -1,8 +1,932 @@
-\subsection{Définitions}
+Cette section décrit les automates finis, fait le lien avec la notion de langage et propose une représentation visuelle de ces automates.
+
+
+\subsection{Définitions}\label{ss:autodef}
+
+
+% ██████  ███████ ███████ ██ ███    ██ ██ ████████ ██  ██████  ███    ██
+% ██   ██ ██      ██      ██ ████   ██ ██    ██    ██ ██    ██ ████   ██
+% ██   ██ █████   █████   ██ ██ ██  ██ ██    ██    ██ ██    ██ ██ ██  ██
+% ██   ██ ██      ██      ██ ██  ██ ██ ██    ██    ██ ██    ██ ██  ██ ██
+% ██████  ███████ ██      ██ ██   ████ ██    ██    ██  ██████  ██   ████
+
+
+Un \emph{automate fini} \automaton est défini comme suit :
+\begin{itemize}
+  \item $Q$ est un ensemble fini d'\emph{états}
+  \item $\Sigma$ est un alphabet
+  \item $q_0 \in Q$ est l'\emph{état initial}
+  \item $\delta$ est la \emph{fonction de transition}
+  \item $F \subseteq Q$ est un ensemble d'\emph{états acceptants}.
+\end{itemize}
+
+La fonction de transition $\delta$ est définie différemment en fonction du type d'automate souhaité :
+\begin{itemize}
+  \item \textbf{Automate Déterministe Fini (ADF)} $\delta : Q \times \Sigma \rightarrow Q$. Soit un état $q$ et un symbole $a$. Alors la \emph{transition} $\delta(q,a)$ retourne un état $p$. $\delta(q,a)$ doit être définie pour tout état et tout symbole.
+  \item \textbf{Automate Non-déterministe Fini (ANF)} $\delta : Q \times \Sigma \rightarrow 2^Q$. Soit un état $q$ et un symbole $a$. Alors la transition $\delta(q,a)$ retourne un ensemble d'états $P=\{p_1,p_2,\dots,p_n\}$ avec $n \le |Q|$.
+  \item \textbf{Automate Non-déterministe Fini avec des transitions sur $\epsilon$ ($\epsilon$-ANF)} $\delta : Q \times \Sigma \cup \{\epsilon\} \rightarrow 2^Q$. Pareil que précédemment mais une transition peut exister sans symbole : elle se fait alors sur $\epsilon$.
+\end{itemize}
+
+Lorsqu'un automate est mentionné dans ce document, il s'agit implicitement d'un $\epsilon$-ANF, sauf mention contraire. En effet, c'est la forme la plus générale. Cependant, ces trois types d'automates ont la même puissance expressive, ce qui est prouvé dans la section \ref{ss:eqadfanf}.
+
+Soit la transition $\delta(q,a)=p$ (dans un ADF). Pour $q$, c'est une \emph{transition sortante sur a}. Pour $p$, c'est une \emph{transition entrante sur a}. Si $\delta(q,a)=P=\{p_1,p_2,\dots,p_n\}$, alors les états $\{p_1,p_2,\dots,p_n\}$ auront une transition entrante sur $a$.
+
+Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$ sur un ensemble d'états $S$. A ce moment, $\delta(S,a)=\bigcup_{q\in S}\delta(q,a)$ avec $a\in \Sigma$.
+
+
+% ███████ ██   ██ ███████ ███    ███ ██████  ██      ███████ ███████
+% ██       ██ ██  ██      ████  ████ ██   ██ ██      ██      ██
+% █████     ███   █████   ██ ████ ██ ██████  ██      █████   ███████
+% ██       ██ ██  ██      ██  ██  ██ ██      ██      ██           ██
+% ███████ ██   ██ ███████ ██      ██ ██      ███████ ███████ ███████
+
+
+\begin{example}[Automate déterministe fini]\label{ex:adf}
+  On considère l'automate \automaton défini comme suit :
+  \begin{itemize}
+    \item $Q=\{q_0,q_1,q_2,q_3,q_4,q_5,q_6\}$
+    \item $\Sigma=\{a,b\}$
+    \item $q_0$ est l'état du même nom
+    \item La fonction de transition $\delta$ est décrite par la table \ref{fig:transdelta}. L'intersection d'une ligne reprenant un élément $q \in Q$ et d'une colonne $a \in \Sigma$ donne l'état $\delta(q,a)$.
+    \item $F=\{q_3\}$
+  \end{itemize}
+
+  \begin{figure}[H]
+    \centering
+    \begin{tabular}{|r||c|c|}
+      \hline
+      &a&b\\
+      \hline\hline
+      $\rightarrow q_0$&$q_2$&$q_1$\\\hline
+      $q_1$&$q_3$&$q_5$\\\hline
+      $q_2$&$q_4$&$q_5$\\\hline
+      $q_3^*$&$q_3$&$q_3$\\\hline
+      $q_4$&$q_4$&$q_4$\\\hline
+      $q_5$&$q_3$&$q_1$\\\hline
+      $q_6$&$q_4$&$q_5$\\\hline
+    \end{tabular}
+    \caption{La table de transitions $\delta$}
+    \label{fig:transdelta}
+  \end{figure}
+\end{example}
+
+Via cette notation, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
+
+\begin{example}[Automate non-déterministe fini avec une transition sur $\epsilon$]\label{ex:anf}
+	 De la même façon que pour l'exemple précédant, considérons un automate \automaton défini comme suit :
+
+\begin{itemize}
+	\item $Q=\{q_0,q_1,q_2\}$
+	\item $\Sigma=\{a,b,c\}$
+	\item $q_0$ est l'état du même nom
+	\item $\delta$ est donnée par la table \ref{fig:eanfdelta}.
+	\item $F=\{q_2\}$
+\end{itemize}
+
+$A$ est un $\epsilon$-ANF ; une colonne supplémentaire sert à représenter la transition sur $\epsilon$.
+
+\begin{figure}[H]
+	\centering
+	\begin{tabular}{|r||c|c|c|c|}
+		\hline
+		&$\epsilon$&a&b&c\\
+		\hline\hline
+		$\rightarrow q_0$&$\{q_1,q_2\}$&$\emptyset$&$\{q_1\}$&$\{q_2\}$\\\hline
+		$q_1$&$\emptyset$&$\{q_0\}$&$\{q_2\}$&$\{q_0,q_1\}$\\\hline
+		$q_2^*$&$\emptyset$&$\emptyset$&$\emptyset$&$\emptyset$\\\hline
+	\end{tabular}
+	\caption{$\delta$}
+	\label{fig:eanfdelta}
+\end{figure}
+
+Un exemple d'ANF sans transition sur $\epsilon$ serait juste A sans ces dites transitions. Il ne seraient cependant pas équivalents.
+
+\end{example}
+
+
+%  ██████  ██████   █████  ██████  ██   ██ ███████
+% ██       ██   ██ ██   ██ ██   ██ ██   ██ ██
+% ██   ███ ██████  ███████ ██████  ███████ █████
+% ██    ██ ██   ██ ██   ██ ██      ██   ██ ██
+%  ██████  ██   ██ ██   ██ ██      ██   ██ ███████
+
 \subsection{Représentation graphique}
-\subsection{Déterminisme}
+
+Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit comme suit :
+
+\begin{itemize}
+  \item Chaque état de $Q$ est représenté par un nœud.
+  \item Chaque transition $\delta(q,a)$ est représenté par un arc étiquetté $a$. Dans le cas d'un automate non-déterministe, un arc existe pour chacun des états obtenus en suivant la transition. Si il y a plusieurs transitions sortant d'un même état et entrant dans un même autre état, les arcs peuvent être fusionnés en listant les étiquettes.
+  \item L'état initial est mis en évidence par une flèche entrante.
+  \item Les états acceptants sont représentés par un double cercle, en opposition au simple cercle des autres nœuds.
+\end{itemize}
+
+\begin{example}[Graphe d'automate]
+ Voici les graphes représentant les automates définis dans la section précédente :
+
+ \begin{minipage}[t]{0.5\textwidth}
+   \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10]
+
+    \tikzstyle{every state}=[circle]
+
+    \node[initial,state] (A)                    {$q_0$};
+    \node[state]         (B) [below right of=A] {$q_1$};
+    \node[state]         (C) [below left of=A] {$q_2$};
+    \node[accepting, state]         (D) [below right of=B] {$q_3$};
+    \node[state]         (E) [below left of=C]       {$q_4$};
+    \node[state]         (G) [below right of=E]       {$q_6$};
+    \node[state]         (F) [above right of=G]       {$q_5$};
+
+    \path 	(A) 	edge              node {a} (C)
+    edge              node {b} (B)
+    (B) 	edge              node {a} (D)
+    edge [bend left]  node {b} (F)
+    (C) 	edge              node {a} (E)
+    edge              node {b} (F)
+    (D) 	edge [loop above] node {a,b} (D)
+    (E) 	edge [loop above] node {a,b} (E)
+    (F) 	edge              node {a} (D)
+    edge [bend left]  node {b} (B)
+    (G) 	edge              node {a} (E)
+    edge              node {b} (F);
+    \end{tikzpicture}
+    \caption{Graphe de l'automate de la table \ref{fig:transdelta}}\label{fig:a1}
+   \end{figure}
+ \end{minipage}
+ \begin{minipage}[t]{0.5\textwidth}
+   \begin{figure}[H]
+   	\centering
+   	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10]
+
+   	\tikzstyle{every state}=[circle]
+
+   	\node[initial,state] (A)                    {$q_0$};
+   	\node[state]         (B) [above right of=A] {$q_1$};
+   	\node[accepting, state]         (C) [below right of=A] {$q_2$};
+
+   	\path
+   	(A) edge [bend left] node{$\epsilon$,b} (B)
+   	(A) edge node{$\epsilon$,c} (C)
+   	(B) edge [bend left] node{a,c} (A)
+   	(B) edge [loop right] node{c} (B)
+   	(B) edge node{b} (C);
+   	\end{tikzpicture}
+   	\caption{Graphe de l'automate de la table \ref{fig:eanfdelta}}\label{fig:eanf}
+   \end{figure}
+\end{minipage}
+\end{example}
+
+ Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part.
+
+
+
+% ███████  ██████ ██       ██████  ███████ ███████
+% ██      ██      ██      ██    ██ ██      ██
+% █████   ██      ██      ██    ██ ███████ █████
+% ██      ██      ██      ██    ██      ██ ██
+% ███████  ██████ ███████  ██████  ███████ ███████
+
+
 \subsection{ECLOSE}
-\subsection{Fonction de transition étendue}
+Soit un $\epsilon$-ANF \automaton. Il est possible de construire un fonction retournant l'ensemble des états atteints uniquement en suivant des transitions sur $\epsilon$ pour un état $q$ donné. Cette fonction est la \emph{fermeture sur epsilon} $ECLOSE : Q \rightarrow 2^Q$. Sa définition est inductive.\\
+
+Soit $q$ un état dans $Q$.\\
+\textbf{Cas de base} $q$ est dans ECLOSE($q$)\\
+\textbf{Pas de récurrence} Si $p$ est dans ECLOSE($q$) et qu'il existe un état $r$ tel quel $r\in\delta(p,\epsilon)$, alors $r$ est dans ECLOSE($q$)\\
+
+ECLOSE peut être utilisé indifféremment sur un ensemble d'états S ($ECLOSE : 2^Q \rightarrow 2^Q$). Alors, $ECLOSE(S)=\bigcup_{q\in S}ECLOSE(q)$
+
+\begin{example}[ECLOSE]\label{ex:anfclosure} Considérons l'automate $A$ de l'exemple \ref{ex:anf}. Les différentes fermetures peuvent être calculées :
+	\begin{itemize}
+		\item ECLOSE($q_0$) = $\{q_0,q_1,q_2\}$. En effet, $q_0$ appartient à sa fermeture, selon le cas de base. Aussi, $q_1,q_2\in\delta(q_0, \epsilon)$
+		\item ECLOSE($q_1$)=$\{q_1\}$ par le cas de base.
+		\item ECLOSE($q_2$)=$\{q_2\}$ par le cas de base.
+	\end{itemize}
+\end{example}
+
+
+% ██       █████  ███    ██  ██████   █████   ██████  ███████
+% ██      ██   ██ ████   ██ ██       ██   ██ ██       ██
+% ██      ███████ ██ ██  ██ ██   ███ ███████ ██   ███ █████
+% ██      ██   ██ ██  ██ ██ ██    ██ ██   ██ ██    ██ ██
+% ███████ ██   ██ ██   ████  ██████  ██   ██  ██████  ███████
+
+
+\subsection{Langage}
+
+Un automate représente un langage, tel que défini dans la section \ref{sec:langage}.
+
+\subsubsection*{Fonction de transition étendue}
+
+La \emph{fonction de transition étendue} $\hdelta$ est une extension de la fonction de transition, acceptant plusieurs symboles de façon consécutive. Intuitivement, il s'agit de suivre plusieurs arcs sur le graphe.
+
+Comme $\delta$ est différente en fonction du type d'automate considéré, $\hdelta$ l'est aussi.
+
+\begin{itemize}
+  \item \textbf{ADF :} $\hdelta : Q \times \Sigma^* \rightarrow Q$. $\hdelta$ prend en entrée un état de $Q$ et un mot $w$ sur $\Sigma$ et retourne un état de $Q$.
+  \item \textbf{ANF et $\epsilon$-ANF :} $\hdelta : Q \times \Sigma^* \rightarrow 2^Q$. $\hdelta$ prend en entrée un état de $Q$ et un mot $w$ sur $\Sigma$ et retourne un ensemble d'états de $Q$.
+\end{itemize}
+
+Soit un état $q \in Q$ et un mot $w \in \Sigma^*$. Alors $\hdelta$ est définie par:\\
+\textbf{Cas de base} Il y a deux cas de base:
+\begin{itemize}
+ \item $w$ est un mot vide :
+    \begin{itemize}
+      \item Pour un ADF ou ANF : $\hdelta(q, \epsilon) = q$.
+      \item Pour un $\epsilon$-ANF : $\hdelta(q, \epsilon) = ECLOSE(q)$.
+    \end{itemize}
+ \item $w$ est un symbole : $\hdelta(q, w)=\hdelta(q,a)$ avec $w=a\in \Sigma$.
+    \begin{itemize}
+      \item Pour un ADF ou ANF : $\hdelta(q,a)=\delta(q,a)$.
+      \item Pour un $\epsilon$-ANF : $\hdelta(q,a)=ECLOSE(\delta(q,a))$.
+    \end{itemize}
+\end{itemize}
+\textbf{Pas de récurrence} Si $|w|>1$, alors $w=xa$ avec $x$ un mot sur $\Sigma$ et $a$ un symbole de $\Sigma$.
+\begin{itemize}
+  \item Pour un ADF ou ANF : $\hdelta(q,w) = \hdelta(q,xa)= \delta(\hdelta(q,x),a)$
+  \item Pour un $\epsilon$-ANF : $\hdelta(q,w) = \hdelta(q,xa)= ECLOSE(\delta(\hdelta(q,x),a))$.
+\end{itemize}
+
+
+Il se peut que la fonction de transition $\delta$ ne soit pas définie pour une paire d'arguments. Auquel cas, $\hdelta$ ne l'est pas non plus.\\
+
+\subsubsection*{Chemin}
+
+Un \emph{chemin} est une application de cette fonction sur un état et un mot.
+
+\begin{example}[Chemin]
+ Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $\hdelta(q_0, ab) = \delta(\hdelta(q_0,a),b) = \delta(\delta(q_0,a),b) = \delta(q_2, b)=q_5$.
+\end{example}
+
+\subsubsection*{Langage}
+Le langage représenté par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
+$$
+L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\} \hspace{0.5cm}
+L(A)= \{w \in \Sigma^* | \exists q \in \hdelta(q_0,w), q \in F\}
+$$
+Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$. L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
+
+
+\begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:membership}
+ \begin{algorithmic}[1]
+   \REQUIRE un mot $w$, un automate \automaton représentant $L$
+   \ENSURE si $w$ appartient à $L$
+
+   \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ sont les états courants}
+   \WHILE {$|w| > 0$}
+   \STATE décomposer $w$ en $ax$ avec $a\in\Sigma$ et $x$ le reste du mot
+   \STATE $C \leftarrow \delta(C,a)$ \COMMENT{passage à l'état suivant}
+   \STATE \COMMENT{Si l'automate est un ADF, C ne contient toujours qu'un seul état}
+   \STATE $w \leftarrow x$
+   \ENDWHILE
+
+   \RETURN s'il existe un état $q \in C$ appartenant à $F$
+ \end{algorithmic}
+\end{algo}
+
+\begin{complexity}[Lecture d'un mot par un automate]
+ Si $|w|=n$, l'algorithme \ref{alg:membership} est en $\mathcal{O}(n)$. En effet, les étapes 1 et 8 sont en temps constant. La boucle de l'étape 2 est parcourue $n$ fois (la taille étant diminuée de 1 exactement à chaque itération). Le test de 2 et les opérations de 3 et 6 peuvent être faites en temps constant (par exemple, en voyant w comme une queue). L'étape 4, déterminante, peut être effectuée en temps constant également, par exemple avec l'utilisation d'un tableau de transition.
+
+\end{complexity}
+
+
+% ██      ██    █████
+% ██       ██  ██   ██
+% ██ █████  ██ ███████
+% ██       ██  ██   ██
+% ███████ ██   ██   ██
+
 \subsection{Construction d'un automate depuis un langage régulier}
+Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
+
+On peut diviser les mots en 3 ensembles :
+
+\begin{itemize}
+ \item $W_0$ le sous-ensemble des mots ne finissant pas le symbole $b$
+ \item $W_1$ celui des mots finissant par le symbole $b$ mais ne contenant pas $bb$
+ \item $W_2$ celui des mots contenant au moins $bb$
+\end{itemize}
+
+Il y a d'autres façons de construire des sous-ensembles, mais celle-ci à l'avantage de rendre la question de l'appartenance à $L_N$ triviale : un mot appartient au second ensemble si et seulement si il fait partie du langage, par définition.
+
+De plus, tous les éléments d'un sous-ensemble respectent la relation $R_L$ entre eux. ($R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$). Cela en fait des classes d'équivalence sur cette relation.
+
+Cela peut être démontré pour chaque sous-ensemble :
+\begin{itemize}
+ \item Soient $x,y \in W_0$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ fini par $b$ mais ne contient pas $bb$, et donc $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
+ \item Soient $x,y \in W_1$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ ne commençait pas le symbole $b$ et ne contenait pas $bb$, $yz$ ne contiendra donc pas $bb$, puisque cette chaîne n'est ni dans $z$ ni dans $y$, ni a cheval sur les deux, $z$ ne commençant pas par $b$. Ainsi, $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
+ \item Soient $x,y \in W_2$. Soit $z \in \Sigma^*$. Comme $x$ contient déjà $bb$, $x \notin L_N$ et, a fortiori, $xz \notin L_N$. Comme la prémisse est fausse, l'implication $xz \in L \Rightarrow yz \in L$ est vraie. La même logique peut être appliquée à partir de $y$ pour justifier l'implication inverse.
+\end{itemize}
+
+De plus, ces sous-ensembles sont disjoints. Cela peut se prouver en invalidant la relation pour certains éléments entre eux, mais dans ce cas-ci, la propriété est assurée par définition.
+
+Ceci revient à démontrer que $W_0,W_1,W_2$ sont des classes d'équivalence. De plus, $R_L$ respecte la congruence à droite, comme démontré dans la preuve du théorème de Myhill-Nérode. Ce même théorème donne une méthode pour construire un automate : prendre un représentant pour chaque classe et en faire un état.
+
+\begin{itemize}
+ \item $\Sigma=\{a,b\}$ est connu.
+ \item $Q=\{[[\epsilon]]\, [[b]], [[bb]]\} = \{q_\epsilon, q_b, q_{bb}\}$
+ \item $q_0 = q_\epsilon$
+ \item $F = \{q_b\}$ l'union des classes acceptant
+ \item $\delta$ défini en utilisant des exemples tirés des classes d'équivalence.
+\end{itemize}
+
+Ce qui donne l'automate de la figure \ref{fig:an}
+
+\begin{figure}[H]
+ \centering
+ \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
+
+ \tikzstyle{every state}=[circle]
+
+ \node[initial,state]	(A)					{$q_\epsilon$};
+ \node[accepting,state]	(B)	[right= of A]	{$q_b$};
+ \node[state]			(C) [right= of B]	{$q_{bb}$};
+
+ \path
+ (A)	edge	[bend left]		node{b}		(B)
+ (A)	edge	[loop above]	node{a}		(A)
+ (B) edge	[bend left]		node{a}		(A)
+ (B) edge					node{b}		(C)
+ (C)	edge	[loop above]	node{a,b}	(C)
+
+ ;
+ \end{tikzpicture}
+ \caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}\label{fig:an}
+\end{figure}
+
+Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
+
+
+
+% ███████       ██     ██        █████
+% ██           ██       ██      ██   ██
+% █████       ██  █████  ██     ███████
+% ██           ██       ██      ██   ██
+% ███████       ██     ██       ██   ██
+
 \subsection{Équivalence entre expression régulière et automate}
-\subsection{Équivalence entre un automate déterministe fini et un automate non-déterministe fini}
+\begin{proposition}[ADF et expression régulière]
+	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
+\end{proposition}
+
+Cette proposition étant une double implication, elle est vraie si les deux implications le sont. Soit un langage $L$.
+
+
+\begin{theorem}[ADF $\implies$ expression régulière]
+	Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
+\end{theorem}
+\begin{proof}
+	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés.
+
+	Posons $E_{ij}^k$ l'expression régulière exprimant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+
+		\tikzstyle{every state}=[circle]
+
+		\node[initial,state] (A)                    {$1$};
+		\node[state]         (B) [right of=A] {$2$};
+		\node[state]         (C)  [right of=B] {$3$};
+		\node[accepting, state]         (D)  [right of=C] {$4$};
+		\node[state]         (E)  [right of=D]       {$5$};
+
+		\path
+		(A) edge [bend left=45] node{a} (C)
+		(A) edge  node{b} (B)
+
+		(B) edge [bend left=45] node{a} (A)
+		(B) edge node{b} (C)
+
+		(C) edge [bend left=45,dashed] node{a} (E)
+		(C) edge [loop below] node{b} (C)
+
+		(D) edge [loop below,dashed] node{a,b} (D)
+		(E) edge [,dashed] node{a,b} (D)
+
+		;
+		\end{tikzpicture}
+		\caption{Exemple : automate mettant $E_{1,3}^3$ en évidence}\label{fig:proofeijk}
+	\end{figure}
+
+
+	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Dans cet exemple, $E_{5,4}^3$ tolère la transition de $5$ à $4$ bien que supérieure à $k$ : ce ne sont pas des intermédiaires. Construisons le langage par induction sur les états autorisés.
+
+	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté. La première possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté aux possibilités si $i=j$.
+	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :
+
+	Pour chaque paire $i$, $j$ :
+	\begin{itemize}
+		\item Il n'existe pas de symbole $a$ tel que $\delta(i,a)=j$. Alors, $R_{ij}^0=\emptyset (+\epsilon)$
+		\item Il existe un unique symbole $a$ tel que  $\delta(i,a)=j$. Alors, $R_{ij}^0=a(+\epsilon)$
+		\item Il existe des symboles $a_1,a_2,\dots,a_k$ tels que $\forall l \in \{1,\dots, k\}, \delta(i,a_l)=j$. Alors, $R_{ij}^0=a_1+a_2+\dots+a_k(+\epsilon)$
+	\end{itemize}
+
+	\paragraph{Pas de récurrence} Supposons qu'il existe un chemin allant de $i$ à $j$ ne passant par aucun état ayant un numéro supérieur à $k$.	La première possibilité est que le-dit chemin ne passe pas par $k$. Alors, le mot représenté par ce chemin fait partie du langage de $E_{ij}^{k-1}$. Seconde possibilité, le chemin passe par $k$ une ou plusieurs fois comme représenté à la figure \ref{fig:ikjpath}.
+
+	\begin{figure}[H]\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+
+	\tikzstyle{every state}=[circle]
+
+	\node[state] (A) {$i$};
+	\node[state] (B) [right of=A] {$k$};
+	\node[state] (C) [right of=B] {$k$};
+	\node[state] (D) [right of=C] {$k$};
+	\node[state] (E) [right of=D] {$k$};
+	\node[state] (F) [right of=E] {$j$};
+
+	\path
+	(A) edge [snake] (B)
+	(B) edge [snake] (C)
+	(C) edge [snake] (D)
+	(D) edge [snake] (E)
+	(E) edge [snake] (F)
+	;
+
+	\draw[-] (0.3,-0.8) arc (-100:-80:4.5) ;
+	\draw[-] (2.24,-0.8) arc (-100:-80:16) ;
+	\draw[-] (8.3,-0.8) arc (-100:-80:4.5) ;
+
+
+	\node[draw=none] at (1.25,-1.4) {Dans $E_{ik}^{k-1}$};
+	\node[draw=none] at (5.25,-1.4) {Mots dans $E_{kk}^{k-1}$};
+	\node[draw=none] at (9.25,-1.4) {Dans $E_{kj}^{k-1}$};
+
+	\end{tikzpicture}
+	\caption{Un chemin de $i$ à $j$ peut être découpé en différent segment en fonction de $k$}\label{fig:ikjpath}
+	\end{figure}
+
+	Auquel cas, ces chemins sont composés d'une sous-chemin donnant un mot dans $E_{ik}^{k-1}$, suivi d'un sous-chemin donnant un ou plusieurs mots dans $E_{kk}^{k-1}$ et finalement un mot dans $E_{kj}^{k-1}$.
+
+	En combinant les expressions des deux types, on obtient :
+	$$
+	E_{ij}^k = E_{ij}^{k-1}+E_{ik}^{k-1}(E_{kk}^{k-1})*E_{kj}^{k-1}
+	$$
+
+	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
+
+	\hfill$\square$
+\end{proof}
+\stepcounter{algo}
+\begin{complexity}
+	Soit un ADF \automaton comportant $n$ états. La complexité peut se décomposer en deux facteurs : la longueur d'une expression régulière et le nombre de celles-ci.
+
+	A chacune des $n$ itérations (ajoutant progressivement des nouveaux états admis pour état intermédiaire), la longueur de l'expression peut quadrupler : elle est exprimée par 4 facteurs. Ainsi, après $n$ étapes, cette expression peut être de taille $\mathcal{O}(4^n)$.
+
+	Le nombre d'expressions à construire, lui, est décomposable en deux facteurs également : le nombre d'itérations et celui de paires $i,j$ possibles. Le premier facteur est $n$, quand aux paires, leur nombre s'exprime par $n^2$. $n^3$ expressions sont construites.
+
+	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle, la première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
+\end{complexity}
+
+
+\begin{example}[Construction d'une expression régulière]
+	Construction d'une expression régulière à partir de l'automate de la figure suivante :
+
+	\begin{figure}[H]\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
+
+		\tikzstyle{every state}=[circle]
+
+		\node[initial,state] (A) {$1$};
+		\node[accepting,state] (B) [right of=A] {$2$};
+
+		\path
+		(A) edge [bend left=20] node{0} (B)
+		(B) edge [bend left=20] node{0} (A)
+
+		(A) edge [loop above] node{1} (A)
+		(B) edge [loop above] node{1} (B)
+		;
+
+		\end{tikzpicture}
+		\caption{Un automate acceptant tout mot ayant un nombre impair de $0$}
+	\end{figure}
+
+	La construction par récurrence commençant avec $k=0$ le processus peut être représenté par des tableaux correspondant à différents $k$ de façon croissante.
+
+	\paragraph{Première itération} Dans la première itération, chaque expression se résume à un des trois cas de base, avec éventuellement $\epsilon$ si $i=j$ pour l'expression analysée.
+
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|l|c|}
+			\hline
+			 & Cas de base\\
+			\hline
+			$E_{11}^0$& $1+\epsilon$\\
+			$E_{12}^0$& $0$\\
+			$E_{21}^0$& $0$\\
+			$E_{22}^0$& $1+\epsilon$\\
+			\hline
+		\end{tabular}
+	\end{figure}
+
+	\paragraph{Seconde itération} Ensuite, l'état $1$ est autorisé comme état intermédiaire : $k=1$. Ayant potentiellement un état intermédiaire, la formule de récurrence est utilisée.
+
+	\begin{figure}[H]
+		\centering
+		\begin{tabular}{|l|c|c|c|}
+			\hline
+			 & Formule de récurrence & Détail & Simplification\\
+			\hline
+			$E_{11}^1$& $E_{11}^0 + E_{11}^0(E_{11}^0)^*E_{11}^0$&
+			$(1+\epsilon)+(1+\epsilon)(1+\epsilon)^*(1+\epsilon)$ & $1^*$\\
+			$E_{12}^1$& $E_{12}^0 + E_{11}^0(E_{11}^0)^*E_{12}^0$&
+			$0+(1+\epsilon)(1+\epsilon)^*0$ & $1^*0$ \\
+			$E_{21}^1$& $E_{21}^0 + E_{21}^0(E_{11}^0)^*E_{11}^0$&
+			$0+0(1+\epsilon)^*(1+\epsilon)$& $01^*$\\
+			$E_{22}^1$& $E_{22}^0 + E_{21}^0(E_{11}^0)^*E_{12}^0$&
+			$(1+\epsilon)+0(1+\epsilon)^*0$ & $1+01^*0$\\
+			\hline
+		\end{tabular}
+	\end{figure}
+
+
+	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire.
+
+	\begin{figure}[H]
+		\hspace{-5mm}\begin{tabular}{|l|c|c|c|}
+			\hline
+			 & Formule de récurrence & Détail & Simplification\\
+			\hline
+			$E_{11}^2$& $E_{11}^1 + E_{12}^1(E_{22}^1)^*E_{21}^1$&
+			$1^*+1^*0(1+01^*0)^*01^*$&$1^*+1^*0(1+01^*0)^*01^*$\\
+			$E_{12}^2$& $E_{12}^1 + E_{12}^1(E_{22}^1)^*E_{22}^1$&
+			$1^*0+1^*0(1+01^*0)^*(1+01^*0)$&$1^*0(1+01^*0)^*$\\
+			$E_{21}^2$& $E_{21}^1 + E_{22}^1(E_{22}^1)^*E_{21}^1$&
+			$01^*+(1+01^*0)(1+01^*0)^*01^*$&$(1+01^*0)^*01^*$\\
+			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&
+			$(1+01^*0)+(1+01^*0)(1+01^*0)^*(1+01^*0)$&$(1+01^*0)^*$\\
+			\hline
+		\end{tabular}
+	\end{figure}
+
+	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $L(1^*0(1+01^*0)^*)=L$.
+
+	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.
+
+\end{example}
+
+
+
+\begin{theorem}[Expression régulière $\implies$ ADF]
+	($\Leftarrow$) Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
+\end{theorem}
+
+
+\begin{proof}
+	Comme tout ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
+
+	Soit $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
+	\begin{enumerate}
+		\item Il y a un unique état acceptant
+		\item Aucune transition ne mène à l'état initial
+		\item Aucune transition ne part de l'état acceptant
+	\end{enumerate}
+
+
+
+
+	\paragraph{Cas de base}	Les ANF de la figure \ref{fig:regexadfbase} représentent les automates correspondant aux trois cas de base.
+
+	\begin{figure}[H]
+
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+		\tikzstyle{every state}=[circle]
+
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+
+		\path
+		(A) edge  node{$\epsilon$} (B)
+		;
+		\node[draw, fit=(A) (B)] {};
+
+		\end{tikzpicture}
+		\caption{$L=\{\epsilon\}$}
+	\end{subfigure}
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+		\tikzstyle{every state}=[circle]
+
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+
+		\node[draw, fit=(A) (B)] {};
+
+		\end{tikzpicture}
+		\caption{$L=\emptyset$}
+	\end{subfigure}
+	\begin{subfigure}{.33\textwidth}\centering
+		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+		\tikzstyle{every state}=[circle]
+
+		\node[initial,state,scale=0.5] (A) {};
+		\node[accepting,state,scale=0.5] (B) [right of=A] {};
+
+		\path
+		(A) edge  node{$a$} (B)
+		;
+		\node[draw, fit=(A) (B)] {};
+
+		\end{tikzpicture}
+		\caption{$L=\{a\}$}
+	\end{subfigure}
+
+	\caption{Blocs de base pour la construction d'un automate à partir d'une expression régulière}
+	\label{fig:regexadfbase}
+	\end{figure}
+
+
+	En effet, l'automate (a) correspond à l'expression $\epsilon$ : le seul arc de l'état initial à un état final est $\epsilon$. L'automate (b) ne propose pas d'arc atteignant l'état final. Aucun mot n'appartient au langage d'où la construction de $\emptyset$. Finalement, (c) propose un arc pour $a$, donnant le seul mot $a$ comme faisant partie du langage, faisant de $a$ une expression régulière équivalente. De plus, ces automates respectent bien l'invariant de récurrence proposé.
+
+	\paragraph{Pas de récurrence} Les ANF \emph{abstraits} de la figure \ref{fig:regexadfrec} représentent la façon dont un automate peut être construit récursivement en fonction des règles de récurrence des expressions régulières. Ces ANF sont abstraits car le contenu d'un bloc $R$ ou $S$ n'est pas représenté explicitement. Cependant, celui-ci respecte les invariants de récurrence.
+
+	\begin{figure}[H]
+
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+				\tikzstyle{every state}=[circle]
+
+				\node[initial,state,scale=0.5] (A) {};
+				\node[state,scale=0.5] (B) [right of=A] {};
+				\node[state,scale=0.5] (C) [right of=B] {};
+				\node[accepting,state,scale=0.5] (D) [right of=C] {};
+
+				\node[draw=none] (K) [right= 0.5cm of B] {$E$};
+
+				\path
+				(A) edge  node{$\epsilon$} (B)
+				(C) edge  node{$\epsilon$} (D)
+
+				(C) edge[bend right=90]  node{$\epsilon$} (B)
+				(A) edge[bend right=40]  node{$\epsilon$} (D)
+
+				;
+
+
+				\node[draw, fit=(B) (C)] {};
+
+				\end{tikzpicture}
+				\caption{$L=L(E)^*$}
+			\end{subfigure}\newline\vspace{1cm}
+
+
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+				\tikzstyle{every state}=[circle]
+
+				\node[initial,state,scale=0.5] (A) {};
+				\node[state, scale=0.5] (B) [right of=A] {};
+				\node[state, scale=0.5] (C) [right of=B] {};
+				\node[accepting,state,scale=0.5] (D) [right of=C] {};
+
+
+				\node[draw=none] (K) [right= 0.5cm of A] {$E$};
+				\node[draw=none] (L) [right= 0.5cm of C] {$F$};
+
+				\path
+				(B) edge  node{$\epsilon$} (C)
+				;
+
+
+				\node[draw, fit=(A) (B)] {};
+				\node[draw, fit=(C) (D)] {};
+
+
+
+				\end{tikzpicture}
+				\caption{$L=L(E)L(F)$}
+			\end{subfigure}\newline\vspace{1cm}
+
+
+			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
+			\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
+
+			\tikzstyle{every state}=[circle]
+
+			\node[initial,state,scale=0.5] (A) {};
+
+			\node[state,scale=0.5] (B) [above right of=A] {};
+			\node[state,scale=0.5] (C) [below right of=A] {};
+
+			\node[draw=none] (K) [right= 0.5cm of B] {$E$};
+			\node[draw=none] (L) [right= 0.5cm of C] {$F$};
+
+			\node[state,scale=0.5] (D) [right of=B] {};
+			\node[state,scale=0.5] (E) [right of=C] {};
+
+			\node[accepting,state,scale=0.5] (F) [below right of=D] {};
+
+			\path
+			(A) edge  node{$\epsilon$} (B)
+			(A) edge  node{$\epsilon$} (C)
+
+			(D) edge  node{$\epsilon$} (F)
+			(E) edge  node{$\epsilon$} (F)
+			;
+			\node[draw, fit=(B)(D)] {};
+			\node[draw, fit=(C)(E)] {};
+
+			\end{tikzpicture}
+			\caption{$L=L(E)+L(F)$}
+		\end{subfigure}
+
+
+
+
+
+		\caption{Enchaînement de blocs pour une construction récursive}
+		\label{fig:regexadfrec}
+	\end{figure}
+
+	Les quatre règles de récurrence sur une expression régulière permettent de construire les automates:
+	\begin{itemize}
+		\item Pour une expression régulière de forme $(E)$, le langage $L(E)$ étant équivalent à $L((E))$, l'automate construit pour $E$ reste valable.
+		\item L'expression régulière est de forme $E^*$. Par induction, il existe un automate exprimant le même langage que $E$. L'automate pour $E^*$ est construit comme en (a). Cet automate comprend un arc $\epsilon$ de l'état initial à l'état acceptant pour représenté le cas $E^0$. Ensuite, un arc $\epsilon$ permet de concaténer plus chemins dans $E$, donnant des mots représentés par $E^1$,$E^2$,$E^3$,... Le tout complétant l'ensemble des mots possibles des $L(E)^*$. On a bien $L(E^*)=L(E)^*$.
+		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) représente bien, selon la définition d'un expression régulière $L(EF)=L(E)L(F)$.
+		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expression $E$ et $F$. Par cette construction, en particulier les transitions sur $\epsilon$, permettent à $c$ de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors, en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
+	\end{itemize}
+
+	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
+
+	\hfill$\square$
+\end{proof}
+\stepcounter{algo}
+\begin{complexity}
+	Soit une expression régulière $E$ de longueur $n$ représentant un langage $L$. Si un \emph{arbre syntaxique} est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
+	\begin{itemize}
+		\item Cas de base : $n$ ANFs sont créés. Cependant, chacun est constitué de 2 états et au plus 1 transition. Ces nombres sont des constantes. Ce cas de base est effectué en $\mathcal{O}(n*3)=\mathcal{O}(n)$
+		\item Récurrence : L'arbre syntaxique requiert au plus $n$ lectures d'opération de récurrence pour fusionner les $n$ ANF en un seul. Cependant, chacune de ses opération implique au plus la création de 2 états et 4 arcs. Ces nombres sont des constantes. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
+	\end{itemize}
+
+	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section \ref{sec:anf} peut quand à elle être exponentielle.
+
+\end{complexity}
+
+
+%  █████  ██████  ███████       ██     ██        █████  ███    ██ ███████
+% ██   ██ ██   ██ ██           ██       ██      ██   ██ ████   ██ ██
+% ███████ ██   ██ █████       ██  █████  ██     ███████ ██ ██  ██ █████
+% ██   ██ ██   ██ ██           ██       ██      ██   ██ ██  ██ ██ ██
+% ██   ██ ██████  ██            ██     ██       ██   ██ ██   ████ ██
+
+
+\subsection{Équivalence entre un automate déterministe fini et un automate non-déterministe fini}\label{ss:eqadfanf}
+Cette section présente une méthode permettant de créer un ADF à partir d'un ANF.
+
+Soit un ANF \automaton. Alors l'ADF équivalent
+$$
+D=(Q_D, \Sigma, \delta_D, q_D, F_D)
+$$
+est défini par :
+\begin{itemize}
+	\item $Q_D = \{S | S \subseteq Q \text{ et } S \text{ est \emph{fermé sur epsilon}}\}$. Concrètement, $Q_D$ est l'ensemble des partie des $Q$ fermées sur $\epsilon$. Cette fermeture s'écrit $S$=ECLOSE(S), ce qui signifie que chaque transition sur $\epsilon$ depuis un état de $S$ mène à un état également dans $S$. L'ensemble $\emptyset$ est fermé sur $\epsilon$.
+	\item $q_D$=ECLOSE($q_0$). L'état initial de $D$ est l'ensemble des états dans la fermeture sur $\epsilon$ des états de $A$.
+	\item $F_D= \{S|S \in Q_D \text{ et } S \cap F \neq \emptyset\}$ contient les ensembles dont au moins un état est acceptant pour $A$.
+	\item $\delta_D(S,a)$ est construit, $\forall a \in \Sigma, \forall S \in Q_D$ par :
+		\begin{enumerate}
+			\item Soit $S=\{p_1, p_2,\dots,p_k\}$.
+			\item Calculer $\bigcup_{i=1}^k\delta(p_i,a)$. Renommer cet ensemble en $\{r_1, r_2, \dots, r_m\}$.
+			\item Alors $\delta_D(S,a)=\bigcup_{j=1}^m\text{ECLOSE(}r_j\text{)}$.
+		\end{enumerate}
+\end{itemize}
+
+
+\begin{example}[Transformation ANF vers ADF] Considérons l'automate \automaton de l'exemple \ref{ex:anf} et les fermetures calculées dans l'exemple \ref{ex:anfclosure}.
+
+Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
+
+\begin{itemize}
+	\item $Q_D=\{\emptyset, \{q_1\}, \{q_2\}, \{q_1,q_2\}, \{q_0,q_1,q_2\}\}$. Les ensembles $\{q_0,q_1\}$ et $\{q_0,q_2\}$ sont des sous-ensembles de $Q$ mais ne sont pas fermé sur $\epsilon$.
+	\item $q_D=\{q_0,q_1,q_2\}=\text{ECLOSE(}q_0\text{)}$.
+	\item $F_D=\{\{q_2\}, \{q_1,q_2\}, \{q_0,q_1,q_2\}\}$, les ensembles contenant $q_2$, étant acceptant de $A$.
+	\item $\delta_D$ est exprimé sur le graphe de la figure \ref{fig:dndf}.
+\end{itemize}
+
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10]
+
+	\tikzstyle{every state}=[circle]
+
+	\node[accepting, state]         	(B) 				   {$\{q_0\}$};
+	\node[state]		 	(A) [above of=B] {$\emptyset$};
+	\node[state] (C) [right of=B] {$\{q_1\}$};
+	\node[state]         	(D) [below of=C] {$\{q_2\}$};
+	\node[accepting,state]         	(E) [right of=C] {$\{q_0,q_1\}$};
+	\node[accepting,state]         	(F) [above of=C] {$\{q_0,q_2\}$};
+	\node[state]         	(G) [below right of=E] {$\{q_1,q_2\}$};
+	\node[initial,accepting, state]  	(H) [above right of=E] {$\{q_0,q_1,q_2\}$};
+
+	\path
+	(A) edge [loop left] node{a,b,c} (A)
+
+	(B) edge  node{a} (A)
+	(B) edge [bend left, near start] node{b} (C)
+	(B) edge node{c} (D)
+
+	(C) edge [bend left, near start] node{a} (B)
+	(C) edge node{b} (D)
+	(C) edge node{c} (E)
+
+	(D) edge [near end,above right] node{a,b,c} (A)
+
+	(E) edge [bend left=20,near start] node{a} (B)
+	(E) edge [bend left] node{b} (G)
+	(E) edge node{c} (H)
+
+	(F) edge node{a,b} (A)
+	(F) edge [bend left=20,near end] node{c} (D)
+
+	(G) edge [bend left=80] node{a} (B)
+	(G) edge node{b} (D)
+	(G) edge [bend left] node{c} (E)
+
+	(H) edge [bend right=20, near start] node{a} (B)
+	(H) edge node{b} (G)
+	(H) edge [loop above] node{c} (H)
+	;
+	\end{tikzpicture}
+	\caption{Automate $D$. De par la construction par les parties de $Q$, le nombre de parties est exprimé en exponentiel, d'où la complexité du graphe. Ici, $\{q_0,q_2\}$ n'est pas atteignable et peut être supprimé. De même $\emptyset$ est souvent omis pour clarifier la représentation.}\label{fig:dndf}
+\end{figure}
+\end{example}
+
+
+
+\begin{theorem}[ANF $\Leftrightarrow$ ADF]\label{anf-dnf}
+	Un langage $L$ peut être représenté par un ANF si et seulement si il peut l'être par un ADF.
+\end{theorem}
+
+\begin{proof}
+	 Soit $L$ un langage. Cette preuve étant une double implication, chacune peut être prouvée séparément.
+
+	($\Leftarrow$) $L$ peut être représenté par un ADF $\implies$ $L$ peut être représenté par un ANF. Supposons qu'un automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ représente $L$ : $L(D)=L$.
+	L'ANF \automaton correspondant est construit comme suit :
+
+	\begin{itemize}
+		\item $Q=\{\{q\}|q\in Q_D\}$
+		\item $\delta$ contient les transitions de $D$ modifiées. Les objets retournés deviennent des ensembles d'états. C'est-à-dire, si $\delta_D(q,a)=p$ alors $\delta(q,a)=\{p\}$. De plus, pour chaque état $q\in Q_D$, $\delta(q,\epsilon)=\emptyset$.
+		\item $q_0=\{q_D\}$
+		\item $F=\{\{q\}| q\in F_D\}$
+	\end{itemize}
+
+	 Dès lors, les transitions sont les mêmes entre $D$ et $A$, mais $A$ précise explicitement qu'il n'y a pas de transition sur $\epsilon$. Comme $A$ représente le même langage, un ANF représente $L$.
+
+
+	($\Rightarrow$) $L$ peut être représenté par un ANF $\implies$ $L$ peut être représenté par un ADF. Soit l'automate \automaton. Supposons qu'il représente $L$ ($L=L(A)$). Considérons l'automate obtenu par la transformation détaillée à la section précédente \ref{ss:eanfadf} :
+	$$
+	D=(Q_D, \Sigma, \delta_D, q_D, F_D)
+	$$
+	Montrons que $L(D)=L(A)$. Pour ce faire, montrons que les fonctions de transition étendues sont équivalentes. Auquel cas, les chemins sont équivalents et donc les langages également.
+	Montrons que $\hdelta(q_0,w)=\hdelta_D(q_D,w)$ pour tout mot $w$, par récurrence sur $w$.
+
+	\paragraph{Cas de base} Si $|w|=0$, $w=\epsilon$. $\hdelta(q_0,\epsilon)=$ ECLOSE($q$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta(q_0,\epsilon)$.
+
+	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta(q_0,x)$. Ce sont bien les mêmes objets car $\hdelta_D$ retourne un état de $D$ qui correspond à un ensemble d'états de $A$. Notons celui-ci $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta(q_0,w)$ est obtenu en :
+
+	\begin{enumerate}
+		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
+		\item Alors $\hdelta(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
+	\end{enumerate}
+
+	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\bigcup_{j=1}^k$ECLOSE($p_j$)$=\hdelta(q_0,w)$.
+
+	On a bien $\hdelta_D(q_D,w)=\hdelta(q_0,w)$. Les langages sont équivalents.
+
+	\hfill$\square$
+\end{proof}
+
+\stepcounter{algo}%TODO because we don't exactly have an algorithm here
+
+\begin{complexity}[Conversion ANF vers ADF]
+
+	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler.
+
+	\begin{itemize}
+		\item ECLOSE : Pour chacun des $n$ états, il y a au plus $n^2$ transitions à suivre sur $\epsilon$ pour construire la fermeture. Ceci représente le cas où tous les états sont reliés avec tous les autres par des transitions sur $\epsilon$. Le coût de cet algorithme est dès lors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$.
+
+		\item Construction : Posons $s$ le nombre d'états dans l'ADF (qui, dans le pire des cas vaut $s=2^n$ par la construction des sous-ensembles). La création d'un état est en temps $\mathcal{O}(n)$, correspondant au plus à $n$ états de l'ANF. Pour ce qui est des transitions, pour chacun des $s$ nouveaux états, ECLOSE contient au plus $n$ éléments. Chacune des $n^2$ transitions de l'ADF sont alors suivies pour chaque symbole $a\in\Sigma$. Le coût de construction d'une transition est alors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$ auquel vient s'ajouter $\mathcal{O}(n^2)$, négligeable, pour l'union de l'ensemble obtenu.
+	\end{itemize}
+
+	La complexité totale est $\mathcal{O}(n^3) + s * \mathcal{O}(n^3) = \mathcal{O}(s*n^3) = \mathcal{O}(2^n*n^3)$.
+	Le détail est donné sur $s$ car, comme mentionné par Hopcroft et Al. \cite{Hopcroft00}, en pratique le nombre de l'état dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$.
+
+\end{complexity}
+
+
+\begin{complexity}[Conversion ADF vers ANF]
+	La conversion d'un ADF \automaton vers un ANF consiste au remplacement d'états par des ensembles d'états. Si l'ADF contient $n$ états, cette étape est en $\mathcal{O}(n)$. De plus, une colonne pour $\epsilon$ doit être ajoutée à la table de transition (pour la fonction $\delta$), et ce pour chacun des états. Cette étape se fait également en $\mathcal{O}(n)$.
+
+	La complexité totale d'une conversion d'un ADF vers un ANF est en $\mathcal{O}(n)$.
+\end{complexity}

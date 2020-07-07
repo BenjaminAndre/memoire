@@ -12,137 +12,137 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 \end{theorem}
 \begin{proof}
 	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés.
-	
+
 	Posons $E_{ij}^k$ l'expression régulière exprimant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
-	
+
 	\begin{figure}[H]
 		\centering
 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
-		
+
 		\tikzstyle{every state}=[circle]
-		
+
 		\node[initial,state] (A)                    {$1$};
 		\node[state]         (B) [right of=A] {$2$};
 		\node[state]         (C)  [right of=B] {$3$};
 		\node[accepting, state]         (D)  [right of=C] {$4$};
 		\node[state]         (E)  [right of=D]       {$5$};
-		
+
 		\path
 		(A) edge [bend left=45] node{a} (C)
 		(A) edge  node{b} (B)
-		
+
 		(B) edge [bend left=45] node{a} (A)
 		(B) edge node{b} (C)
-		
+
 		(C) edge [bend left=45,dashed] node{a} (E)
 		(C) edge [loop below] node{b} (C)
-		
+
 		(D) edge [loop below,dashed] node{a,b} (D)
 		(E) edge [,dashed] node{a,b} (D)
-		
+
 		;
 		\end{tikzpicture}
 		\caption{Exemple : automate mettant $E_{1,3}^3$ en évidence}\label{fig:proofeijk}
 	\end{figure}
 
-	
+
 	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Dans cet exemple, $E_{5,4}^3$ tolère la transition de $5$ à $4$ bien que supérieure à $k$ : ce ne sont pas des intermédiaires. Construisons le langage par induction sur les états autorisés.
-	
+
 	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté. La première possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté aux possibilités si $i=j$.
-	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :	
-	
+	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :
+
 	Pour chaque paire $i$, $j$ :
 	\begin{itemize}
 		\item Il n'existe pas de symbole $a$ tel que $\delta(i,a)=j$. Alors, $R_{ij}^0=\emptyset (+\epsilon)$
 		\item Il existe un unique symbole $a$ tel que  $\delta(i,a)=j$. Alors, $R_{ij}^0=a(+\epsilon)$
 		\item Il existe des symboles $a_1,a_2,\dots,a_k$ tels que $\forall l \in \{1,\dots, k\}, \delta(i,a_l)=j$. Alors, $R_{ij}^0=a_1+a_2+\dots+a_k(+\epsilon)$
 	\end{itemize}
-	
+
 	\paragraph{Pas de récurrence} Supposons qu'il existe un chemin allant de $i$ à $j$ ne passant par aucun état ayant un numéro supérieur à $k$.	La première possibilité est que le-dit chemin ne passe pas par $k$. Alors, le mot représenté par ce chemin fait partie du langage de $E_{ij}^{k-1}$. Seconde possibilité, le chemin passe par $k$ une ou plusieurs fois comme représenté à la figure \ref{fig:ikjpath}.
-	
+
 	\begin{figure}[H]\centering
 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
-	
+
 	\tikzstyle{every state}=[circle]
-	
+
 	\node[state] (A) {$i$};
 	\node[state] (B) [right of=A] {$k$};
 	\node[state] (C) [right of=B] {$k$};
 	\node[state] (D) [right of=C] {$k$};
 	\node[state] (E) [right of=D] {$k$};
 	\node[state] (F) [right of=E] {$j$};
-	
+
 	\path
 	(A) edge [snake] (B)
 	(B) edge [snake] (C)
 	(C) edge [snake] (D)
 	(D) edge [snake] (E)
-	(E) edge [snake] (F)	
+	(E) edge [snake] (F)
 	;
-	
+
 	\draw[-] (0.3,-0.8) arc (-100:-80:4.5) ;
 	\draw[-] (2.24,-0.8) arc (-100:-80:16) ;
 	\draw[-] (8.3,-0.8) arc (-100:-80:4.5) ;
-	
-	
+
+
 	\node[draw=none] at (1.25,-1.4) {Dans $E_{ik}^{k-1}$};
 	\node[draw=none] at (5.25,-1.4) {Mots dans $E_{kk}^{k-1}$};
 	\node[draw=none] at (9.25,-1.4) {Dans $E_{kj}^{k-1}$};
-	
+
 	\end{tikzpicture}
 	\caption{Un chemin de $i$ à $j$ peut être découpé en différent segment en fonction de $k$}\label{fig:ikjpath}
 	\end{figure}
 
 	Auquel cas, ces chemins sont composés d'une sous-chemin donnant un mot dans $E_{ik}^{k-1}$, suivi d'un sous-chemin donnant un ou plusieurs mots dans $E_{kk}^{k-1}$ et finalement un mot dans $E_{kj}^{k-1}$.
-	
+
 	En combinant les expressions des deux types, on obtient :
 	$$
 	E_{ij}^k = E_{ij}^{k-1}+E_{ik}^{k-1}(E_{kk}^{k-1})*E_{kj}^{k-1}
 	$$
-	
+
 	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
-	
+
 	\hfill$\square$
 \end{proof}
 \stepcounter{algo}
 \begin{complexity}
 	Soit un ADF \automaton comportant $n$ états. La complexité peut se décomposer en deux facteurs : la longueur d'une expression régulière et le nombre de celles-ci.
-	
+
 	A chacune des $n$ itérations (ajoutant progressivement des nouveaux états admis pour état intermédiaire), la longueur de l'expression peut quadrupler : elle est exprimée par 4 facteurs. Ainsi, après $n$ étapes, cette expression peut être de taille $\mathcal{O}(4^n)$.
-	
+
 	Le nombre d'expressions à construire, lui, est décomposable en deux facteurs également : le nombre d'itérations et celui de paires $i,j$ possibles. Le premier facteur est $n$, quand aux paires, leur nombre s'exprime par $n^2$. $n^3$ expressions sont construites.
-	
-	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle, la première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.	
+
+	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle, la première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
 \end{complexity}
 
 
 \begin{example}[Construction d'une expression régulière]
 	Construction d'une expression régulière à partir de l'automate de la figure suivante :
-	
+
 	\begin{figure}[H]\centering
 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm, semithick, bend angle=10]
-		
+
 		\tikzstyle{every state}=[circle]
-		
+
 		\node[initial,state] (A) {$1$};
 		\node[accepting,state] (B) [right of=A] {$2$};
-		
+
 		\path
 		(A) edge [bend left=20] node{0} (B)
 		(B) edge [bend left=20] node{0} (A)
-		
+
 		(A) edge [loop above] node{1} (A)
 		(B) edge [loop above] node{1} (B)
 		;
-		
+
 		\end{tikzpicture}
 		\caption{Un automate acceptant tout mot ayant un nombre impair de $0$}
 	\end{figure}
-	
+
 	La construction par récurrence commençant avec $k=0$ le processus peut être représenté par des tableaux correspondant à différents $k$ de façon croissante.
-	
+
 	\paragraph{Première itération} Dans la première itération, chaque expression se résume à un des trois cas de base, avec éventuellement $\epsilon$ si $i=j$ pour l'expression analysée.
-	
+
 	\begin{figure}[H]
 		\centering
 		\begin{tabular}{|l|c|}
@@ -153,12 +153,12 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 			$E_{12}^0$& $0$\\
 			$E_{21}^0$& $0$\\
 			$E_{22}^0$& $1+\epsilon$\\
-			\hline		
+			\hline
 		\end{tabular}
 	\end{figure}
 
 	\paragraph{Seconde itération} Ensuite, l'état $1$ est autorisé comme état intermédiaire : $k=1$. Ayant potentiellement un état intermédiaire, la formule de récurrence est utilisée.
-	
+
 	\begin{figure}[H]
 		\centering
 		\begin{tabular}{|l|c|c|c|}
@@ -173,13 +173,13 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 			$0+0(1+\epsilon)^*(1+\epsilon)$& $01^*$\\
 			$E_{22}^1$& $E_{22}^0 + E_{21}^0(E_{11}^0)^*E_{12}^0$&
 			$(1+\epsilon)+0(1+\epsilon)^*0$ & $1+01^*0$\\
-			\hline		
+			\hline
 		\end{tabular}
 	\end{figure}
-	
-	
+
+
 	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire.
-	
+
 	\begin{figure}[H]
 		\hspace{-5mm}\begin{tabular}{|l|c|c|c|}
 			\hline
@@ -193,18 +193,18 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 			$01^*+(1+01^*0)(1+01^*0)^*01^*$&$(1+01^*0)^*01^*$\\
 			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&
 			$(1+01^*0)+(1+01^*0)(1+01^*0)^*(1+01^*0)$&$(1+01^*0)^*$\\
-			\hline		
+			\hline
 		\end{tabular}
 	\end{figure}
-	
+
 	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $L(1^*0(1+01^*0)^*)=L$.
-	
-	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.	
-	
+
+	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.
+
 \end{example}
 
 
-	
+
 \begin{theorem}[Expression régulière $\implies$ ADF]
 	($\Leftarrow$) Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
 \end{theorem}
@@ -212,63 +212,63 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 
 \begin{proof}
 	Comme tout ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
-	
+
 	Soit $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
 	\begin{enumerate}
 		\item Il y a un unique état acceptant
 		\item Aucune transition ne mène à l'état initial
 		\item Aucune transition ne part de l'état acceptant
 	\end{enumerate}
-	
-	
-	
-	
+
+
+
+
 	\paragraph{Cas de base}	Les ANF de la figure \ref{fig:regexadfbase} représentent les automates correspondant aux trois cas de base.
-	
+
 	\begin{figure}[H]
-	
+
 	\begin{subfigure}{.33\textwidth}\centering
 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-		
+
 		\tikzstyle{every state}=[circle]
-		
+
 		\node[initial,state,scale=0.5] (A) {};
 		\node[accepting,state,scale=0.5] (B) [right of=A] {};
-		
+
 		\path
 		(A) edge  node{$\epsilon$} (B)
-		;		
+		;
 		\node[draw, fit=(A) (B)] {};
-			
+
 		\end{tikzpicture}
 		\caption{$L=\{\epsilon\}$}
 	\end{subfigure}
 	\begin{subfigure}{.33\textwidth}\centering
 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-		
+
 		\tikzstyle{every state}=[circle]
-		
+
 		\node[initial,state,scale=0.5] (A) {};
 		\node[accepting,state,scale=0.5] (B) [right of=A] {};
-		
+
 		\node[draw, fit=(A) (B)] {};
-		
+
 		\end{tikzpicture}
 		\caption{$L=\emptyset$}
 	\end{subfigure}
 	\begin{subfigure}{.33\textwidth}\centering
 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-		
+
 		\tikzstyle{every state}=[circle]
-		
+
 		\node[initial,state,scale=0.5] (A) {};
 		\node[accepting,state,scale=0.5] (B) [right of=A] {};
-		
+
 		\path
 		(A) edge  node{$a$} (B)
-		;		
+		;
 		\node[draw, fit=(A) (B)] {};
-		
+
 		\end{tikzpicture}
 		\caption{$L=\{a\}$}
 	\end{subfigure}
@@ -276,112 +276,112 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	\caption{Blocs de base pour la construction d'un automate à partir d'une expression régulière}
 	\label{fig:regexadfbase}
 	\end{figure}
-	
-	
+
+
 	En effet, l'automate (a) correspond à l'expression $\epsilon$ : le seul arc de l'état initial à un état final est $\epsilon$. L'automate (b) ne propose pas d'arc atteignant l'état final. Aucun mot n'appartient au langage d'où la construction de $\emptyset$. Finalement, (c) propose un arc pour $a$, donnant le seul mot $a$ comme faisant partie du langage, faisant de $a$ une expression régulière équivalente. De plus, ces automates respectent bien l'invariant de récurrence proposé.
-	
+
 	\paragraph{Pas de récurrence} Les ANF \emph{abstraits} de la figure \ref{fig:regexadfrec} représentent la façon dont un automate peut être construit récursivement en fonction des règles de récurrence des expressions régulières. Ces ANF sont abstraits car le contenu d'un bloc $R$ ou $S$ n'est pas représenté explicitement. Cependant, celui-ci respecte les invariants de récurrence.
-	
+
 	\begin{figure}[H]
-			
+
 			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
 				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-				
+
 				\tikzstyle{every state}=[circle]
-				
+
 				\node[initial,state,scale=0.5] (A) {};
 				\node[state,scale=0.5] (B) [right of=A] {};
-				\node[state,scale=0.5] (C) [right of=B] {};			
+				\node[state,scale=0.5] (C) [right of=B] {};
 				\node[accepting,state,scale=0.5] (D) [right of=C] {};
-				
+
 				\node[draw=none] (K) [right= 0.5cm of B] {$E$};
-				
+
 				\path
 				(A) edge  node{$\epsilon$} (B)
 				(C) edge  node{$\epsilon$} (D)
-				
+
 				(C) edge[bend right=90]  node{$\epsilon$} (B)
 				(A) edge[bend right=40]  node{$\epsilon$} (D)
-				
-				;		
-				
-				
+
+				;
+
+
 				\node[draw, fit=(B) (C)] {};
-				
+
 				\end{tikzpicture}
 				\caption{$L=L(E)^*$}
 			\end{subfigure}\newline\vspace{1cm}
-			
-			
+
+
 			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
 				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-				
+
 				\tikzstyle{every state}=[circle]
-				
+
 				\node[initial,state,scale=0.5] (A) {};
 				\node[state, scale=0.5] (B) [right of=A] {};
-				\node[state, scale=0.5] (C) [right of=B] {};			
+				\node[state, scale=0.5] (C) [right of=B] {};
 				\node[accepting,state,scale=0.5] (D) [right of=C] {};
-				
-				
+
+
 				\node[draw=none] (K) [right= 0.5cm of A] {$E$};
 				\node[draw=none] (L) [right= 0.5cm of C] {$F$};
-				
+
 				\path
 				(B) edge  node{$\epsilon$} (C)
 				;
-				
-				
+
+
 				\node[draw, fit=(A) (B)] {};
 				\node[draw, fit=(C) (D)] {};
-				
-				
-				
+
+
+
 				\end{tikzpicture}
 				\caption{$L=L(E)L(F)$}
 			\end{subfigure}\newline\vspace{1cm}
-			
-			
+
+
 			\hspace{0.2\textwidth}\begin{subfigure}{.6\textwidth}\centering
 			\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10,initial text= ]
-			
+
 			\tikzstyle{every state}=[circle]
-			
+
 			\node[initial,state,scale=0.5] (A) {};
-			
+
 			\node[state,scale=0.5] (B) [above right of=A] {};
 			\node[state,scale=0.5] (C) [below right of=A] {};
-			
+
 			\node[draw=none] (K) [right= 0.5cm of B] {$E$};
 			\node[draw=none] (L) [right= 0.5cm of C] {$F$};
-			
+
 			\node[state,scale=0.5] (D) [right of=B] {};
 			\node[state,scale=0.5] (E) [right of=C] {};
-			
+
 			\node[accepting,state,scale=0.5] (F) [below right of=D] {};
-			
+
 			\path
 			(A) edge  node{$\epsilon$} (B)
 			(A) edge  node{$\epsilon$} (C)
-				
+
 			(D) edge  node{$\epsilon$} (F)
 			(E) edge  node{$\epsilon$} (F)
-			;		
+			;
 			\node[draw, fit=(B)(D)] {};
 			\node[draw, fit=(C)(E)] {};
-			
+
 			\end{tikzpicture}
 			\caption{$L=L(E)+L(F)$}
 		\end{subfigure}
-	
-		
-	
-		
-		
+
+
+
+
+
 		\caption{Enchaînement de blocs pour une construction récursive}
 		\label{fig:regexadfrec}
 	\end{figure}
-	
+
 	Les quatre règles de récurrence sur une expression régulière permettent de construire les automates:
 	\begin{itemize}
 		\item Pour une expression régulière de forme $(E)$, le langage $L(E)$ étant équivalent à $L((E))$, l'automate construit pour $E$ reste valable.
@@ -389,9 +389,9 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) représente bien, selon la définition d'un expression régulière $L(EF)=L(E)L(F)$.
 		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expression $E$ et $F$. Par cette construction, en particulier les transitions sur $\epsilon$, permettent à $c$ de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors, en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
 	\end{itemize}
-	
+
 	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
-	
+
 	\hfill$\square$
 \end{proof}
 \stepcounter{algo}
@@ -401,64 +401,64 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 		\item Cas de base : $n$ ANFs sont créés. Cependant, chacun est constitué de 2 états et au plus 1 transition. Ces nombres sont des constantes. Ce cas de base est effectué en $\mathcal{O}(n*3)=\mathcal{O}(n)$
 		\item Récurrence : L'arbre syntaxique requiert au plus $n$ lectures d'opération de récurrence pour fusionner les $n$ ANF en un seul. Cependant, chacune de ses opération implique au plus la création de 2 états et 4 arcs. Ces nombres sont des constantes. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
 	\end{itemize}
-	
-	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section \ref{sec:anf} peut quand à elle être exponentielle. 
-	
+
+	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section \ref{sec:anf} peut quand à elle être exponentielle.
+
 \end{complexity}
 
 
 \subsection{Équivalence d'états}\label{ss:tfa}
-	 
+
 	 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rm. Celui-ci peut alors être simplifié. Une façon de détecter ces équivalences est de construire un tableau via l'\emph{algorithme de remplissage de tableau}.
-	 
+
 	 Celui-ci détecte les paires \emph{différenciables}, récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel qu'un chemin $\hdelta(p,w)$ mène à un état acceptant et $\hdelta(q,w)$ mène à un état non-acceptant ou vice-versa. $w$ sert alors de \emph{mot témoin}.
-	 
+
 	 \textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$.
-	 
+
 	 \textbf{Pas de récurrence : } Soient $p,q$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$.
-	 
+
 	 \begin{theorem}[Table d'équivalence]
 	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de tableau, les états sont équivalents (ils respectent la relation \rm).
 	 \end{theorem}
-	 
+
 	 \begin{proof}
-	 	
+
 	 Considérons un automate déterministe fini quelconque \automaton. Supposons par l'absurde qu'il existe une paire d'états $\{p,q\}$ tels que :
 	 \begin{enumerate}
 	 		\item $p$ et $q$ ne sont pas distingués par l'algorithme de remplissage de table.
 	 		\item Les états ne sont pas équivalents, $\not pR_M q$. Par extension, il existe un mot témoin $w$ différenciant $p$ et $q$.
 	 \end{enumerate}
-	 	
+
 	 Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune distinguée par un mot témoin, il doit exister un paire distinguée par le mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court qui les distingue. Dès lors, soit $\hdelta(p,w)$ est acceptant, soit $\hdelta(q,w)$ l'est, mais pas les deux.
-	 	
+
 	 Ce mot $w$ ne peut pas être $\epsilon$. Auquel cas, la table aurait été remplie dès l'étape d'induction de l'algorithme. La paire $\{p,q\}$ ne serait pas une mauvaise paire, ne respectant pas l'hypothèse 1.
-	 
+
 	 $w$ n'étant pas $\epsilon$, $ |w| \ge 1$. Considérons les états $r = \delta(p,a_1)$ et $s=\delta(q,a_1)$. Ces états sont différenciés par $a_2a_3\dots a_n$ car $\hdelta(p,w) = \hdelta(r, a_2a_3\dots a_n)$ et $\hdelta(q,w) = \hdelta(s, a_2a_3\dots a_n)$ et $p$ et $q$ sont différenciables.
-	 
+
 	 Cela signifie qu'il existe un mot plus petit que $w$ qui différencie deux états: le mot $a_2a_3\dots a_n$. Comme on a supposé que $w$ est le mot le plus petit qui différencie une mauvaise paire, $r$ et $s$ ne peuvent pas être une mauvaise paire. Donc, l'algorithme a du découvrir qu'ils sont différenciables.
-	 	
+
 	 Cependant, le pas de récurrence impose que $\delta(p, a_1)$ et $\delta(q, a_1)$ mènent à deux états différentiables implique que $p$ et $q$ le sont aussi. On a une contradiction de notre hypothèse : $\{p,q\}$ n'est pas une mauvaise paire.
-	 
+
 	 Ainsi, s'il n'existe pas de mauvaise paire, c'est que chaque paire différenciable est reconnue par l'algorithme.
-	 
+
 	 \hfill$\square$
 	 \end{proof}
-	 
+
 	 \begin{example}[Table d'équivalence] Voici une application de cet algorithme sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
-	 
+
 	 \begin{figure}[H]
 	 	\centering
 	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	 	
+
 	 	\tikzstyle{every state}=[circle]
-	 	
+
 	 	\node[initial,state] (A)                    {$q_0$};
 	 	\node[state]         (B) [below right of=A] {$q_1$};
 	 	\node[state]         (C) [below left of=A] {$q_2$};
 	 	\node[accepting,state]         (D) [below right of=B] {$q_3$};
 	 	\node[state]         (E) [below left of=C]       {$q_4$};
 	 	\node[state]         (F) [below right of=C]       {$q_5$};
-	 	
+
 	 	\path 	(A) 	edge              node {a} (C)
 	 	edge              node {b} (B)
 	 	(B) 	edge              node {a} (D)
@@ -472,9 +472,9 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\end{tikzpicture}
 	 	\caption{Automate $A_2$}\label{fig:a2}
 	 \end{figure}
-	 
+
 	 La première étape est de remplir la table avec l'algorithme précédant. Tout état est distinguable de $q_3$ : il est le seul état acceptant. 5 cases peuvent déjà êtres cochées. Le reste de la table est remplie par induction.
-	 
+
 	 \begin{figure}[H]
 	 	\centering
 	 	\begin{tabular}{ccccccc}
@@ -490,7 +490,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		\multicolumn{1}{c|}{$q_5$} & \multicolumn{1}{c|}{x} & \multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
 	 		\cline{2-6}
 	 		\multicolumn{1}{c}{} & $q_0$&$q_1$&$q_2$&$q_3$&$q_4$\\
-	 		
+
 	 	\end{tabular}
 	 	\caption{Table filling pour $A_2$, décelant des équivalences d'états}
 	 	\label{fig:ta2}
@@ -498,39 +498,39 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \end{example}
 	 \stepcounter{algo}
 	 \begin{complexity}
-	 
+
 	 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
-	 
+
 	 Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différentiable. Cette étape prend au plus $\mathcal{O}(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $\mathcal{O}(kn^2)$. Si une itération ne découvre pas de nouveaux état différentiable s'arrête. Comme la table a une taille en $\mathcal{O}(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $\mathcal{O}(kn^4)$.
-	 
-	 Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables. 
-	 
+
+	 Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paire $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables.
+
 	 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.\mathcal{O}(n^2)=\mathcal{O}(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
-	 
+
 	 Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différentiables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $\mathcal{O}(n^2)$, ce qui donne $\mathcal{O}(kn^2)$ pour cette exploration.
-	 
+
 	 La complexité totale revient à $\mathcal{O}(kn^2)$.
 	 \end{complexity}
-	 
-	 
+
+
 	 \subsection{Équivalence d'automates}\label{ss:eqauto}
-	 
+
 	 Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
-	 
+
 	 \begin{minipage}{0.4\linewidth}
 	 	\begin{figure}[H]
 	 		\centering
 	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 5cm, semithick, bend angle=10]
-	 		
+
 	 		\tikzstyle{every state}=[circle]
-	 		
+
 	 		\node[initial,state]	(A)					{$q_0$};
 	 		\node[state]			(B)	[right= of A]	{$q_1$};
 	 		\node[accepting,state]	(C) [below of=A]	{$q_2$};
 	 		\node[accepting,state]	(D)	[below of=B]	{$q_3$};
 	 		\node[accepting,state]	(E)	[below of=C]	{$q_4$};
 	 		\node[state]			(F)	[below of=D]	{$q_5$};
-	 		
+
 	 		\path
 	 		(A)	edge	[bend left]		node{a}		(B)
 	 		(A)	edge					node{b}		(C)
@@ -543,8 +543,8 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		(E)	edge	[loop below]	node{a}	(E)
 	 		(E) edge					node{b} (F)
 	 		(F)	edge	[loop below]	node{a,b}	(F)
-	 		
-	 		; 
+
+	 		;
 	 		\end{tikzpicture}
 	 		\caption{Automate $A_H$, du livre d'Hopcraft et al. de 1979\cite{Hopcroft79} (Fig3.2)}\label{fig:ah}
 	 	\end{figure}
@@ -553,28 +553,28 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 	\begin{figure}[H]
 	 		\centering
 	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1cm and 1cm, semithick, bend angle=10]
-	 		
+
 	 		\tikzstyle{every state}=[circle]
-	 		
+
 	 		\node[initial,state]	(A)					{$q_6$};
 	 		\node[accepting,state]	(B)	[right= of A]	{$q_7$};
 	 		\node[state]			(C) [right= of B]	{$q_8$};
-	 		
+
 	 		\path
 	 		(A)	edge					node{b}		(B)
 	 		(A)	edge	[loop above]	node{a}		(A)
 	 		(B) edge					node{b}		(C)
 	 		(B) edge	[loop above]	node{a}		(B)
 	 		(C)	edge	[loop above]	node{a,b}	(C)
-	 		
-	 		; 
+
+	 		;
 	 		\end{tikzpicture}
 	 		\caption{Automate $A_I$, provenant également de \cite{Hopcroft79}. Les états ont été renommés. }\label{fig:ai}
 	 	\end{figure}
 	 \end{minipage}
-	 
+
 	 Il est possible de remplir un tableau via l'algorithme éponyme. Pour ce faire, les deux automates sont considérés comme un seul dont les états sont disjoints.
-	 
+
 	 \begin{figure}[H]
 	 	\centering
 	 	\begin{tabular}{ccccccccc}
@@ -596,39 +596,39 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		\multicolumn{1}{c|}{$q_8$}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{}&\multicolumn{1}{c|}{x}&\multicolumn{1}{c|}{x}\\
 	 		\cline{2-9}
 	 		\multicolumn{1}{c}{} & $q_0$& $q_1$ & $q_2$ & $q_3$ & $q_4$ & $q_5$ & $q_6$ & $q_7$\\
-	 		
+
 	 	\end{tabular}
 	 	\caption{Tableau généré par l'application de l'algorithme sur $A_H$ et $A_I$}\label{fig:tahi}
 	 \end{figure}
-	 
-	 De cette table, toujours grâce aux conclusions précédentes, il est possible d'extraire des classes d'équivalences : 
+
+	 De cette table, toujours grâce aux conclusions précédentes, il est possible d'extraire des classes d'équivalences :
 	 \begin{itemize}
 	 	\item $C_0 = \{q_0, q_1, q_6\}$
 	 	\item $C_1 = \{q_2, q_3, q_4, q_7\}$
 	 	\item $C_2 = \{q_5, q_8\}$
 	 \end{itemize}
-	 
+
 	 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
 	 \stepcounter{algo}
 	 \begin{complexity}
 	 	Reposant sur la construction de la table d'équivalence d'états, la complexité est en $\mathcal{O}(kn^2)$, avec $k$ la taille de l'alphabet et $n$ le nombre d'états. L'étape supplémentaire, la lecture de cette table, est en temps constant et n'impacte pas la complexité.
 	 \end{complexity}
-	 
-	 
+
+
 	 Les différentes notions liées à l'égalité : les propriétés de réflexivité, transitivité et symétrie ont été démontrées dans la section \ref{ss:rm}.
-	 
-	 
-	 
+
+
+
 	 \subsection{Minimisation d'automate}\label{ss:miniauto}
-	 
+
 	 La minimisation d'automate se fait en deux étapes :
 	 \begin{enumerate}
 	 	\item Se débarrasser de tous les états injoignables : ils ne participent pas à la construction du langage représenté
-	 	\item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate. 
+	 	\item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate.
 	 \end{enumerate}
-	 
+
 	 Soit un automate déterministe fini \automaton. Les états non-atteignables peuvent être supprimés de $Q$ et de $\delta$.
-	 
+
 	 Pour minimiser cet automate, il faut :
 	 \begin{enumerate}
 	 	\item Générer la table de différenciation.
@@ -641,30 +641,30 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		\item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Si ce n'est pas le cas, c'est que deux états $p$ et $q$ dans $S$ mènent à différentes classes d'équivalences. Or, ces deux états sont différenciables, et ne pourraient pas appartenir tous deux à $S$ par construction. Ce fait est déjà mentionné dans le corollaire \ref{col:st}. On peut écrire $\delta_C(S,a)=T$. Pour rappel, la fonction $\delta$ est définie pour tout état et tout symbole. Rien n'empêche $T=S$.
 	 	\end{itemize}
 	 \end{enumerate}
-	 
-	 
+
+
 	 \begin{example}
-	 	
+
 	 	Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
-	 	
+
 	 	Le tableau de la figure \ref{fig:ta2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
 	 	$A_3$.
-	 	
-	 	En appliquant l'algorithme, qui peut se résumer intuitivement à fusionner les états équivalents, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.	 	
-	 	
+
+	 	En appliquant l'algorithme, qui peut se résumer intuitivement à fusionner les états équivalents, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.
+
 	 	\begin{figure}[H]
 	 		\centering
 	 		\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-	 		
+
 	 		\tikzstyle{every state}=[circle]
-	 		
+
 	 		\node[initial,state] (A)                    {$q_0$};
 	 		\node[state]         (B) [below right of=A] {$q_1$};
 	 		\node[state]         (C) [below left of=A] {$q_2$};
 	 		\node[accepting, state]         (D) [below right of=B] {$q_3$};
 	 		\node[state]         (E) [below left of=C]       {$q_4$};
-	 		
-	 		\path 	
+
+	 		\path
 	 		(A) 	edge              node {a} (C)
 	 		edge              node {b} (B)
 	 		(B) 	edge              node {a} (D)
@@ -676,100 +676,98 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 		\end{tikzpicture}
 	 		\caption{Automate $A_3$}\label{fig:a3}
 	 	\end{figure}
-	 	
+
 	 	Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
 	 \end{example}
-	 
-	 
+
+
 	 \begin{theorem}[Minimalité de l'automate réduit]
 	 	Soit un ADF $A$ et soit $C$ l'automate construit par cet algorithme de minimisation. Aucun automate équivalent à $A$ n'a moins d'états que $C$. De plus, chaque automate ayant autant d'états que $C$ peut être transformé en celui-ci par homomorphisme.
 	 \end{theorem}
- 
- 
+
+
  	\begin{proof}
  		Prouvons que l'algorithme de minimisation fourni un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage)
  		Soient un ADF $A$ et $C$ l'automate obtenu par l'algorithme de minimisation. Posons que $C$ comporte $k$ états.
- 		
+
  		Par l'absurde, supposons qu'il existe $M$ un ADF minimisé équivalent à $A$ mais comptant moins d'états que $C$. Posons qu'il en comporte $l<k$.
  		Appliquons l'algorithme de remplissage de table sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différentiables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symboles sont eux aussi équivalent. Le cas contraire impliquerait que états initiaux sont différentiables, ce qui n'est pas le cas.
  		De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
  		Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents, et que par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
- 		Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différentiables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$. 
- 		
- 		\hfill$\square$		
+ 		Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différentiables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$.
+
+ 		\hfill$\square$
  	\end{proof}
- 
+
  	\begin{proof}
  		Prouvons que tout automate minimal pour un langage est $C$, à un isomorphisme sur les noms des états près.
- 		
+
  		Soit $A$ un ADF pour un langage $L$. Soient $C$ un ADF obtenu par l'algorithme de minimisation et $M$ un automate minimal comportant autant d'états que $C$.
- 		
+
  		Comme mentionné dans la preuve précédente, il doit y avoir une équivalence 1 à 1 entre chaque état de $C$ et de $M$. (Au minimum 1 et au plus 1). De plus, aucun état de $M$ ne peut être équivalent à 2 états de $C$, selon le même argument.
- 		
- 		Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états. 		
- 		
- 		\hfill$\square$ 
+
+ 		Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états.
+
+ 		\hfill$\square$
  	\end{proof}
- 
+
 	 \subsection{Construction d'automate depuis un langage}
-	 
+
 	 Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
-	 
-	 On peut diviser les mots en 3 ensembles : 
-	 
+
+	 On peut diviser les mots en 3 ensembles :
+
 	 \begin{itemize}
 	 	\item $W_0$ le sous-ensemble des mots ne finissant pas le symbole $b$
 	 	\item $W_1$ celui des mots finissant par le symbole $b$ mais ne contenant pas $bb$
 	 	\item $W_2$ celui des mots contenant au moins $bb$
 	 \end{itemize}
-	 
+
 	 Il y a d'autres façons de construire des sous-ensembles, mais celle-ci à l'avantage de rendre la question de l'appartenance à $L_N$ triviale : un mot appartient au second ensemble si et seulement si il fait partie du langage, par définition.
-	 
+
 	 De plus, tous les éléments d'un sous-ensemble respectent la relation $R_L$ entre eux. ($R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$). Cela en fait des classes d'équivalence sur cette relation.
-	 
+
 	 Cela peut être démontré pour chaque sous-ensemble :
 	 \begin{itemize}
 	 	\item Soient $x,y \in W_0$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ fini par $b$ mais ne contient pas $bb$, et donc $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
 	 	\item Soient $x,y \in W_1$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ ne commençait pas le symbole $b$ et ne contenait pas $bb$, $yz$ ne contiendra donc pas $bb$, puisque cette chaîne n'est ni dans $z$ ni dans $y$, ni a cheval sur les deux, $z$ ne commençant pas par $b$. Ainsi, $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
 	 	\item Soient $x,y \in W_2$. Soit $z \in \Sigma^*$. Comme $x$ contient déjà $bb$, $x \notin L_N$ et, a fortiori, $xz \notin L_N$. Comme la prémisse est fausse, l'implication $xz \in L \Rightarrow yz \in L$ est vraie. La même logique peut être appliquée à partir de $y$ pour justifier l'implication inverse.
 	 \end{itemize}
-	 
+
 	 De plus, ces sous-ensembles sont disjoints. Cela peut se prouver en invalidant la relation pour certains éléments entre eux, mais dans ce cas-ci, la propriété est assurée par définition.
-	 
+
 	 Ceci revient à démontrer que $W_0,W_1,W_2$ sont des classes d'équivalence. De plus, $R_L$ respecte la congruence à droite, comme démontré dans la preuve du théorème de Myhill-Nérode. Ce même théorème donne une méthode pour construire un automate : prendre un représentant pour chaque classe et en faire un état.
-	 
+
 	 \begin{itemize}
 	 	\item $\Sigma=\{a,b\}$ est connu.
 	 	\item $Q=\{[[\epsilon]]\, [[b]], [[bb]]\} = \{q_\epsilon, q_b, q_{bb}\}$
-	 	\item $q_0 = q_\epsilon$ 
+	 	\item $q_0 = q_\epsilon$
 	 	\item $F = \{q_b\}$ l'union des classes acceptant
 	 	\item $\delta$ défini en utilisant des exemples tirés des classes d'équivalence.
 	 \end{itemize}
-	 
+
 	 Ce qui donne l'automate de la figure \ref{fig:an}
-	 
+
 	 \begin{figure}[H]
 	 	\centering
 	 	\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
-	 	
+
 	 	\tikzstyle{every state}=[circle]
-	 	
+
 	 	\node[initial,state]	(A)					{$q_\epsilon$};
 	 	\node[accepting,state]	(B)	[right= of A]	{$q_b$};
 	 	\node[state]			(C) [right= of B]	{$q_{bb}$};
-	 	
+
 	 	\path
 	 	(A)	edge	[bend left]		node{b}		(B)
 	 	(A)	edge	[loop above]	node{a}		(A)
 	 	(B) edge	[bend left]		node{a}		(A)
 	 	(B) edge					node{b}		(C)
 	 	(C)	edge	[loop above]	node{a,b}	(C)
-	 	
-	 	; 
+
+	 	;
 	 	\end{tikzpicture}
 	 	\caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}\label{fig:an}
 	 \end{figure}
-	 
+
 	 Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
-	 
-	 
