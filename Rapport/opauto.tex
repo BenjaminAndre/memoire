@@ -409,7 +409,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 
 \subsection{Équivalence d'états}\label{ss:tfa}
 
-	 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rm. Celui-ci peut alors être simplifié. Une façon de détecter ces équivalences est de construire un tableau via l'\emph{algorithme de remplissage de tableau}.
+	 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \re. Celui-ci peut alors être simplifié. Une façon de détecter ces équivalences est de construire un tableau via l'\emph{algorithme de remplissage de tableau}.
 
 	 Celui-ci détecte les paires \emph{différenciables}, récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel qu'un chemin $\hdelta(p,w)$ mène à un état acceptant et $\hdelta(q,w)$ mène à un état non-acceptant ou vice-versa. $w$ sert alors de \emph{mot témoin}.
 
@@ -418,7 +418,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 \textbf{Pas de récurrence : } Soient $p,q$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$.
 
 	 \begin{theorem}[Table d'équivalence]
-	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de tableau, les états sont équivalents (ils respectent la relation \rm).
+	 	Si deux états ne sont pas distingués par l'algorithme de remplissage de tableau, les états sont équivalents (ils respectent la relation \re).
 	 \end{theorem}
 
 	 \begin{proof}
@@ -426,7 +426,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	 Considérons un automate déterministe fini quelconque \automaton. Supposons par l'absurde qu'il existe une paire d'états $\{p,q\}$ tels que :
 	 \begin{enumerate}
 	 		\item $p$ et $q$ ne sont pas distingués par l'algorithme de remplissage de table.
-	 		\item Les états ne sont pas équivalents, $\not pR_M q$. Par extension, il existe un mot témoin $w$ différenciant $p$ et $q$.
+	 		\item Les états ne sont pas équivalents, $\not p R_E q$. Par extension, il existe un mot témoin $w$ différenciant $p$ et $q$.
 	 \end{enumerate}
 
 	 Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune distinguée par un mot témoin, il doit exister un paire distinguée par le mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court qui les distingue. Dès lors, soit $\hdelta(p,w)$ est acceptant, soit $\hdelta(q,w)$ l'est, mais pas les deux.
