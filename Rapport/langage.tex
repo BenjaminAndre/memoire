@@ -1,27 +1,27 @@
-Cette section pose les différents concepts et notations pour arriver à la notion de langage. Celles-ci reprennent les notations proposées par Hopcroft et al. \cite{Hopcroft00}.
-
-
+Cette section pose les différents concepts et notations pour arriver à la notion de langage. Celles-ci reprennent les notations proposées par Hopcroft et al. \cite{Hopcroft00}. Un sous-ensemble de ces langages correspond à des automates, sujet central de ce document.
 
 \subsection{Définitions}
 
-Un \emph{alphabet} $\Sigma$ est un ensemble fini et non vide de \emph{symboles}. Un \emph{mot} sur cet alphabet $\Sigma$ est une suite finie de $k$ éléments de $\Sigma$ notée $ w = a_1a_2\dots a_k $. L'entier $k$ est la \emph{longueur} de ce mot aussi notée $|w|=k$. Le \emph{mot vide} est un mot de taille $k=0$ noté $w=\epsilon$.
+Un \emph{alphabet} $\Sigma$ est un ensemble fini et non vide de \emph{symboles}. Un \emph{mot} sur cet alphabet $\Sigma$ est une suite finie de $k$ éléments de $\Sigma$ notée $ w = a_1a_2\dots a_k$ où $k$ est un nombre naturel. $k$ est la \emph{longueur} de ce mot aussi notée $|w|=k$. Le \emph{mot vide} est un mot de taille $k=0$ noté $w=\epsilon$.
 
 La \emph{concaténation} de deux mots $w=a_1a_2\dots a_k$ et $x=b_1b_2\dots b_j$ est l'opération consistant à créer un nouveau mot $wx=a_1a_2\dots a_kb_1b_2\dots b_j$ de longueur $i=k+j$.
 
 \begin{proposition}[$\epsilon$ et la concaténation]
-$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$. (ce qui est trivial par la définition de la concaténation)
+$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$.
 \end{proposition}
 
-\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$. L'ensemble de tous les mots possibles sur $\Sigma$ est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
+Cette proposition est triviale par la définition de la concaténation.
+
+\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$. L'ensemble de tous les mots possibles sur $\Sigma$ est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
 
 
-Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage} \cite{Hopcroft00}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
+Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
 
 \begin{example}[Définition d'un langage] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
 	\begin{itemize}
-		\item $L=\{12,35,42,7,0\}$, un ensemble défini explicitement
-		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro,un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
-		\item L est "Tous les noms de villes belges". Ici $L$ est défini en français.
+		\item $L=\{12,35,42,7,0\}$, un langage défini explicitement
+		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro, un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
+		\item $L$ contient tous les noms de villes belges. Ici $L$ est défini en langage courant.
 		\item $\emptyset$ est un langage pour tout alphabet.
 		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
 	\end{itemize}
@@ -36,22 +36,26 @@ Le langage composé de tous les mots produits par la concaténation d'un mot de 
 
 La \emph{fermeture} de $L$ est un langage constitué de tous les mots qui peuvent être construits par un concaténation d'un nombre arbitraire de mots de $L$, noté $L^*=\{w_1w_2\dots w_n|n\in \mathbb{N},\forall i \in \{1,2,\dots,n\}, w_i \in L\}$.
 
+% ██████  ███████  ██████  ███████ ██   ██
+% ██   ██ ██      ██       ██       ██ ██
+% ██████  █████   ██   ███ █████     ███
+% ██   ██ ██      ██    ██ ██       ██ ██
+% ██   ██ ███████  ██████  ███████ ██   ██
 
 \subsection{Expressions régulières}
 
-Certains langages peuvent être exprimés par une \emph{expression régulière}. Un exemple de celles-ci est $01^*0$ qui décrit la langage constitué de tous les mots commençant et finissant par $0$ avec uniquement des $1$ entre les deux.
+Certains langages peuvent être exprimés par une \emph{expression régulière}.
 
-Les expressions régulières suivent un algèbre avec ses opérations et leur priorités. Le langage décrit par une expression est construit de façon inductive par ces différentes opérations. Pour une expression régulière $E$, le langage exprimé est noté $L(E)$. Un langage qui peut être exprimé par une expression régulière est dit \emph{langage régulier}.
+Les expressions régulières suivent un algèbre avec ses opérations et leur priorités. Le langage décrit par une expression est construit de façon inductive par ces différentes opérations. Pour une expression régulière $E$, le langage décrit est noté $L(E)$. Un langage qui peut être décrit par une expression régulière est dit \emph{langage régulier}.
 
 
 \textbf{Cas de base}
 Certains langages peuvent être construits directement sans passer par l'induction:
 
 \begin{itemize}
-	\item $\epsilon$ est une expression régulière. Elle exprime le langage $L(\epsilon)=\{\epsilon\}$
+	\item $\epsilon$ est une expression régulière. Elle décirt le langage $L(\epsilon)=\{\epsilon\}$
 	\item $\emptyset$ est une expression régulière décrivant $L(\emptyset)=\emptyset$
-	\item Si $a$ est un symbole, alors \textbf{a} est une expression régulière composée uniquement de $a$. $L(a) = \{a\}$.
-	\item Une variable, souvent en majuscule et italique, représente un langage quelconque, par exemple $L$.
+	\item Si $a$ est un symbole, alors $a$ est une expression régulière décrivant le langage $L(a) = \{a\}$.
 \end{itemize}
 
 
@@ -61,21 +65,18 @@ Les autres langages réguliers sont construits suivant différentes règles d'in
 \begin{itemize}
 	\item Si $E$ est une expression régulière, $(E)$ est une expression régulière et $L((E)) = L(E)$.
 	\item Si $E$ est une expression régulière, $E^*$ est une expression régulière représentant la fermeture de $L(E)$, à savoir $L(E^*) = L(E)^*$.
-	\item Si $E$ et $F$ sont des expressions régulières, $EF$ est une expression régulière décrivant la concaténation des deux langages représentés, à savoir $L(EF)=L(E)L(F)$. La concaténation étant commutative, l'ordre de groupement n'est pas important, mais par convention, la priorité est à gauche.
-	\item Si $E$ et $F$ sont des expressions régulières, $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est commutative et la priorité est à gauche.
+	\item Si $E$ et $F$ sont des expressions régulières, $EF$ est une expression régulière décrivant la concaténation des deux langages représentés, à savoir $L(EF)=L(E)L(F)$. La concaténation étant associative, l'ordre de groupement n'est pas important, mais par convention, la priorité est à gauche.
+	\item Si $E$ et $F$ sont des expressions régulières, $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est associative et la priorité est à gauche.
 \end{itemize}
 
 \begin{example}[Expression régulière]
-	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui représente le langage $L$.\\
+	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui représente le langage $L=L(E)$.\\
 	\begin{itemize}
-		\item \textbf{ba} fait partie de $L$. En effet, en développant $E$ avec des choix sur les unions et le degré d'une fermeture, on obtient  $E= (b)b^0a(a+b)^0 = b\epsilon a \epsilon = ba$.
-		\item \textbf{ababbab} fait partie de $L$. En développant à nouveau $E$ en posant des choix sur les unions et fermetures, on obtient $E=(ab)b^0a(a+b)^4 = ab\epsilon a (a+b)(a+b)(a+b)(a+b) = ababbab$.
-		\item \textbf{aa} ne fait \textbf{pas} partie de $L$. Supposons par l'absurde que $aa \in L$. Alors il existerait une façon de décomposer $E$ en $aa$. Or, les premiers symboles doivent être soit $b$, soit $ab$. Il y a contradiction : $E$ ne peut pas être décomposé. Comme $aa$ ne peut pas être construit par $E$, $aa \notin L$.
+		\item Le mot $ba$ fait partie de $L$. En effet, $ba=b\epsilon a \epsilon=(b)b^0a(a+b)^0$, ce qui respecte bien la définition de $E$.
+		\item Le mot $ababbab$ fait partie de $L$. A nouveau, $ababbab=ab\epsilon a (a+b)(a+b)(a+b)(a+b)=(ab)b^0a(a+b)^4$.
+		\item Le mot $aa$ ne fait \textbf{pas} partie de $L$. Supposons par l'absurde que $aa \in L$. Alors il existerait une façon de décomposer $E$ en $aa$. Or, les premiers symboles doivent être soit $b$, soit $ab$. Il y a contradiction. Donc, $aa \notin L$.
 	\end{itemize}
 	\label{ex:regex}
 \end{example}
 
-
-
-\subsection{Lemme de la pompe}
-\todo{rédiger, et fournir une preuve et un exemple d'utilisation}
+Un autre exemple d'expression régulière est $01^*0$ qui décrit le langage constitué de tous les mots commençant et finissant par $0$ avec uniquement des $1$ entre les deux.
