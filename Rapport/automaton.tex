@@ -48,11 +48,11 @@ Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$
     \item $Q=\{q_0,q_1,q_2,q_3,q_4,q_5,q_6\}$
     \item $\Sigma=\{a,b\}$
     \item $q_0$ est l'état du même nom
-    \item La fonction de transition $\delta$ est décrite par la table \ref{fig:transdelta}. L'intersection d'une ligne reprenant un élément $q \in Q$ et d'une colonne $a \in \Sigma$ donne l'état $\delta(q,a)$.
+    \item La fonction de transition $\delta$ est décrite par la table \ref{table:transdelta}. L'intersection d'une ligne reprenant un élément $q \in Q$ et d'une colonne $a \in \Sigma$ donne l'état $\delta(q,a)$.
     \item $F=\{q_3\}$
   \end{itemize}
 
-  \begin{figure}[H]
+  \begin{table}[H]
     \centering
     \begin{tabular}{|r||c|c|}
       \hline
@@ -66,27 +66,27 @@ Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$
       $q_5$&$q_3$&$q_1$\\\hline
       $q_6$&$q_4$&$q_5$\\\hline
     \end{tabular}
-    \caption{La table de transitions $\delta$}
-    \label{fig:transdelta}
-  \end{figure}
+    \caption{La table de transitions $\delta$ d'un ANF}
+    \label{table:transdelta}
+  \end{table}
 \end{example}
 
-Via cette notation, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
+Via la notation de la table \ref{table:transdelta}, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
 
-\begin{example}[Automate non-déterministe fini avec une transition sur $\epsilon$]\label{ex:anf}
-	 De la même façon que pour l'exemple précédant, considérons un automate \automaton défini comme suit :
+\begin{example}[Automate non-déterministe fini avec transitions sur $\epsilon$]\label{ex:anf}
+	 De la même façon que pour l'exemple précédent, considérons un automate \automaton défini comme suit :
 
 \begin{itemize}
 	\item $Q=\{q_0,q_1,q_2\}$
 	\item $\Sigma=\{a,b,c\}$
 	\item $q_0$ est l'état du même nom
-	\item $\delta$ est donnée par la table \ref{fig:eanfdelta}.
+	\item $\delta$ est donnée par la table \ref{table:eanfdelta}.
 	\item $F=\{q_2\}$
 \end{itemize}
 
 $A$ est un $\epsilon$-ANF ; une colonne supplémentaire sert à représenter la transition sur $\epsilon$.
 
-\begin{figure}[H]
+\begin{table}[H]
 	\centering
 	\begin{tabular}{|r||c|c|c|c|}
 		\hline
@@ -96,11 +96,11 @@ $A$ est un $\epsilon$-ANF ; une colonne supplémentaire sert à représenter la 
 		$q_1$&$\emptyset$&$\{q_0\}$&$\{q_2\}$&$\{q_0,q_1\}$\\\hline
 		$q_2^*$&$\emptyset$&$\emptyset$&$\emptyset$&$\emptyset$\\\hline
 	\end{tabular}
-	\caption{$\delta$}
-	\label{fig:eanfdelta}
-\end{figure}
+	\caption{La table de transitions $\delta$ d'un $\Sigma$-ANF}
+	\label{table:eanfdelta}
+\end{table}
 
-Un exemple d'ANF sans transition sur $\epsilon$ serait juste A sans ces dites transitions. Il ne seraient cependant pas équivalents.
+Un exemple d'ANF sans transition sur $\epsilon$ serait juste A sans ces dites transitions.
 
 \end{example}
 
@@ -117,13 +117,13 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
 
 \begin{itemize}
   \item Chaque état de $Q$ est représenté par un nœud.
-  \item Chaque transition $\delta(q,a)$ est représenté par un arc étiquetté $a$. Dans le cas d'un automate non-déterministe, un arc existe pour chacun des états obtenus en suivant la transition. Si il y a plusieurs transitions sortant d'un même état et entrant dans un même autre état, les arcs peuvent être fusionnés en listant les étiquettes.
+  \item Chaque transition $\delta(q,a)$ est représenté par un arc étiqueté $a$. Dans le cas d'un automate non-déterministe, un arc existe pour chacun des états obtenus en suivant la transition. Si il y a plusieurs transitions sortant d'un même état et entrant dans un même autre état, les arcs peuvent être fusionnés en listant les étiquettes.
   \item L'état initial est mis en évidence par une flèche entrante.
   \item Les états acceptants sont représentés par un double cercle, en opposition au simple cercle des autres nœuds.
 \end{itemize}
 
 \begin{example}[Graphe d'automate]
- Voici les graphes représentant les automates définis dans la section précédente :
+ Voici les graphes représentant les automates définis dans les tables \ref{table:transdelta} et \ref{table:eanfdelta} :
 
  \begin{minipage}[t]{0.5\textwidth}
    \begin{figure}[H]
@@ -153,7 +153,7 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
     (G) 	edge              node {a} (E)
     edge              node {b} (F);
     \end{tikzpicture}
-    \caption{Graphe de l'automate de la table \ref{fig:transdelta}}\label{fig:a1}
+    \caption{Graphe de l'ADF de la table \ref{table:transdelta}}\label{fig:a1}
    \end{figure}
  \end{minipage}
  \begin{minipage}[t]{0.5\textwidth}
@@ -174,12 +174,12 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
    	(B) edge [loop right] node{c} (B)
    	(B) edge node{b} (C);
    	\end{tikzpicture}
-   	\caption{Graphe de l'automate de la table \ref{fig:eanfdelta}}\label{fig:eanf}
+   	\caption{Graphe du $\Sigma$-ANF de la table \ref{table:eanfdelta}}\label{fig:eanf}
    \end{figure}
 \end{minipage}
 \end{example}
 
- Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique. De plus, dans la représentation par graphe, les ensembles $Q$ et $\Sigma$ sont implicites et doivent être définis ou déduits à part.
+ Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique.
 
 
 
@@ -191,6 +191,9 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
 
 
 \subsection{ECLOSE}
+
+Cette sous-section introduit l'algorithme ECLOSE. Cet algorithme permet, à partir d'un état spécifique, de calculer l'ensemble des états atteignables uniquement par des transitions sur $\epsilon$. Ce calcul sert notemment au test d'appartenance d'un mot à un $\Sigma$-ANF ainsi qu'à tous les algorithmes qui en dépendent.
+
 Soit un $\epsilon$-ANF \automaton. Il est possible de construire un fonction retournant l'ensemble des états atteints uniquement en suivant des transitions sur $\epsilon$ pour un état $q$ donné. Cette fonction est la \emph{fermeture sur epsilon} $ECLOSE : Q \rightarrow 2^Q$. Sa définition est inductive.\\
 
 Soit $q$ un état dans $Q$.\\
@@ -217,7 +220,7 @@ ECLOSE peut être utilisé indifféremment sur un ensemble d'états S ($ECLOSE :
 
 \subsection{Langage}
 
-Un automate représente un langage, tel que défini dans la section \ref{sec:langage}.
+Un automate représente un langage. Nous expliqueront ici comment il le fait pour les 3 catégories d'automates.
 
 \subsubsection*{Fonction de transition étendue}
 
@@ -231,43 +234,72 @@ Comme $\delta$ est différente en fonction du type d'automate considéré, $\hde
 \end{itemize}
 
 Soit un état $q \in Q$ et un mot $w \in \Sigma^*$. Alors $\hdelta$ est définie par:\\
-\textbf{Cas de base} Il y a deux cas de base:
-\begin{itemize}
- \item $w$ est un mot vide :
-    \begin{itemize}
-      \item Pour un ADF ou ANF : $\hdelta(q, \epsilon) = q$.
-      \item Pour un $\epsilon$-ANF : $\hdelta(q, \epsilon) = ECLOSE(q)$.
-    \end{itemize}
- \item $w$ est un symbole : $\hdelta(q, w)=\hdelta(q,a)$ avec $w=a\in \Sigma$.
-    \begin{itemize}
-      \item Pour un ADF ou ANF : $\hdelta(q,a)=\delta(q,a)$.
-      \item Pour un $\epsilon$-ANF : $\hdelta(q,a)=ECLOSE(\delta(q,a))$.
-    \end{itemize}
-\end{itemize}
-\textbf{Pas de récurrence} Si $|w|>1$, alors $w=xa$ avec $x$ un mot sur $\Sigma$ et $a$ un symbole de $\Sigma$.
+\textbf{Cas de base} $w$ est un mot vide :
+  \begin{itemize}
+    \item Pour un ADF ou ANF : $\hdelta(q, \epsilon) = q$.
+    \item Pour un $\epsilon$-ANF : $\hdelta(q, \epsilon) = ECLOSE(q)$.
+  \end{itemize}
+\textbf{Pas de récurrence} Si $|w|\ge 1$, alors $w=xa$ avec $x$ un mot sur $\Sigma$ et $a$ un symbole de $\Sigma$.
 \begin{itemize}
   \item Pour un ADF ou ANF : $\hdelta(q,w) = \hdelta(q,xa)= \delta(\hdelta(q,x),a)$
   \item Pour un $\epsilon$-ANF : $\hdelta(q,w) = \hdelta(q,xa)= ECLOSE(\delta(\hdelta(q,x),a))$.
 \end{itemize}
-
+Dans le cas particulier où $|w|=1$, $w=xa=\epsilon a$, ce qui mène au cas de base.
 
 Il se peut que la fonction de transition $\delta$ ne soit pas définie pour une paire d'arguments. Auquel cas, $\hdelta$ ne l'est pas non plus.\\
 
 \subsubsection*{Chemin}
 
-Un \emph{chemin} est une application de cette fonction sur un état et un mot.
+Un \emph{chemin} est une suite d'états d'un automate. Chaque état de cette suite doit être atteignable par une transition depuis l'état précédent.
 
 \begin{example}[Chemin]
- Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $\hdelta(q_0, ab) = \delta(\hdelta(q_0,a),b) = \delta(\delta(q_0,a),b) = \delta(q_2, b)=q_5$.
+ Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $(q_0,q_2,q_5)$. En effet, les transitions sont définies : $\delta(q_0, a)=q_2$, $\delta(q_2, b)=q_5$. Un mot représenté par ce chemin est $ab$.
 \end{example}
 
+Dans le cas où plusieurs transitions mènent d'un état à un autre, plusieurs mots peuvent être représentés par un même chemin.
+
 \subsubsection*{Langage}
-Le langage représenté par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
+Le \emph{langage représenté} par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
 $$
 L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\} \hspace{0.5cm}
 L(A)= \{w \in \Sigma^* | \exists q \in \hdelta(q_0,w), q \in F\}
 $$
-Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$. L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
+Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$.
+
+\begin{example}
+  Soit $A$ l'ADF de la figure \ref{fig:a1}. Alors $abaa$ est un exemple de mot appartenant à $L(A)$. En effet :
+  \begin{align*}
+    &\hdelta(q_0,abaa)=\\
+    &\delta(\hdelta(q_0,aba),a)=\\
+    &\delta(\delta(\hdelta(q_0,ab),a),a)=\\
+    &\delta(\delta(\delta(\hdelta(q_0,a),b),a),a)=\\
+    &\delta(\delta(\delta(\delta(q_0,a),b),a),a)=\\
+    &\delta(\delta(\delta(q_2,b),a),a)=\\
+    &\delta(\delta(q_5,a),a)=\\
+    &\delta(q_3,a)=\\
+    &q_3 \in F
+  \end{align*}
+\end{example}
+
+\begin{example}
+  Soit $A$ le $\Sigma$-ANF de la figure \ref{fig:eanf}. Alors $cb$ est un exemple de mot appartenant à $L(A)$. En effet :
+  \begin{align*}
+    &\hdelta(q_0,cb)=\\
+    &ECLOSE(\delta(\hdelta(q_0, c),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(\hdelta(q_0,\epsilon),c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(ECLOSE(q_0),c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(\{q_0,q_1,q_2\},c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\{q_0,q_1,q_2\}),b))=\\
+    &ECLOSE(\delta(\{q_0,q_1,q_2\},b))=\\
+    &ECLOSE(\{q_1,q_2\})=\\
+    &\{q_1,q_2\}
+  \end{align*}
+  Avec $q_2\in F$.
+\end{example}
+
+
+
+L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 
 
 \begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:membership}
@@ -275,12 +307,18 @@ Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\h
    \REQUIRE un mot $w$, un automate \automaton représentant $L$
    \ENSURE si $w$ appartient à $L$
 
-   \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ sont les états courants}
+   \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ est l'ensemble des états courants}
+   \IF {A est un $\Sigma$-ANF}
+   \STATE $C \leftarrow ECLOSE(C)$
+   \ENDIF
    \WHILE {$|w| > 0$}
    \STATE décomposer $w$ en $ax$ avec $a\in\Sigma$ et $x$ le reste du mot
-   \STATE $C \leftarrow \delta(C,a)$ \COMMENT{passage à l'état suivant}
+   \STATE $C \leftarrow \delta(C,a)$ \COMMENT{passage à l'ensemble des états suivants}
    \STATE \COMMENT{Si l'automate est un ADF, C ne contient toujours qu'un seul état}
    \STATE $w \leftarrow x$
+   \IF {A est un $\Sigma$-ANF}
+   \STATE $C \leftarrow ECLOSE(C)$
+   \ENDIF
    \ENDWHILE
 
    \RETURN s'il existe un état $q \in C$ appartenant à $F$
@@ -288,7 +326,34 @@ Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\h
 \end{algo}
 
 \begin{complexity}[Lecture d'un mot par un automate]
- Si $|w|=n$, l'algorithme \ref{alg:membership} est en $\mathcal{O}(n)$. En effet, les étapes 1 et 8 sont en temps constant. La boucle de l'étape 2 est parcourue $n$ fois (la taille étant diminuée de 1 exactement à chaque itération). Le test de 2 et les opérations de 3 et 6 peuvent être faites en temps constant (par exemple, en voyant w comme une queue). L'étape 4, déterminante, peut être effectuée en temps constant également, par exemple avec l'utilisation d'un tableau de transition.
+
+ Si $|w|=n$, l'algorithme \ref{alg:membership} est en $\mathcal{O}(n)$.
+
+L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale (\mathcal{O}(1)). Pour un $\Sigma$-ANF, cette opération est en $\mathcal{O}(n^2)$.
+
+Les opération 6 et 9 sont en temps constant. L'opération 7 à la complexité de $\delta$. Cette fonction est triviale pour un ADF. Si celui-ci est stocké dans un tableau, l'opéation est en temps constant. Pour un ANF ou $\Sigma$-ANF, comme $\delta$ porte sur un sous-ensemble de $Q$, l'opération est en $\mathcal{O}(n)$. Le pire des cas étant $C=Q$ avant ou après l'application de $\delta$. Les opérations 10 à 12 sont à nouveau une application de $ECLOSE$.
+
+Des lors, le pire des cas du corps de la boucle de l'opération 5 est le maximum entre le pire des cas de $ECLOSE$ et $\delta$. Cette boucle s'effectue au plus $n$ fois. Une lettre est enlevée à chaque itération.
+
+L'opération 14 se fait en $\mathcal{O}(\log_2(n))$ pour un ADF et $\mathcal{O}(n\log_2(n))$ pour un ANF ou $\Sigma$-ANF. Cette valeur suppose une recherche efficace dans F.
+
+En conclusion :
+\begin{table}[H]
+  \centering
+  \resizebox{\columnwidth}{!}{
+  \begin{tabular}{|c|c|c|}
+    \hline
+    ADF & ANF & $\Sigma$-ANF\\
+    \hline
+    $\mathcal{O}(1)\!+\!n(\mathcal{O}(1)\!+\!\mathcal{O}(1))\!+\!\mathcal{O}(\log_2(n))$&$\mathcal{O}(1)\!+\!n(\mathcal{O}(1)\!+\!\mathcal{O}(n))\!+\!\mathcal{O}(nlog_2(n))$&$\mathcal{O}(n)\!+\!n(\mathcal{O}(n)\!+\!\mathcal{O}(n))\!+\!\mathcal{O}(n\log_2(n))$\\
+    \hline
+    $\mathcal{O}(n)$&$\mathcal{O}(n^2)$&$\mathcal{O}(n^2)$\\
+    \hline
+  \end{tabular}
+  }
+\end{table}
+
+
 
 \end{complexity}
 
@@ -300,7 +365,7 @@ Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\h
 % ███████ ██   ██   ██
 
 \subsection{Construction d'un automate depuis un langage régulier}
-Soit le langage $A_N = \{w | w \text{ fini par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
+Soit le langage $A_N = \{w | w \text{ finit par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
 
 On peut diviser les mots en 3 ensembles :
 
