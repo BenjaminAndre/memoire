@@ -1,6 +1,6 @@
 Cette section décrit les automates finis, fait le lien avec la notion de langage régulier et propose une représentation visuelle de ces automates.
 
-\TODO{sources}
+\todo{sources}
 
 \subsection{Définitions}\label{ss:autodef}
 
@@ -257,6 +257,7 @@ Un \emph{chemin} est une suite d'états d'un automate. Chaque état de cette sui
 \end{example}
 
 Dans le cas où plusieurs transitions mènent d'un état à un autre, plusieurs mots peuvent être représentés par un même chemin.
+Chaque état d'un chemin entre deux états $p$ et $q$ et distinct de ceux-ci est dit \emph{état intermédiaire}.
 
 \subsubsection*{Langage}
 Le \emph{langage représenté} par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
@@ -329,7 +330,7 @@ L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 
  Si $|w|=n$, l'algorithme \ref{alg:membership} est en $\mathcal{O}(n)$.
 
-L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale (\mathcal{O}(1)). Pour un $\Sigma$-ANF, cette opération est en $\mathcal{O}(n^2)$.
+L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale ($\mathcal{O}(1)$). Pour un $\Sigma$-ANF, cette opération est en $\mathcal{O}(n^2)$.
 
 Les opération 6 et 9 sont en temps constant. L'opération 7 à la complexité de $\delta$. Cette fonction est triviale pour un ADF. Si celui-ci est stocké dans un tableau, l'opéation est en temps constant. Pour un ANF ou $\Sigma$-ANF, comme $\delta$ porte sur un sous-ensemble de $Q$, l'opération est en $\mathcal{O}(n)$. Le pire des cas étant $C=Q$ avant ou après l'application de $\delta$. Les opérations 10 à 12 sont à nouveau une application de $ECLOSE$.
 
@@ -372,20 +373,20 @@ Certains problèmes peuvent être exprimés sous forme d'appartenance à un lang
 Pouvoir convertir une expression réguliere en automate permet d'exécuter cet automate sur un machine pour tester l'appartenance. Ainsi, grâce à cet méthode, une grande classe de problèmes peut être résolue.
 
 
-\begin{proposition}[ADF et expression régulière]
-	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
-\end{proposition}
+\begin{theorem}[ADF et expression régulière]
+	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être décrit par une expression régulière.
+\end{theorem}
 
-Cette proposition étant une double implication, elle est vraie si les deux implications le sont. Soit un langage $L$.
+Ce théorème étant une double implication, il est vrai si les deux implications le sont. Étudions celles-ci séparemment.
 
 
 \begin{theorem}[ADF $\implies$ expression régulière]
-	Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
+	Soit un langage $L$. Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
 \end{theorem}
 \begin{proof}
 	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés.
 
-	Posons $E_{ij}^k$ l'expression régulière exprimant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
+	Posons $E_{ij}^k$ l'expression régulière décrivant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
 
 	\begin{figure}[H]
 		\centering
@@ -469,7 +470,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 
 	En combinant les expressions des deux types, on obtient :
 	$$
-	E_{ij}^k = E_{ij}^{k-1}+E_{ik}^{k-1}(E_{kk}^{k-1})*E_{kj}^{k-1}
+	E_{ij}^k = E_{ij}^{k-1}+E_{ik}^{k-1}(E_{kk}^{k-1})^*E_{kj}^{k-1}
 	$$
 
 	En commençant cette construction sur $E_{ij}^n$, comme l'appel se fait toujours à des chaînes plus courtes, éventuellement on retombe sur le cas de base. Si l'état initial est numéroté 1, alors l'expression régulière $E$ exprimant $L$ est l'union ($+$) des $E_{1j}^n$ tel que $j$ est un état acceptant.
@@ -544,7 +545,7 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 			$E_{21}^1$& $E_{21}^0 + E_{21}^0(E_{11}^0)^*E_{11}^0$&
 			$0+0(1+\epsilon)^*(1+\epsilon)$& $01^*$\\
 			$E_{22}^1$& $E_{22}^0 + E_{21}^0(E_{11}^0)^*E_{12}^0$&
-			$(1+\epsilon)+0(1+\epsilon)^*0$ & $1+01^*0$\\
+			$(1+\epsilon)+0(1+\epsilon)^*0$ & $\epsilon+1+01^*0$\\
 			\hline
 		\end{tabular}
 	\end{figure}
@@ -553,37 +554,34 @@ Cette proposition étant une double implication, elle est vraie si les deux impl
 	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire.
 
 	\begin{figure}[H]
+    \centering
 		\hspace{-5mm}\begin{tabular}{|l|c|c|c|}
 			\hline
-			 & Formule de récurrence & Détail & Simplification\\
+			 & Formule de récurrence & Résultat\\
 			\hline
-			$E_{11}^2$& $E_{11}^1 + E_{12}^1(E_{22}^1)^*E_{21}^1$&
-			$1^*+1^*0(1+01^*0)^*01^*$&$1^*+1^*0(1+01^*0)^*01^*$\\
-			$E_{12}^2$& $E_{12}^1 + E_{12}^1(E_{22}^1)^*E_{22}^1$&
-			$1^*0+1^*0(1+01^*0)^*(1+01^*0)$&$1^*0(1+01^*0)^*$\\
-			$E_{21}^2$& $E_{21}^1 + E_{22}^1(E_{22}^1)^*E_{21}^1$&
-			$01^*+(1+01^*0)(1+01^*0)^*01^*$&$(1+01^*0)^*01^*$\\
-			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&
-			$(1+01^*0)+(1+01^*0)(1+01^*0)^*(1+01^*0)$&$(1+01^*0)^*$\\
+			$E_{11}^2$& $E_{11}^1 + E_{12}^1(E_{22}^1)^*E_{21}^1$&$1^*+1^*0(1+01^*0)^*01^*$\\
+			$E_{12}^2$& $E_{12}^1 + E_{12}^1(E_{22}^1)^*E_{22}^1$&$1^*0(1+01^*0)^*$\\
+			$E_{21}^2$& $E_{21}^1 + E_{22}^1(E_{22}^1)^*E_{21}^1$&$(1+01^*0)^*01^*$\\
+			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&$(1+01^*0)^*$\\
 			\hline
 		\end{tabular}
 	\end{figure}
 
-	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $L(1^*0(1+01^*0)^*)=L$.
+	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $E^2_{12}=1^*0(1+01^*0)^*=L$.
 
-	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire de se fait par paire. Cela correspond bien à un nombre impair.
+	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire se fait par paire. Cela correspond bien à un nombre impair de 0.
 
 \end{example}
 
 
 
 \begin{theorem}[Expression régulière $\implies$ ADF]
-	($\Leftarrow$) Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
+	($\Leftarrow$) Soit un langage $L$. Il existe une expression régulière $E$ telle que $L(E)=L$ $\implies$  il existe un automate déterministe $A$ tel que $L(A)=L$.
 \end{theorem}
 
 
 \begin{proof}
-	Comme tout ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
+	Comme tout $\epsilon$-ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
 
 	Soit $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
 	\begin{enumerate}
