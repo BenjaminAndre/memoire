@@ -358,72 +358,6 @@ En conclusion :
 \end{complexity}
 
 
-% ██      ██    █████
-% ██       ██  ██   ██
-% ██ █████  ██ ███████
-% ██       ██  ██   ██
-% ███████ ██   ██   ██
-
-\subsection{Construction d'un automate depuis un langage régulier}
-Soit le langage $A_N = \{w | w \text{ finit par b et ne contient pas bb}\}$ défini sur $\Sigma_N = {a,b}$.
-
-On peut diviser les mots en 3 ensembles :
-
-\begin{itemize}
- \item $W_0$ le sous-ensemble des mots ne finissant pas le symbole $b$
- \item $W_1$ celui des mots finissant par le symbole $b$ mais ne contenant pas $bb$
- \item $W_2$ celui des mots contenant au moins $bb$
-\end{itemize}
-
-Il y a d'autres façons de construire des sous-ensembles, mais celle-ci à l'avantage de rendre la question de l'appartenance à $L_N$ triviale : un mot appartient au second ensemble si et seulement si il fait partie du langage, par définition.
-
-De plus, tous les éléments d'un sous-ensemble respectent la relation $R_L$ entre eux. ($R_L : xR_Ly \Leftrightarrow \forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$). Cela en fait des classes d'équivalence sur cette relation.
-
-Cela peut être démontré pour chaque sous-ensemble :
-\begin{itemize}
- \item Soient $x,y \in W_0$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ fini par $b$ mais ne contient pas $bb$, et donc $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
- \item Soient $x,y \in W_1$. Soit $z \in \Sigma^*$. Dès lors, si $xz \in L_N$, c'est que $z$ ne commençait pas le symbole $b$ et ne contenait pas $bb$, $yz$ ne contiendra donc pas $bb$, puisque cette chaîne n'est ni dans $z$ ni dans $y$, ni a cheval sur les deux, $z$ ne commençant pas par $b$. Ainsi, $yz \in L_N$. Si $yz \in L_N$, le même argument peut être appliqué.
- \item Soient $x,y \in W_2$. Soit $z \in \Sigma^*$. Comme $x$ contient déjà $bb$, $x \notin L_N$ et, a fortiori, $xz \notin L_N$. Comme la prémisse est fausse, l'implication $xz \in L \Rightarrow yz \in L$ est vraie. La même logique peut être appliquée à partir de $y$ pour justifier l'implication inverse.
-\end{itemize}
-
-De plus, ces sous-ensembles sont disjoints. Cela peut se prouver en invalidant la relation pour certains éléments entre eux, mais dans ce cas-ci, la propriété est assurée par définition.
-
-Ceci revient à démontrer que $W_0,W_1,W_2$ sont des classes d'équivalence. De plus, $R_L$ respecte la congruence à droite, comme démontré dans la preuve du théorème de Myhill-Nérode. Ce même théorème donne une méthode pour construire un automate : prendre un représentant pour chaque classe et en faire un état.
-
-\begin{itemize}
- \item $\Sigma=\{a,b\}$ est connu.
- \item $Q=\{[[\epsilon]]\, [[b]], [[bb]]\} = \{q_\epsilon, q_b, q_{bb}\}$
- \item $q_0 = q_\epsilon$
- \item $F = \{q_b\}$ l'union des classes acceptant
- \item $\delta$ défini en utilisant des exemples tirés des classes d'équivalence.
-\end{itemize}
-
-Ce qui donne l'automate de la figure \ref{fig:an}
-
-\begin{figure}[H]
- \centering
- \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm and 2cm, semithick, bend angle=10]
-
- \tikzstyle{every state}=[circle]
-
- \node[initial,state]	(A)					{$q_\epsilon$};
- \node[accepting,state]	(B)	[right= of A]	{$q_b$};
- \node[state]			(C) [right= of B]	{$q_{bb}$};
-
- \path
- (A)	edge	[bend left]		node{b}		(B)
- (A)	edge	[loop above]	node{a}		(A)
- (B) edge	[bend left]		node{a}		(A)
- (B) edge					node{b}		(C)
- (C)	edge	[loop above]	node{a,b}	(C)
-
- ;
- \end{tikzpicture}
- \caption{Automate $A_N$, exemple d'une thèse\cite{Neider14}}\label{fig:an}
-\end{figure}
-
-Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
-
 
 
 % ███████       ██     ██        █████
@@ -432,7 +366,12 @@ Cet automate est bien une représentation du langage $L_N$. Seul un mot finissan
 % ██           ██       ██      ██   ██
 % ███████       ██     ██       ██   ██
 
-\subsection{Équivalence entre expression régulière et automate}
+\subsection{Équivalence entre expression régulière et automate}\label{ss:e-a}
+
+Certains problèmes peuvent être exprimés sous forme d'appartenance à un langage régulier, et par extension à une expression régulière.
+Pouvoir convertir une expression réguliere en automate permet d'exécuter cet automate sur un machine pour tester l'appartenance. Ainsi, grâce à cet méthode, une grande classe de problèmes peut être résolue.
+
+
 \begin{proposition}[ADF et expression régulière]
 	Un langage peut être exprimé par un automate déterministe fini si et seulement si il peut être exprimé par une expression régulière.
 \end{proposition}
