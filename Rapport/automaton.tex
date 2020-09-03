@@ -30,7 +30,9 @@ La fonction de transition $\delta$ est définie différemment en fonction du typ
 
 Lorsqu'un automate est mentionné dans ce document, il s'agit implicitement d'un $\epsilon$-ANF, sauf mention contraire. En effet, c'est la forme la plus générale. Cependant, ces trois types d'automates ont la même puissance expressive, ce qui est prouvé dans la section \ref{ss:eqadfanf}.
 
-Soit la transition $\delta(q,a)=p$ (dans un ADF). Pour $q$, c'est une \emph{transition sortante sur a}. Pour $p$, c'est une \emph{transition entrante sur a}. Si $\delta(q,a)=P=\{p_1,p_2,\dots,p_n\}$ dans un ANF, alors les états $\{p_1,p_2,\dots,p_n\}$ auront une transition entrante sur $a$.
+Soit la transition $\delta(q,a)=p$ (dans un ADF). Pour $q$, c'est une \emph{transition sortante sur a}. Pour $p$, c'est une \emph{transition entrante sur a}. On peut aussi dire que $p$ est \emph{atteignable}. Si au contraire aucune transition de la forme $\delta(q,a)=p$ n'existe et que $p$ n'est pas l'état initial, alors $p$ est \emph{inatteignable}.
+
+Si $\delta(q,a)=P=\{p_1,p_2,\dots,p_n\}$ dans un ANF, alors les états $\{p_1,p_2,\dots,p_n\}$ auront une transition entrante sur $a$.
 
 Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$ sur un ensemble d'états $S$. A ce moment, $\delta(S,a)=\bigcup_{q\in S}\delta(q,a)$ avec $a\in \Sigma$.
 
