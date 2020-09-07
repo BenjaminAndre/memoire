@@ -1,15 +1,11 @@
-L'algorithme d'Angluin repose, en plus des éléments précédents sur quatre concepts :
-
+L'algorithme d'Angluin est un algorithme d'apprentissage automatique d'automate. Il requiert un professeur pouvant vérifier :
 \begin{itemize}
-	\item Une table d'observation
-	\item La relation $R_O$, se basant sur la table d'observation et semblable à la relation $R_L$
-	\item La propriété de fermeture (closure en anglais)
-	\item La propriété de cohérence (consistence en anglais)
+	\item L'équivalence entre deux automates.
+	\item L'appartenance d'un mot à un automate.
 \end{itemize}
+Grâce à ce professeur, l'élève (ici joué par l'algorithme) peut apprendre un automate.
 
-Cette section commence par décrire cette table en \ref{ss:a_tblo}, la relation $R_O$ en \ref{ss:a_ro}, la fermeture en \ref{ss:a_fermeture}, la cohérence en \ref{ss:a_coherence}.
-
-Une fois toutes ces bases posées, une exécution de l'algorithme sur un exemple est proposée en \ref{ss:a_exemple}, suivie du fonctionnement formel de l'algorithme et des preuves sur son exactitude et sa complexité en \ref{ss:a_algo}, \ref{ss:a_proof} et \ref{ss:a_comp}.
+Celui-ci repose, en plus des éléments précédents, sur différents concepts expliqués dans les différentes sous-sections. Une fois toutes les bases posées, une exécution de l'algorithme d'Angluin sur un exemple est proposée en \ref{ss:a_exemple}, suivie du fonctionnement formel de l'algorithme et des preuves sur son exactitude et sa complexité.
 
 
 % ██████  ██
@@ -22,14 +18,14 @@ Une fois toutes ces bases posées, une exécution de l'algorithme sur un exemple
 
 Soit un langage $L$ sur un alphabet $\Sigma$.
 
-Soit la relation $R_L$ portant sur deux mots (ne faisant pas nécessairement partie de $L$). Deux mots $x$ et $y$ respectent la relation de Myhill-Nérode $R_L$ si
+Soit la relation $R_L\subseteq\Sigma^*\Sigma^*$. Deux mots $x$ et $y$ respectent la \emph{relation de Myhill-Nérode $R_L$} si
 
 $$\forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$$
 
-Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène, les deux mots résultants sont tous deux dans le langage ou non.
+Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène, les deux mots résultants sont tous deux dans le langage $L$ ou non.
 
 \begin{lemma}
-	Cette relation est une relation d'équivalence. De plus, elle respecte la congruence à droite. C'est à dire que si $xR_Ly$, alors pour tout symbole $a \in \Sigma$, $xaR_Lya$
+	Cette relation est une relation d'équivalence. De plus, elle est congruente à droite. C'est à dire que si $xR_Ly$, alors pour tout symbole $a \in \Sigma$, $xaR_Lya$
 \end{lemma}
 
 \begin{proof}[Equivalence et Congruence à droite]
@@ -37,7 +33,7 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 \begin{itemize}
 		\item $R_L$ est réflexive. Soit $x \in \Sigma^*$. Soit $z \in \Sigma^*$. Montrer que $xR_Lx$ est vrai revient à montrer que $ xz \in L \Leftrightarrow xz \in L$ est vrai. $R_L$ est donc réflexive.
 		\item $R_L$ est symétrique. Soient $x, y \in \Sigma^*$ tels que $xR_Ly$. Soit $w \in \Sigma^*$. Montrer que $yR_Lx$ revient à montrer que $ yw \in L \Leftrightarrow xw \in L$. Or, par hypothèse, $ xz \in L \Leftrightarrow yz \in L$, qui peut s'écrire aussi $ yz \in L \Leftrightarrow xz \in L$ pour tout $z \in \Sigma^*$, et en particulier $z=w$.
-		\item $R_L$ est transitive. Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
+		\item $R_L$ est transitive. Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$ et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
 		\item $R_L$ est congruente à droite. Soient $x,y \in \Sigma^*$ tels que $xR_Ly$. Soit $a \in \Sigma$. Par hypothèse, $ xz \in L \Leftrightarrow yz \in L$ pour tout $z \in \Sigma^*$. Cela doit donc être vrai en particulier pour le mot $z=aw$ avec $w$ quelconque. En remplaçant dans l'hypothèse, on obtient  $ xaw \in L \Leftrightarrow yaw \in L$. Ce qui montre que $xaR_Lya$.
 	\end{itemize}
 
@@ -81,9 +77,6 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 	\end{theorem}
 
 
-
-
-
 	\begin{proof}\label{proof:mn}
 		La preuve d'équivalence se fait en prouvant chaque implication de façon cyclique :\\
 
@@ -108,6 +101,8 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 		La partie $(3)\rightarrow(1)$ de la preuve \ref{proof:mn} donne une méthode permettant de construire un ADF à partir des classes d'équivalences de la relation \rl.
 	\end{corollary}
 
+On peut prouver que l'automate obtenu de cette façon est l'automate minimal de $L$. Une preuve est disponible dans l'ouvrage \cite{Hopcroft79} en lien avec le théorème 3.10.
+
 
   % ████████  ██████
   %    ██    ██    ██
@@ -117,17 +112,16 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 
   \subsection{La table d'observation}
 
-  % ███████ ███████ ██████  ███    ███  ██████  ██████  ██   ██ ███████
-  % ██      ██      ██   ██ ████  ████ ██      ██    ██ ██   ██ ██
-  % █████   █████   ██████  ██ ████ ██ ██      ██    ██ ███████ █████
-  % ██      ██      ██   ██ ██  ██  ██ ██      ██    ██ ██   ██ ██
-  % ██      ███████ ██   ██ ██      ██  ██████  ██████  ██   ██ ███████
+	%  ██████ ██       ██████   ██████  ██████  ██   ██
+	% ██      ██      ██    ██ ██      ██    ██ ██   ██
+	% ██      ██      ██    ██ ██      ██    ██ ███████
+	% ██      ██      ██    ██ ██      ██    ██ ██   ██
+	%  ██████ ███████  ██████   ██████  ██████  ██   ██
 
+\subsection{Clôture et cohérence}
 
-\subsection{Fermeture et cohérence}
-
-\subsubsection*{Fermeture}
-La propriété de fermeture (closure) s'exprime mathématiquement par
+\subsubsection*{Clôture}
+La propriété de \emph{clôture} s'exprime mathématiquement par
 
 $$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
 
@@ -135,7 +129,7 @@ Cette propriété peut être vérifiée par cet algorithme, expliqué de façon 
 
 \begin{algorithm}[H]
 	\begin{algorithmic}[1]
-		\ENSURE si la fermeture est respectée ou non
+		\ENSURE si la clôture est respectée ou non
 
 		\FORALL {élément $w$ de la section $R$}
 		\FORALL {symbole $a$ dans $\Sigma$}
@@ -151,7 +145,7 @@ Cette propriété peut être vérifiée par cet algorithme, expliqué de façon 
 		\ENDFOR
 		\RETURN Vrai
 	\end{algorithmic}
-	\caption{Vérification de la fermeture}\label{alg:closure}
+	\caption{Vérification de la clôture}\label{alg:closure}
 \end{algorithm}
 
 \subsubsection*{Cohérence}
@@ -170,14 +164,14 @@ Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même li
 % ██   ██ ██      ██    ██ ██    ██
 % ██   ██ ███████  ██████   ██████
 
-\subsection{L'algorithme}
-Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:miniauto} sur la minimisation.
+\subsection{L'algorithme}\label{ss:a_exemple}
+Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:mini} sur la minimisation. 
 
 \todo{Marquer la différence entre $R_L$ et $R_O$}
 
 \subsubsection{Première itération}
 
-L'algorithme d'Angluin précise, pour son cas de base, une initialisation de la table $T$ avec les ensembles $R$ et $S$ contenant uniquement $\epsilon$. Le champ $R.\{a,b\}$ ($R.\Sigma$) est rempli via des requête d'appartenance sur les mots $a$ et $b$.
+L'algorithme d'Angluin précise, pour son cas de base, une initialisation de la table $T$ avec les ensembles $R$ et $S$ contenant uniquement $\epsilon$. Le champ $R.\{a,b\}$ ($R.\Sigma$) est rempli via des requêtes d'appartenance sur les mots $a$ et $b$.
 
 \begin{minipage}{0.5\linewidth}
 	\centering
@@ -225,7 +219,7 @@ Sur cette itération, un automate initial a été proposé, et aucun état final
 
 \subsubsection{Seconde itération}
 
-L'enseignant répond que non, les automates ne sont pas équivalents. Il fourni le contre-exemple $ba$. Comme il est rejeté par $O_0$, cela signifie qu'il est accepté par $A_4$. Une nouvelle table est alors construite, en ajoutant $ba$ et ses préfixes (ici, juste $b$) à $R$. $R.\Sigma$ est calculé et les mots n'ayant pas encore reçu une valeur dans $T$ sont soumis à l'enseignant pour un test d'appartenance.
+L'enseignant répond que non, les automates ne sont pas équivalents. Il fourni le contre-exemple $ba$. Comme il est rejeté par $O_0$, cela signifie qu'il est accepté par $A_3$. Une nouvelle table est alors construite, en ajoutant $ba$ et ses préfixes (ici, juste $b$) à $R$. $R.\Sigma$ est calculé et les mots n'ayant pas encore reçu une valeur dans $T$ sont soumis à l'enseignant pour un test d'appartenance.
 \vspace{1cm}
 
 \begin{minipage}{0.25\linewidth}
@@ -287,9 +281,9 @@ L'enseignant répond que non, les automates ne sont pas équivalents. Il fourni 
 \end{minipage}
 
 \vspace{1cm}
-Comme pour la première itération, la \emph{fermeture} est testée, suivie de la \emph{cohérence}. Celle-ci n'est pas respectée : si on considère les mots $\epsilon$ et $b$, qui ont la même ligne dans la table $T$ ($\epsilon R_O b$), le symbole $a$, on obtient les mots $a$ et $ba$ qui n'ont pas la même ligne : ($\not a R_O ba$). Le symbole $a$ est alors ajouté à $S$ et une nouvelle table $O_2$ est calculée.
+Comme pour la première itération, la clôture est testée, suivie de la \emph{cohérence}. Celle-ci n'est pas respectée : si on considère les mots $\epsilon$ et $b$, qui ont la même ligne dans la table $T$ ($\epsilon R_O b$), le symbole $a$, on obtient les mots $a$ et $ba$ qui n'ont pas la même ligne : ($\not a R_O ba$). Le symbole $a$ est alors ajouté à $S$ et une nouvelle table $O_2$ est calculée.
 
-La fermeture étant déjà vérifiée, la question de la cohérence est reposée, et cette fois-ci elle est vérifiée ; l'automate est construit et proposé à l'enseignant.
+La clôture étant déjà vérifiée, la question de la cohérence est reposée, et cette fois-ci elle est vérifiée ; l'automate est construit et proposé à l'enseignant.
 
 Sur cette itération, l'algorithme a reçu le mot $ba$ comme étant accepté. Il a du ajouter $a$ à $S$ pour permettre de différencier certains états. L'automate se voit ajouter les états $[[b]]$ et $[[ba]]$.
 
@@ -411,8 +405,8 @@ Il sort le contre-exemple $aaba$. Si c'est un contre-exemple et qu'il est accept
 
 Ayant reçu $aaba$, ce mot et tous ses préfixes sont ajoutés à la table. L'extension $R.\Sigma$ est recalculée et la table $O_3$ est construite.
 
-Ensuite, la question de la \emph{fermeture} est posée. Un manquement est détecté : le mot $a$. En effet, en lui ajoutant le symbole $b$, on obtient $ab$ qui n'est ni dans $R$ ni en relation $R_O$ avec $a$. $ab$ est alors ajouté à $R$, et $R.\Sigma$ est étendu. La nouvelle table, $O_4$ est de nouveau testée.
+Ensuite, la question de la \emph{clôture} est posée. Un manquement est détecté : le mot $a$. En effet, en lui ajoutant le symbole $b$, on obtient $ab$ qui n'est ni dans $R$ ni en relation $R_O$ avec $a$. $ab$ est alors ajouté à $R$, et $R.\Sigma$ est étendu. La nouvelle table, $O_4$ est de nouveau testée.
 
-$O_4$ ne respecte pas la fermeture : le mot $ab$, agrémenté du symbole $a$ donne le mot $aba$, qui n'est ni dans $R$ ni en relation avec $ab$. Le mot est ajouté à $R$, et la table est étendue. La nouvelle table, $O_5$ est à la fois fermée et cohérente.
+$O_4$ ne respecte pas la clôture : le mot $ab$, agrémenté du symbole $a$ donne le mot $aba$, qui n'est ni dans $R$ ni en relation avec $ab$. Le mot est ajouté à $R$, et la table est étendue. La nouvelle table, $O_5$ est à la fois fermée et cohérente.
 
 L'automate $O_5$ est alors proposé à l'enseignant pour vérification. Celui-ci est accepté (isomorphe à $A_4$). L'algorithme s'arrête et un automate minimal pour le langage a été construit.
