@@ -267,7 +267,7 @@ $$
 L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\} \hspace{0.5cm}
 L(A)= \{w \in \Sigma^* | \exists q \in \hdelta(q_0,w), q \in F\}
 $$
-Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\hdelta(q_0,w) \in F$.
+Ainsi, un mot $w$ appartient à un langage $L$ représenté par l'automate $A$ si $\hdelta(q_0,w) \in F$.
 
 \begin{example}
   Soit $A$ l'ADF de la figure \ref{fig:a1}. Alors $abaa$ est un exemple de mot appartenant à $L(A)$. En effet :
@@ -300,7 +300,7 @@ Ainsi, un mot $w$ appartient à un langage $L$ défini par l'automate $A$ si $\h
   Avec $q_2\in F$.
 \end{example}
 
-
+Si deux automates représentent le même langage, ils sont dit \emph{équivalents}.
 
 L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 

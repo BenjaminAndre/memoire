@@ -260,7 +260,9 @@ La minimisation d'automate se fait en deux étapes :
  \item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate.
 \end{enumerate}
 
-Décrivons en détail cette minimisation.
+Décrivons en détail cette minimisation dans l'algorithme \ref{alg:mini}.
+
+\begin{algo}[Minimisation]\label{alg:mini}
 Soit un automate déterministe fini \automaton. Les états inatteignables peuvent être supprimés de $Q$ et de $\delta$.
 
 Pour minimiser cet automate, il faut :
@@ -275,16 +277,15 @@ Pour minimiser cet automate, il faut :
 	 \item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Voir corollaire \ref{col:st}. On défini alors $\delta_C(S,a)=T$.
  \end{itemize}
 \end{enumerate}
-
+\end{algo}
 
 \begin{example}
 
  Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
 
- Le tableau de la figure \ref{fig:ta2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
- $A_3$.
+ Le tableau \ref{tab:tfaa2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
 
- En appliquant l'algorithme, qui peut se résumer intuitivement à fusionner les états équivalents, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.
+ En appliquant l'algorithme de minimisation ci-dessus, qui peut se résumer intuitivement à fusionner les états équivalents $q_1$ et $q_5$, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.
 
  \begin{figure}[H]
 	 \centering
@@ -311,7 +312,7 @@ Pour minimiser cet automate, il faut :
 	 \caption{Automate $A_3$}\label{fig:a3}
  \end{figure}
 
- Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L$ grâce à cet automate. Cette expression régulière est celle de l'exemple \ref{ex:regex}
+ Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L=L(A_3)$ grâce à cet automate $A_3$. Cette expression régulière est celle de l'exemple \ref{ex:regex}
 \end{example}
 
 
@@ -321,14 +322,14 @@ Pour minimiser cet automate, il faut :
 
 
 \begin{proof}
- Prouvons que l'algorithme de minimisation fourni un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage)
+ Prouvons que l'algorithme de minimisation fournit un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage)
  Soient un ADF $A$ et $C$ l'automate obtenu par l'algorithme de minimisation. Posons que $C$ comporte $k$ états.
 
  Par l'absurde, supposons qu'il existe $M$ un ADF minimisé équivalent à $A$ mais comptant moins d'états que $C$. Posons qu'il en comporte $l<k$.
- Appliquons l'algorithme de remplissage de table sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différenciables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symboles sont eux aussi équivalent. Le cas contraire impliquerait que états initiaux sont différenciables, ce qui n'est pas le cas.
+ Appliquons le table filling algorithm sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différenciables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symbole sont eux aussi équivalents. Le cas contraire impliquerait que les états initiaux sont différenciables, ce qui n'est pas le cas.
  De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
  Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents, et que par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
- Or, $lk>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalent entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différenciables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$.
+ Or, $k>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalents entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différenciables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$.
 
  \hfill$\square$
 \end{proof}
@@ -354,8 +355,11 @@ Pour minimiser cet automate, il faut :
 %             ▀▀
 
 
-\subsection{Appartenance et équivalence}
-Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
+\subsection{Appartenance et équivalence}\label{ss:eqauto}
+Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer les langages représentés au complet n'est pas toujours possible et rarement efficace. Grâce à de légères modifications à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
+
+
+Considérons les ADF $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
 
 \begin{minipage}{0.4\linewidth}
  \begin{figure}[H]
@@ -386,7 +390,7 @@ Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} 
 
 	 ;
 	 \end{tikzpicture}
-	 \caption{Automate $A_H$, du livre d'Hopcraft et al. de 1979\cite{Hopcroft79} (Fig3.2)}\label{fig:ah}
+	 \caption{Automate $A_H$, du livre \cite{Hopcroft79} (Fig3.2)}\label{fig:ah}
  \end{figure}
 \end{minipage}\hspace{0.2\linewidth}
 \begin{minipage}{0.4\linewidth}
@@ -413,7 +417,7 @@ Considérons les automates $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} 
  \end{figure}
 \end{minipage}
 
-Il est possible de remplir un tableau via l'algorithme éponyme. Pour ce faire, les deux automates sont considérés comme un seul dont les états sont disjoints.
+Il est possible de remplir un tableau via le table filling algorithm. Pour ce faire, les deux ADFs sont considérés comme un seul dont les états sont disjoints.
 
 \begin{figure}[H]
  \centering
@@ -449,7 +453,20 @@ De cette table, toujours grâce aux conclusions précédentes, il est possible d
 \end{itemize}
 
 En particulier, la classe $C_0$ souligne que les états initiaux sont équivalents. Cela signifie, par définition, que tout mot $w$ lu en partant d'un de ces états sera soit accepté dans les deux automates, soit refusé dans les deux. $A_H$ et $A_I$ définissent donc le même langage.
-\stepcounter{algo}
+
+Écrivons concrètement l'algorithme de test d'équivalence entre deux automates déterministes finis.
+\begin{algo}[Équivalence entre deux automates]\label{alg:eqauto}
+  Soient les ADFs \automaton et \automatonbis. Des automates utilisant des alphabets différents représenteront probablement des langages différents mais pas nécessairement.
+  \begin{enumerate}
+    \item Considérer les deux automates comme un seul automate disjoint. Le choix de l'état initial de l'automate ainsi construit n'a pas d'importance, qu'il soit $q_0$ ou $q_b$.
+    \item Construire la table de différenciation par le table filling algorithm.
+    \item Si $q_0$ et $q_b$ sont équivalents (non différenciés par la table), alors $A$ et $B$ sont équivalents.
+  \end{enumerate}
+
+\end{algo}
+
+
+
 \begin{complexity}
  Reposant sur la construction de la table d'équivalence d'états, la complexité est en $\mathcal{O}(kn^2)$, avec $k$ la taille de l'alphabet et $n$ le nombre d'états. L'étape supplémentaire, la lecture de cette table, est en temps constant et n'impacte pas la complexité.
 \end{complexity}
