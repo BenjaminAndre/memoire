@@ -591,7 +591,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 		\item Aucune transition ne mène à l'état initial
 		\item Aucune transition ne part de l'état acceptant
 	\end{enumerate}
-  Intuitivement, ces invariants servirent à assurer que l'automate ainsi créé sera lu de gauche à droite tel une expression régulière.
+  Intuitivement, ces invariants servent à assurer que l'automate ainsi créé est lu de gauche à droite tel une expression régulière.
 
 	\paragraph{Cas de base}	Les ANF de la figure \ref{fig:regexadfbase} représentent les automates correspondant aux trois cas de base.
 
@@ -918,22 +918,25 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
 \begin{complexity}[Conversion ANF vers ADF]
 
-	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler.
+	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante $k$, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler. Ici, l'automate est stocké sous forme d'une table de transitions. Cette solution est plus facile à manipuler mais peut engendrer un surcoût en mémoire, qui n'est pas analysé ici.
 
 	\begin{itemize}
-		\item ECLOSE : Pour chacun des $n$ états, il y a au plus $n^2$ transitions à suivre sur $\epsilon$ pour construire la fermeture. Ceci représente le cas où tous les états sont reliés avec tous les autres par des transitions sur $\epsilon$. Le coût de cet algorithme est dès lors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$.
+		\item ECLOSE : Chacun des $n$ états ayant une entrée pour $\epsilon$ dans la fonction $\delta$, le temps de calcul sur chaque nœud ajouté est en temps constant. Chacune des $n$ fermetures pour chacun des $n$ états $q \in Q$ pouvant au plus compter les $n$ états, le temps total de cette opération est en $n*\mathcal{O}(n)=\mathcal{O}(n^2)$.
 
-		\item Construction : Posons $s$ le nombre d'états dans l'ADF (qui, dans le pire des cas vaut $s=2^n$ par la construction des sous-ensembles). La création d'un état est en temps $\mathcal{O}(n)$, correspondant au plus à $n$ états de l'ANF. Pour ce qui est des transitions, pour chacun des $s$ nouveaux états, ECLOSE contient au plus $n$ éléments. Chacune des $n^2$ transitions de l'ADF sont alors suivies pour chaque symbole $a\in\Sigma$. Le coût de construction d'une transition est alors de $n*\mathcal{O}(n^2)=\mathcal{O}(n^3)$ auquel vient s'ajouter $\mathcal{O}(n^2)$, négligeable, pour l'union de l'ensemble obtenu.
+		\item Construction : Posons $s$ le nombre d'états dans l'ADF (qui, dans le pire des cas vaut $s=2^n$ par la construction des sous-ensembles). La création d'un état de l'ADF est en $\mathcal{O}(n)$. En effet, il faut garder des références vers les états de l'ANF concernés. Ceux-ci sont au plus $n$.
+
+    Comme il y a $s$ états dans l'ADF, il y a $ks$ transitions. Chacune de celle-ci peut être construite en $\mathcal{O}(n)$. En effet, chaque état de l'ADF étant constitué d'au plus $n$ états de l'ANF, il y a au plus $n$ transitions à suivre pour obtenir l'ensemble d'états résultant dans l'ANF et faire correspondre un état de l'ADF obtenu. Les transitions sont donc construites en $\mathcal{O}(nks)=\mathcal{O}(nks)$. $k$ est toujours considéré comme une constante.
+
 	\end{itemize}
 
-	La complexité totale est $\mathcal{O}(n^3) + s * \mathcal{O}(n^3) = \mathcal{O}(s*n^3) = \mathcal{O}(2^n*n^3)$.
-	Le détail est donné sur $s$ car, comme mentionné par Hopcroft et Al. \cite{Hopcroft00}, en pratique le nombre de l'état dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$.
+	La complexité dans le pire des cas est $\mathcal{O}(n^2) + \mathcal{O}(sn) + \mathcal{O}(sn) = \mathcal{O}(sn)=\mathcal{O}(n2^n)$.
+	Le détail est donné sur $s$ car, comme mentionné par \cite{Hopcroft00}, en pratique le nombre d'états dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$. Dans ce cas là, la complexité devient $\mathcal{O}(n^2)$.
 
 \end{complexity}
 
 
 \begin{complexity}[Conversion ADF vers ANF]
-	La conversion d'un ADF \automaton vers un ANF consiste au remplacement d'états par des ensembles d'états. Si l'ADF contient $n$ états, cette étape est en $\mathcal{O}(n)$. De plus, une colonne pour $\epsilon$ doit être ajoutée à la table de transition (pour la fonction $\delta$), et ce pour chacun des états. Cette étape se fait également en $\mathcal{O}(n)$.
-
-	La complexité totale d'une conversion d'un ADF vers un ANF est en $\mathcal{O}(n)$.
+	La conversion d'un ADF \automaton vers un ANF consiste au remplacement de $n$ états par $n$ ensembles d'un seul état. Chaque copie individuelle étant en temps constant, cette opération est en $\mathcal{O}(n)$.
+  Ensuite, une nouvelle table de transition doit être créée. Si l'alphabet $\Sigma$ est de taille $k$, celle-ci a toujours $n$ lignes mais $k+1$ colonnes. En effet, un colonne est ajoutée pour $\epsilon$. La création de cette nouvelle table se fait alors en $\mathcal{O}(kn)$.
+	La complexité totale d'une conversion d'un ADF vers un ANF est en $\mathcal{O}(kn)$.
 \end{complexity}
