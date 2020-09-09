@@ -1,6 +1,4 @@
-Cette section décrit les automates finis, fait le lien avec la notion de langage régulier et propose une représentation visuelle de ces automates.
-
-\todo{sources}
+Cette section décrit les automates finis, fait le lien avec la notion de langage régulier et propose une représentation visuelle de ces automates. La notation suivie dans cette section s'appuye principalement sur \cite{Hopcroft79}, \cite{Hopcroft00} et \cite{Kozen97}.
 
 \subsection{Définitions}\label{ss:autodef}
 
@@ -386,9 +384,9 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	Soit un langage $L$. Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
 \end{theorem}
 \begin{proof}
-	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés.
+	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés. De plus, un tel automate est aisément représenté dans un ordre séquentiel, de gauche à droite. Ceci permet de séparer visuellement les $k$ premiers états du reste. Par abus de langage, les nombres et états désignés sont utilisés indifféremment. Celà ne doit pas entraîner de confusion car chaque nombre correspond exactement à un état.
 
-	Posons $E_{ij}^k$ l'expression régulière décrivant un langage constitué des mots $w$ tels que $\delta(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
+  Soient $i,j,k \in Q$, tous équivalents à des nombres inférieurs à $n$. Définissons $E_{ij}^k$ comme étant l'expression régulière décrivant un langage constitué des mots $w$ tels que $\delta^*(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
 
 	\begin{figure}[H]
 		\centering
@@ -417,11 +415,17 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 		;
 		\end{tikzpicture}
-		\caption{Exemple : automate mettant $E_{1,3}^3$ en évidence}\label{fig:proofeijk}
+		\caption{Exemple : automate mettant $E_{1,3}^3$ en évidence. Les mots représentés par un chemin passant par un arc discontinu n'appartiennent par à $E_{1,3}^3$ : un des états intermédiaires est dénommé par un nombre supérieur à $k=3$.}\label{fig:proofeijk}
 	\end{figure}
 
 
-	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Dans cet exemple, $E_{5,4}^3$ tolère la transition de $5$ à $4$ bien que supérieure à $k$ : ce ne sont pas des intermédiaires. Construisons le langage par induction sur les états autorisés.
+	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Intuitivement, il s'agit d'un automate auquel on a enlevé les transitions :
+  \begin{itemize}
+    \item Allant de $i$ à un nombre supérieur à $k$ (sauf $j$)
+    \item Entre deux nombres supérieurs à $k$
+    \item Allant d'un nombre supérieur à $k$ (sauf $i$) à $j$
+  \end{itemize}
+  En pratiques, celles-ci ne sont juste pas autorisées.
 
 	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté. La première possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté aux possibilités si $i=j$.
 	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :
@@ -557,14 +561,14 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	\begin{figure}[H]
     \centering
-		\hspace{-5mm}\begin{tabular}{|l|c|c|c|}
+		\hspace{-5mm}\begin{tabular}{|l|c|c|}
 			\hline
-			 & Formule de récurrence & Résultat\\
+			 & Résultat\\
 			\hline
-			$E_{11}^2$& $E_{11}^1 + E_{12}^1(E_{22}^1)^*E_{21}^1$&$1^*+1^*0(1+01^*0)^*01^*$\\
-			$E_{12}^2$& $E_{12}^1 + E_{12}^1(E_{22}^1)^*E_{22}^1$&$1^*0(1+01^*0)^*$\\
-			$E_{21}^2$& $E_{21}^1 + E_{22}^1(E_{22}^1)^*E_{21}^1$&$(1+01^*0)^*01^*$\\
-			$E_{22}^2$& $E_{22}^1 + E_{22}^1(E_{22}^1)^*E_{22}^1$&$(1+01^*0)^*$\\
+			$E_{11}^2$&$1^*+1^*0(1+01^*0)^*01^*$\\
+			$E_{12}^2$&$1^*0(1+01^*0)^*$\\
+			$E_{21}^2$&$(1+01^*0)^*01^*$\\
+			$E_{22}^2$&$(1+01^*0)^*$\\
 			\hline
 		\end{tabular}
 	\end{figure}
