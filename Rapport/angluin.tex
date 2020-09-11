@@ -1,4 +1,4 @@
-L'algorithme d'Angluin est un algorithme d'apprentissage automatique d'automate. Il requiert un professeur pouvant vérifier :
+L'algorithme d'Angluin est un algorithme d'apprentissage actif d'automate. Il requiert un professeur pouvant vérifier :
 \begin{itemize}
 	\item L'équivalence entre deux automates.
 	\item L'appartenance d'un mot à un automate.
@@ -31,11 +31,12 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 \begin{proof}[Equivalence et Congruence à droite]
 	Dire d'une relation qu'elle décrit une équivalence, revient à dire qu'elle est réflexive, transitive et symétrique
 \begin{itemize}
-		\item $R_L$ est réflexive. Soit $x \in \Sigma^*$. Soit $z \in \Sigma^*$. Montrer que $xR_Lx$ est vrai revient à montrer que $ xz \in L \Leftrightarrow xz \in L$ est vrai. $R_L$ est donc réflexive.
-		\item $R_L$ est symétrique. Soient $x, y \in \Sigma^*$ tels que $xR_Ly$. Soit $w \in \Sigma^*$. Montrer que $yR_Lx$ revient à montrer que $ yw \in L \Leftrightarrow xw \in L$. Or, par hypothèse, $ xz \in L \Leftrightarrow yz \in L$, qui peut s'écrire aussi $ yz \in L \Leftrightarrow xz \in L$ pour tout $z \in \Sigma^*$, et en particulier $z=w$.
-		\item $R_L$ est transitive. Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$ et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
-		\item $R_L$ est congruente à droite. Soient $x,y \in \Sigma^*$ tels que $xR_Ly$. Soit $a \in \Sigma$. Par hypothèse, $ xz \in L \Leftrightarrow yz \in L$ pour tout $z \in \Sigma^*$. Cela doit donc être vrai en particulier pour le mot $z=aw$ avec $w$ quelconque. En remplaçant dans l'hypothèse, on obtient  $ xaw \in L \Leftrightarrow yaw \in L$. Ce qui montre que $xaR_Lya$.
+		\item\textbf{Réflexive :} Soit $x \in \Sigma^*$. Soit $z \in \Sigma^*$. Montrer que $xR_Lx$ est vrai revient à montrer que $ xz \in L \Leftrightarrow xz \in L$ est vrai. $R_L$ est donc réflexive.
+		\item \textbf{Symétrique :} Soient $x, y \in \Sigma^*$ tels que $xR_Ly$. Soit $w \in \Sigma^*$. Montrer que $yR_Lx$ revient à montrer que $ yw \in L \Leftrightarrow xw \in L$. Or, par hypothèse, $ xz \in L \Leftrightarrow yz \in L$, qui peut s'écrire aussi $ yz \in L \Leftrightarrow xz \in L$ pour tout $z \in \Sigma^*$, et en particulier $z=w$.
+		\item \textbf{Transitive :} Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$ et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
 	\end{itemize}
+
+	$R_L$ est congruente à droite. Soient $x,y \in \Sigma^*$ tels que $xR_Ly$. Soit $a \in \Sigma$. Par hypothèse, $ xz \in L \Leftrightarrow yz \in L$ pour tout $z \in \Sigma^*$. Cela doit donc être vrai en particulier pour le mot $z=aw$ avec $w$ quelconque. En remplaçant dans l'hypothèse, on obtient  $ xaw \in L \Leftrightarrow yaw \in L$. Ce qui montre que $xaR_Lya$.
 
 \hfill$\square$
 \end{proof}
@@ -54,6 +55,8 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 		Soit un automate \automaton. Soient deux mots $x,y\in\Sigma^*$. Alors la relation $xR_By$ est vraie si et seulement si $\hdelta(q_0,x)=\hdelta(q_0,y)$.
 	\end{definition}
 
+	Intuitivement, deux mots sont en relation \rb par rapport à un automate s'ils mènent à un même état dans celui-ci.
+
 	\begin{lemma}
 		\rb est une relation d'équivalence congruente à droite.
 	\end{lemma}
@@ -61,10 +64,15 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 	\begin{proof}
 		Prouver qu'une relation est dite d'équivalence, il faut prouver que celle-ci est transitive, réflexive et symétrique.
 		Soit un automate \automaton.
-		\paragraph{Transitivité} Soient $x,y,z\in\Sigma^*$. Supposons que $xR_By$ et $yR_Bz$. On a bien $\hdelta(q_0,x)=\hdelta(q_0,y)=\hdelta(q_0,z)$ par la transitivité de l'équivalence entre deux états.
-		\paragraph{Réflexivité} Soit $y\in\Sigma^*$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,y)$ par réflexiviré de l'équivalence sur un état.
-		\paragraph{Symétrie} Soient $x,y\in\Sigma^*$. Supposons que $xR_By$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,x)$ par symétrie de l'équivalence entre deux états.
-		\paragraph{Congruence à droite} Soient $x,y\in\Sigma^*$ tels que $xR_By$. Soit $z\in\Sigma^*$. Montrons que $xzR_Byz$. $\hdelta(q_0,xz)=\hdelta(\hdelta(q_0,x),z)=\hdelta(\hdelta(q_0,y),z)=\hdelta(q_0,yz)$.
+		\begin{itemize}
+		\item \rb est transitive. Soient $x,y,z\in\Sigma^*$. Supposons que $xR_By$ et $yR_Bz$. On a bien $\hdelta(q_0,x)=\hdelta(q_0,y)=\hdelta(q_0,z)$ par la transitivité de l'équivalence entre deux états.
+		\item \rb est réflexive. Soit $y\in\Sigma^*$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,y)$ par réflexiviré de l'équivalence sur un état.
+		\item \rb est symétrique. Soient $x,y\in\Sigma^*$. Supposons que $xR_By$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,x)$ par symétrie de l'équivalence entre deux états.
+		\end{itemize}
+
+		\rb est congruente à droite. Soient $x,y\in\Sigma^*$ tels que $xR_By$. Soit $z\in\Sigma^*$. Montrons que $xzR_Byz$. $\hdelta(q_0,xz)=\hdelta(\hdelta(q_0,x),z)=\hdelta(\hdelta(q_0,y),z)=\hdelta(q_0,yz)$.
+
+		\hfill$\square$
 	\end{proof}
 
 	\begin{theorem}
@@ -111,17 +119,19 @@ On peut prouver que l'automate obtenu de cette façon est l'automate minimal de 
   %    ██     ██████
 
   \subsection{La table d'observation}
+	\todo{Introduire RO et préciser la différence avec RL. Le but de l'algo est d'avoir une table fermée et cohérente qui correspond à l'automate recherché.}
 
-	%  ██████ ██       ██████   ██████  ██████  ██   ██
-	% ██      ██      ██    ██ ██      ██    ██ ██   ██
-	% ██      ██      ██    ██ ██      ██    ██ ███████
-	% ██      ██      ██    ██ ██      ██    ██ ██   ██
-	%  ██████ ███████  ██████   ██████  ██████  ██   ██
+	% ███████ ███████ ██████   ██████  ██████  ██   ██
+	% ██      ██      ██   ██ ██      ██    ██ ██   ██
+	% █████   █████   ██████  ██      ██    ██ ███████
+	% ██      ██      ██   ██ ██      ██    ██ ██   ██
+	% ██      ███████ ██   ██  ██████  ██████  ██   ██
 
-\subsection{Clôture et cohérence}
 
-\subsubsection*{Clôture}
-La propriété de \emph{clôture} s'exprime mathématiquement par
+\subsection{Fermeture et cohérence}
+
+\subsubsection*{Fermeture}
+La propriété de \emph{fermeture} s'exprime mathématiquement par
 
 $$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
 
@@ -129,7 +139,7 @@ Cette propriété peut être vérifiée par cet algorithme, expliqué de façon 
 
 \begin{algorithm}[H]
 	\begin{algorithmic}[1]
-		\ENSURE si la clôture est respectée ou non
+		\ENSURE si la fermeture est respectée ou non
 
 		\FORALL {élément $w$ de la section $R$}
 		\FORALL {symbole $a$ dans $\Sigma$}
@@ -156,6 +166,25 @@ $$ \forall u,v \in R, u R_O v \Rightarrow \forall a \in \Sigma, ua R_O va$$
 
 Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même ligne dans $T$ et vérifier, pour chaque symbole ($a$), s'ils ($ua,va$) ont la même ligne dans $T$.
 
+\begin{example}
+	Soit la table d'observation O de la table \ref{tab:Oex} :
+
+	\begin{table}[H]
+		\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		$O$ & $\epsilon$ & a\\
+		\hline
+		$\epsilon$ & 0 & 0\\
+		$a$ & 0 & 0\\
+		\hline
+		$aa$ & 0 & 1\\
+		\hline
+	\end{tabular}\caption{Table d'observation O}\label{tab:Oex}
+\end{table}
+	\vspace{0.5cm}
+	Cette table n'est pas cohérente. En effet, $\epsilon R_O a$ mais en ajoutant le symbole $a\in \Sigma$, on obtient $\neg (a R_O aa)$. Les lignes ont les mêmes valeurs, mais les lignes obtenues par la concaténation du symbole $a$ ont des valeurs différentes.
+\end{example}
 
 
 %  █████  ██       ██████   ██████
@@ -167,7 +196,7 @@ Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même li
 \subsection{L'algorithme}\label{ss:a_exemple}
 Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:mini} sur la minimisation.
 
-\todo{Marquer la différence entre $R_L$ et $R_O$}
+%\todo{Marquer la différence entre $R_L$ et $R_O$}
 
 \subsubsection{Première itération}
 
@@ -201,15 +230,15 @@ L'algorithme d'Angluin précise, pour son cas de base, une initialisation de la 
 
 
 \vspace{1cm}
-L'étape suivante consiste à vérifier la \emph{clôture} de la table d'observation $O_0$. Mathématiquement :
+L'étape suivante consiste à vérifier la fermeture de la table d'observation $O_0$. Pour rappel :
 
-$$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_L v$$
+$$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
 
 Intuitivement, pour chaque symbole (ici, $\{a,b\}$, et ce sera vrai jusqu'à la dernière itération), tout mot candidat (dans $R$, la partie supérieure de la table) doit se retrouver, complété de ce symbole, dans une classe d'équivalence d'un autre candidat de $R$. Ici, de toute évidence, les mots $a$ et $b$ sont dans la même classe d'équivalence que $\epsilon$. Dès lors, la propriété de clôture est respectée.
 
-Si la clôture est respectée, alors la question de la cohérence se pose. Mathématiquement :
+Si la fermeture est respectée, alors la question de la cohérence se pose. Pour rappel :
 
-$$ \forall u,v \in R, u R_L v \Rightarrow \forall a \in \Sigma, ua R_L va$$
+$$ \forall u,v \in R, u R_O v \Rightarrow \forall a \in \Sigma, ua R_O va$$
 
 Intuitivement, si deux candidats semblent être dans la même classe d'équivalence (leur lignes dans la table supérieure sont identiques), alors pour n'importe quel symbole, les deux nouveaux mots sont également dans une même classe d'équivalence (leur lignes, potentiellement dans la partie inférieure de la table, sont identiques). N'ayant qu'un seul candidat, cette propriété est forcément respectée ($R_L$ est réflexive).
 
@@ -282,15 +311,15 @@ Les valeurs ajoutées ou modifiées dans la table d'observation sont mises en é
 \end{minipage}
 
 \vspace{1cm}
-Comme pour la première itération, la clôture est testée, suivie de la \emph{cohérence}. Celle-ci n'est pas respectée : si on considère les mots $\epsilon$ et $b$, qui ont la même ligne dans la table $T$ ($\epsilon R_O b$), le symbole $a$, on obtient les mots $a$ et $ba$ qui n'ont pas la même ligne : ($\neg a R_O ba$). Le symbole $a$ est alors ajouté à $S$ et une nouvelle table $O_2$ est calculée.
+Comme pour la première itération, la fermeture est testée, suivie de la cohérence. Celle-ci n'est pas respectée : si on considère les mots $\epsilon$ et $b$, qui ont la même ligne dans la table $T$ ($\epsilon R_O b$), le symbole $a$, on obtient les mots $a$ et $ba$ qui n'ont pas la même ligne : ($\neg a R_O ba$). Le symbole $a$ est alors ajouté à $S$ et une nouvelle table $O_2$ est calculée.
 
-La clôture étant déjà vérifiée, la question de la cohérence est reposée, et cette fois-ci elle est vérifiée ; l'automate est construit et proposé à l'enseignant.
+La fermeture étant déjà vérifiée, la question de la cohérence est reposée, et cette fois-ci elle est vérifiée ; l'automate est construit et proposé à l'enseignant.
 
 Sur cette itération, l'algorithme a reçu le mot $ba$ comme étant accepté. Il a du ajouter $a$ à $S$ pour permettre de différencier certains états. L'automate se voit ajouter les états $[[b]]$ et $[[ba]]$.
 
 \subsubsection{Troisième itération}
 
-Suivant toujours l'algorithme de comparaison d'automates détaillé dans la section \ref{sec:algorithmes}, l'enseignant découvre qu'ils sont différents.
+Suivant toujours l'algorithme de comparaison d'automates détaillé dans la section \ref{ss:eqauto}, l'enseignant découvre qu'ils sont différents.
 
 Il sort le contre-exemple $aaba$. Si c'est un contre-exemple et qu'il est accepté par $O_2$, c'est qu'il ne l'est pas (0) par $A_4$. Une nouvelle table $O_3$ doit être construite.
 
@@ -402,7 +431,7 @@ Il sort le contre-exemple $aaba$. Si c'est un contre-exemple et qu'il est accept
 
 Ayant reçu $aaba$, ce mot et tous ses préfixes sont ajoutés à la table. L'extension $R.\Sigma$ est recalculée et la table $O_3$ est construite.
 
-Un manquement est détecté : le mot $a$. En effet, en lui ajoutant le symbole $b$, on obtient $ab$ qui n'est ni dans $R$ ni en relation $R_O$ avec $a$. $ab$ est alors ajouté à $R$, et $R.\Sigma$ est étendu. La nouvelle table, $O_4$ est de nouveau testée.
+Un manquement à la fermeture est détecté : le mot $a$. En effet, en lui ajoutant le symbole $b$, on obtient $ab$ qui n'est ni dans $R$ ni en relation $R_O$ avec $a$. $ab$ est alors ajouté à $R$, et $R.\Sigma$ est étendu. La nouvelle table, $O_4$ est de nouveau testée.
 
 $O_4$ ne respecte pas la cohérence. Les mots $\epsilon$ et $aa$ respectent \ro (leur ligne a la même valeur dans la table) mais $\neg b R_O aab$. $b$ est alors ajouté à $S$ et une nouvelle colonne associée est ajoutée à la table, donnant le table $O_5$. Celle-ci a toujours un soucis de cohérence entre $\epsilon$ et $aa$, menant à l'ajout de $ab$ à $S$ et à la création de $O_6$. Finalement, pour régler le soucis de cohérence dans $O_6$ entre $a$ et $aa$, le mot $ba$ est ajouté à $S$ et une table $O_7$ est ainsi créée avec la nouvelle colonne associée.
 

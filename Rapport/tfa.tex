@@ -1,6 +1,4 @@
-Cette section décrit le \emph{Table Filling Algorithm}, algorithme permettant de minimiser un automate déterministe mais aussi de tester l'équivalence entre deux de ceux-ci. C'est un élément important pour l'algorithme d'Angluin, sujet principal de ce mémoire, car celui repose sur le test d'appartenance à un automate et celui d'égalité entre deux automates.
-
-
+Cette section décrit le \emph{Table Filling Algorithm}, algorithme permettant de minimiser un automate déterministe mais aussi de tester l'équivalence entre deux de ceux-ci. C'est un élément important pour l'algorithme d'Angluin, sujet principal de ce mémoire.
 
 % ██████  ███████
 % ██   ██ ██
@@ -40,13 +38,8 @@ La classe d'équivalence de tous les états en relation \re avec $q$ (qui sert a
   Si $Q$ est fini, alors le nombre de classe d'équivalences est fini aussi. Chaque classe d'équivalence $[[q]]$ contient un nombre d'états fini.
 \end{corollary}
 
-Montrons que \re est congruente à droite, c'est-à-dire
-$$
-xR_Ey \implies \forall a \in \Sigma, \delta(x,a)R_E\delta(y,a)
-$$
-
 \begin{proposition}[Congruence de \re]
- \re est congruente à droite.
+ \re est congruente à droite, c'est-à-dire $$xR_Ey \implies \forall a \in \Sigma, \delta(x,a)R_E\delta(y,a)$$
 \end{proposition}
 
 \begin{proof}[Congruence de \re]\label{proof:rmcongruency}
@@ -62,7 +55,7 @@ $$
 
 \begin{corollary}\label{col:st}
  Toutes les transitions étiquetées par un symbole $a$ sortant d'une classe d'équivalence mènent à une même classe d'équivalence :
- $\forall S \text{ classe d'équivalence},\forall a \in \Sigma, \exists T, \forall q \in S, \delta(q,a)\in T$ avec $T$ une classe d'équivalence.
+ $\forall\text{ classe d'équivalence }S,\forall a \in \Sigma, \exists\text{ une classe d'équivalence } T, \forall q \in S, \delta(q,a)\in T$.
 \end{corollary}
 
 
@@ -72,15 +65,15 @@ $$
 %    ██    ██      ██   ██
 %    ██    ██      ██   ██
 
-\subsection{Table Filling Algorithm}\label{ss:tfa}
+\subsection{Algorithme}\label{ss:tfa}
 
 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \re. L'information que ceux-ci proposent est alors redondante. Dès lors, l'automate peut être simplifié pour offrir la même information de façon plus compacte. Une façon de détecter ces équivalences est de construire un tableau via le \emph{table filling algorithm}. Le tableau obtenu est la \emph{table de différenciation}.
 
-Celui-ci détecte les paires \emph{différenciables} (cochées dans le tableau construit par l'algorithme) récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel que $\hdelta(p,w)$ est un état acceptant et $\hdelta(q,w)$ esr un état non-acceptant ou vice-versa. $w$ sert alors de \emph{mot témoin}. L'algorithme procède récursivement comme suit :
+Celui-ci détecte les paires \emph{différenciables} (cochées dans le tableau construit par l'algorithme) récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel que $\hdelta(p,w)$ est un état acceptant et $\hdelta(q,w)$ ne l'est pas ou vice-versa. $w$ sert alors de \emph{mot témoin}. L'algorithme procède récursivement comme suit :
 
-\textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$.
+\textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$. La cellule correspondante dans le tableau est cochée.
 
-\textbf{Pas de récurrence : } Soient $p,q,r,s$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables, alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$.
+\textbf{Pas de récurrence : } Soient $p,q,r,s$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables (les cellules sont cochées dans le tableau) alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$. Les cellules de ces états sont cochées.
 
 \begin{theorem}[Table de différenciation]
  Si deux états ne sont pas différenciés par le table filling algorithm, les états sont équivalents (ils respectent la relation \re).
@@ -204,15 +197,15 @@ D'après le théorème, comme $q_1$ et $q_5$ ne sont pas différenciés, on a $q
 
 \begin{proof}
 
-Considérons un automate déterministe fini quelconque \automaton. Supposons par l'absurde qu'il existe une paire d'états $\{p,q\}$ tels que :
+Considérons un automate déterministe fini quelconque \automaton. Supposons par l'absurde qu'il existe une paire d'états $\{p,q\}$ telle que :
 \begin{enumerate}
 	 \item $p$ et $q$ ne sont pas différenciés par l'algorithme de remplissage de table.
 	 \item Les états ne sont pas équivalents : $\neg (pR_E q)$. Par extension, il existe un mot témoin $w$ différenciant $p$ et $q$.
 \end{enumerate}
 
-Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune associée à un mot témoin, il doit exister un paire distinguée avec un mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court montrant que $\neg (pR_E q)$ . Dès lors, soit $\hdelta(p,w)$ est acceptant, soit $\hdelta(q,w)$ l'est, mais pas les deux.
+Une telle paire est une \emph{mauvaise paire}. Si il y a des mauvaises paires, chacune associée à un mot témoin, il doit exister un paire distinguée par un mot témoin le plus court. Posons $\{p,q\}$ comme étant cette paire et $w=a_1a_2\dots a_n$ le mot témoin le plus court montrant que $\neg (pR_E q)$ . Dès lors, soit $\hdelta(p,w)$ est acceptant, soit $\hdelta(q,w)$ l'est, mais pas les deux.
 
-Ce mot $w$ ne peut pas être $\epsilon$. Auquel cas, la table aurait été remplie dès l'étape d'induction de l'algorithme avec la paire différenciable $\{p,q\}$. La paire $\{p,q\}$ ne serait pas une mauvaise paire.
+Ce mot $w$ ne peut pas être $\epsilon$. Auquel cas, la table aurait été remplie dès le cas de base de l'algorithme avec la paire différenciable $\{p,q\}$. La paire $\{p,q\}$ ne serait pas une mauvaise paire.
 
 $w$ n'étant pas $\epsilon$, $ |w| \ge 1$. Considérons les états $r = \delta(p,a_1)$ et $s=\delta(q,a_1)$. Ces états sont différenciés par $a_2a_3\dots a_n$ car $\hdelta(p,w) = \hdelta(r, a_2a_3\dots a_n)$ et $\hdelta(q,w) = \hdelta(s, a_2a_3\dots a_n)$ et $p$ et $q$ sont différenciables.
 
@@ -231,120 +224,14 @@ Ainsi, s'il n'existe pas de mauvaise paire, c'est que chaque paire différenciab
 
 Considérons $n$ le nombre d'états d'un automate, et $k$ la taille de l'alphabet $\Sigma$ supporté.
 
-Si il y a $n$ états, il y a $\begin{pmatrix}n\\2\end{pmatrix}$ soit $\frac{n(n-1)}{2}$ paires d'états distincts. A chaque itération (sur l'ensemble de la table), il faut considérer chaque paire, et vérifier si un de leur successeurs est différenciable. Cette étape prend au plus $\mathcal{O}(k)$ pour tester chaque successeurs potentiel (en fonction du symbole lu).  Ainsi, une itération sur la table se fait en $\mathcal{O}(kn^2)$. Si une itération ne découvre pas de nouveaux états différenciables, l'algorithme s'arrête. Comme la table a une taille en $\mathcal{O}(n^2)$ et qu'à chaque étape un élément au minimum doit y être coché, la complexité totale de l'algorithme est en $\mathcal{O}(kn^4)$.
-
-Cependant, il existe des pistes d'amélioration. La première est d'avoir, pour chaque paire $\{r,s\}$ une liste des paires $\{p,q\}$ qui, pour un même symbole, mènent à $\{r,s\}$. On dit de ces paires qu'elles sont dépendantes. Si la paire $\{r,s\}$ est marquée comme différenciable, leurs paires dépendantes seront de facto différenciables.
+Considérons aussi une version optimisées de l'algorithme. Une optimisation simple est de construire pour chaque paire $\{r,s\}$ une liste des paires \emph{dépendantes} $\{p,q\}$ telles que, pour un même symbole $a$, $\delta(p,a)=r$ et $\delta(q,a)=s$.
 
 Cette liste peut être construite en considérant chaque symbole $a \in \Sigma$ et ajoutant les paires $\{p,q\}$ à chacune de leur dépendance $\{\delta(p,a),\delta(q,a)\}$. Cette étape prend au plus $k.\mathcal{O}(n^2)=\mathcal{O}(kn^2)$. (Le nombre de symboles multiplié par le nombre de paires à considérer).
 
-Ensuite, il suffit de partir des cas initiaux (se reposant sur le cas de base de l'algorithme), et de marquer tous leurs états dépendants comme différenciables, tout en ajoutant leur propre liste à chaque fois. La complexité de cette exploration est bornée par le nombre d'éléments dans une liste et le nombre de listes. Respectivement, $k$ et $\mathcal{O}(n^2)$, ce qui donne $\mathcal{O}(kn^2)$ pour cette exploration.
+Dès lors, on peut prendre la récurrence et la propager en ajoutant les paires dépendantes de celles différenciées au cas de base. Celui-ci s'effectue en $\mathcal{O}(n^2)$ opérations, cochant au plus la moitié des paires ($\frac{n(n-1)}{2*2}$). Ayant au plus $\frac{n(n-1)}{2}$ paires à atteindre, il y a au plus de l'ordre de $\mathcal{O}(n^2)$ opérations.
 
-La complexité totale revient à $\mathcal{O}(kn^2)$.
+La complexité totale alors revient à $\mathcal{O}(kn^2)$.
 \end{complexity}
-
-
-% ███    ███ ██ ███    ██ ██ ███    ███
-% ████  ████ ██ ████   ██ ██ ████  ████
-% ██ ████ ██ ██ ██ ██  ██ ██ ██ ████ ██
-% ██  ██  ██ ██ ██  ██ ██ ██ ██  ██  ██
-% ██      ██ ██ ██   ████ ██ ██      ██
-
-\subsection{Minimisation}\label{ss:mini}
-
-Plusieurs automates peuvent représenter un même langage. Parmi ceux-ci, l'\emph{automate minimal} est celui comportant le moins d'états.
-
-
-La minimisation d'automate se fait en deux étapes :
-\begin{enumerate}
- \item Se débarrasser de tous les états inatteignables : ils ne participent pas à la construction du langage représenté
- \item Grâce aux équivalences d'états trouvées grâce à l'algorithme de remplissage de tableau défini au point \ref{ss:tfa}, construire un nouvel automate.
-\end{enumerate}
-
-Décrivons en détail cette minimisation dans l'algorithme \ref{alg:mini}.
-
-\begin{algo}[Minimisation]\label{alg:mini}
-Soit un automate déterministe fini \automaton. Les états inatteignables peuvent être supprimés de $Q$ et de $\delta$.
-
-Pour minimiser cet automate, il faut :
-\begin{enumerate}
- \item Construire la table de différenciation.
- \item Séparer $Q$ en classes d'équivalences.
- \item Construire l'automate minimal $C=(Q_C,\Sigma, \delta_C, q_C, F_C)$:
- \begin{itemize}
-	 \item Soit $S$ une des classes d'équivalence obtenues par la table de différenciation.
-	 \item Ajouter $S$ à $Q_C$ ainsi qu'à $F_C$ si $S$ contient un état acceptant $q\in F$. Cette opération est valide, comme mentionné dans le corollaire \ref{col:st}.
-	 \item Si $S$ contient $q_0$ l'état initial de $A$, alors $S$ est $q_C$ l'état initial de $C$.
-	 \item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$. Voir corollaire \ref{col:st}. On défini alors $\delta_C(S,a)=T$.
- \end{itemize}
-\end{enumerate}
-\end{algo}
-
-\begin{example}
-
- Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
-
- Le tableau \ref{tab:tfaa2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
-
- En appliquant l'algorithme de minimisation ci-dessus, qui peut se résumer intuitivement à fusionner les états équivalents $q_1$ et $q_5$, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.
-
- \begin{figure}[H]
-	 \centering
-	 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
-
-	 \tikzstyle{every state}=[circle]
-
-	 \node[initial,state] (A)                    {$q_0$};
-	 \node[state]         (B) [below right of=A] {$q_1$};
-	 \node[state]         (C) [below left of=A] {$q_2$};
-	 \node[accepting, state]         (D) [below right of=B] {$q_3$};
-	 \node[state]         (E) [below left of=C]       {$q_4$};
-
-	 \path
-	 (A) 	edge              node {a} (C)
-	 edge              node {b} (B)
-	 (B) 	edge              node {a} (D)
-	 edge [loop above] node {b} (B)
-	 (C) 	edge              node {a} (E)
-	 edge              node {b} (B)
-	 (D) 	edge [loop above] node {a,b} (D)
-	 (E) 	edge [loop above] node {a,b} (E);
-	 \end{tikzpicture}
-	 \caption{Automate $A_3$}\label{fig:a3}
- \end{figure}
-
- Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L=L(A_3)$ grâce à cet automate $A_3$. Cette expression régulière est celle de l'exemple \ref{ex:regex}
-\end{example}
-
-
-\begin{theorem}[Minimalité de l'automate réduit]
- Soit un ADF $A$ et soit $C$ l'automate construit par cet algorithme de minimisation. Aucun automate équivalent à $A$ n'a moins d'états que $C$. De plus, chaque automate ayant autant d'états que $C$ peut être transformé en celui-ci par homomorphisme.
-\end{theorem}
-
-
-\begin{proof}
- Prouvons que l'algorithme de minimisation fournit un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage)
- Soient un ADF $A$ et $C$ l'automate obtenu par l'algorithme de minimisation. Posons que $C$ comporte $k$ états.
-
- Par l'absurde, supposons qu'il existe $M$ un ADF minimisé équivalent à $A$ mais comptant moins d'états que $C$. Posons qu'il en comporte $l<k$.
- Appliquons le table filling algorithm sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents (pas différenciables) puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symbole sont eux aussi équivalents. Le cas contraire impliquerait que les états initiaux sont différenciables, ce qui n'est pas le cas.
- De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
- Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents, et que par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
- Or, $k>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalents entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différenciables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$.
-
- \hfill$\square$
-\end{proof}
-
-\begin{proof}
- Prouvons que tout automate minimal pour un langage est $C$, à un isomorphisme sur les noms des états près.
-
- Soit $A$ un ADF pour un langage $L$. Soient $C$ un ADF obtenu par l'algorithme de minimisation et $M$ un automate minimal comportant autant d'états que $C$.
-
- Comme mentionné dans la preuve précédente, il doit y avoir une équivalence 1 à 1 entre chaque état de $C$ et de $M$. (Au minimum 1 et au plus 1). De plus, aucun état de $M$ ne peut être équivalent à 2 états de $C$, selon le même argument.
-
- Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états.
-
- \hfill$\square$
-\end{proof}
 
 
 % ███████  ██████  ██    ██ ██ ██    ██
@@ -356,7 +243,7 @@ Pour minimiser cet automate, il faut :
 
 
 \subsection{Appartenance et équivalence}\label{ss:eqauto}
-Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer les langages représentés au complet n'est pas toujours possible et rarement efficace. Grâce à de légères modifications à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
+Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer des langages représentés au complet n'est pas toujours possible et rarement efficace. Grâce à de légères modifications à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
 
 
 Considérons les ADF $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
@@ -473,3 +360,107 @@ En particulier, la classe $C_0$ souligne que les états initiaux sont équivalen
 
 
 Les différentes notions liées à l'égalité : les propriétés de réflexivité, transitivité et symétrie ont été démontrées dans la section \ref{ss:re}.
+
+
+% ███    ███ ██ ███    ██ ██ ███    ███
+% ████  ████ ██ ████   ██ ██ ████  ████
+% ██ ████ ██ ██ ██ ██  ██ ██ ██ ████ ██
+% ██  ██  ██ ██ ██  ██ ██ ██ ██  ██  ██
+% ██      ██ ██ ██   ████ ██ ██      ██
+
+\subsection{Minimisation}\label{ss:mini}
+
+Plusieurs automates peuvent représenter un même langage. Parmi ceux-ci, l'\emph{automate minimal} est celui comportant le moins d'états.
+
+
+La minimisation d'automate se fait en deux étapes :
+\begin{enumerate}
+ \item Se débarrasser de tous les états inatteignables : ils ne participent pas à la construction du langage représenté
+ \item Grâce aux équivalences d'états trouvées grâce au table filling algorithm défini au point \ref{ss:tfa}, construire un nouvel automate.
+\end{enumerate}
+
+Décrivons en détail cette minimisation dans l'algorithme \ref{alg:mini}.
+
+\begin{algo}[Minimisation]\label{alg:mini}
+Soit un automate déterministe fini \automaton. Les états inatteignables peuvent être supprimés de $Q$ et de $\delta$.
+
+Pour minimiser cet automate, il faut :
+\begin{enumerate}
+ \item Construire la table de différenciation.
+ \item Séparer $Q$ en classes d'équivalences.
+ \item Construire l'automate minimal $C=(Q_C,\Sigma, \delta_C, q_C, F_C)$:
+ \begin{enumerate}
+	 \item Soit $S$ une des classes d'équivalence obtenues par la table de différenciation.
+	 \item Ajouter $S$ à $Q_C$ ainsi qu'à $F_C$ si $S$ contient un état acceptant $q\in F$. Cette opération est valide, comme mentionné dans le corollaire \ref{col:st}.
+	 \item Si $S$ contient $q_0$ l'état initial de $A$, alors $S$ est $q_C$ l'état initial de $C$.
+	 \item Pour un symbole $a \in \Sigma$, alors il doit exister une classe d'équivalence $T$ tel que pour chaque état $\forall q \in S,\delta(q,a) \in T$ par le corollaire \ref{col:st}. On défini alors $\delta_C(S,a)=T$.
+ \end{enumerate}
+\end{enumerate}
+\end{algo}
+
+\begin{example}
+
+ Considérons l'automate $A_1$ représenté à la figure \ref{fig:a1}. En supprimant l'état $q_6$ qui n'est pas atteignable, on obtient l'automate $A_2$ de la figure \ref{fig:a2}.
+
+ Le tableau \ref{tab:tfaa2} sert d'exemple pour l'algorithme de remplissage de tableau, sur $A_2$.
+
+ En appliquant l'algorithme de minimisation ci-dessus, qui peut se résumer intuitivement à fusionner les états équivalents $q_1$ et $q_5$, on obtient l'automate $A_3$ de la figure \ref{fig:a3}.
+
+ \begin{figure}[H]
+	 \centering
+	 \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+
+	 \tikzstyle{every state}=[circle]
+
+	 \node[initial,state] (A)                    {$q_0$};
+	 \node[state]         (B) [below right of=A] {$q_1$};
+	 \node[state]         (C) [below left of=A] {$q_2$};
+	 \node[accepting, state]         (D) [below right of=B] {$q_3$};
+	 \node[state]         (E) [below left of=C]       {$q_4$};
+
+	 \path
+	 (A) 	edge              node {a} (C)
+	 edge              node {b} (B)
+	 (B) 	edge              node {a} (D)
+	 edge [loop above] node {b} (B)
+	 (C) 	edge              node {a} (E)
+	 edge              node {b} (B)
+	 (D) 	edge [loop above] node {a,b} (D)
+	 (E) 	edge [loop above] node {a,b} (E);
+	 \end{tikzpicture}
+	 \caption{Automate $A_3$}\label{fig:a3}
+ \end{figure}
+
+ Une expression régulière ($(b+ab)b^*a(a+b)^*$) peut être déduite pour $L=L(A_3)$ grâce à cet automate $A_3$. Cette expression régulière est celle de l'exemple \ref{ex:regex}
+\end{example}
+
+
+\begin{theorem}[Minimalité de l'automate réduit]
+ Soit un ADF $A$ et soit $C$ l'automate construit par cet algorithme de minimisation. Aucun automate équivalent à $A$ n'a moins d'états que $C$. De plus, chaque automate ayant autant d'états que $C$ lui est homomorphique.
+\end{theorem}
+
+
+\begin{proof}
+ Prouvons que l'algorithme de minimisation fournit un automate minimum (il n'en existe aucun comportant moins d'états pour un même langage). Soient un ADF $A$ et $C$ l'automate obtenu par l'algorithme de minimisation. Posons que $C$ comporte $k$ états.
+
+ Par l'absurde, supposons qu'il existe $M$ un ADF minimisé équivalent à $A$ mais comptant moins d'états que $C$. Posons qu'il en comporte $l<k$.
+ Appliquons le table filling algorithm sur $C$ et $M$, comme s'ils étaient un seul ADF, comme proposé dans la section \ref{ss:eqauto}. Les états initiaux sont équivalents puisque $L(C)=L(M)$. Dès lors, les successeurs pour chaque symbole sont eux aussi équivalents. Le cas contraire impliquerait que les états initiaux sont différenciables, ce qui n'est pas le cas.
+ De plus, ni $C$ ni $M$ n'ont un état inaccessible, sinon il pourrait être éliminé, résultant en un automate comportant moins d'états pour un même langage.
+
+ Soit $p$ un état de $C$. Soit un mot $a_1a_2\dots a_i$, qui mène de l'état initial de $C$ à $p$. Alors, il existe un état $q$ de $M$ équivalent à $p$. Puisque les états initiaux sont équivalents et que, par induction, les états obtenus par la lecture d'un symbole le sont aussi, l'état $q$ dans $M$ obtenu par la lecture du mot $a_1a_2\dots a_i$ est équivalent à $p$. Ceci signifie que tout état de $C$ est équivalent à au moins un état de $M$.
+ Or, $k>l$. Cela signifie qu'il doit exister au moins deux états de $C$ équivalents à un même état de $M$ et donc équivalents entre eux. Il y a la contradiction : par construction, les états de $C$ sont tous différenciables les uns des autres. La supposition de l'existence de $M$ est fausse. Il n'existe pas d'automate équivalent à $A$ comportant moins d'états que $C$.
+
+ \hfill$\square$
+\end{proof}
+
+\begin{proof}
+ Prouvons que tout automate minimal pour un langage est $C$, à un isomorphisme sur les noms des états près.
+
+ Soit $A$ un ADF pour un langage $L$. Soient $C$ un ADF obtenu par l'algorithme de minimisation et $M$ un automate minimal comportant autant d'états que $C$.
+
+ Comme mentionné dans la preuve précédente, il doit y avoir une équivalence 1 à 1 entre chaque état de $C$ et de $M$. (Au minimum 1 et au plus 1). De plus, aucun état de $M$ ne peut être équivalent à 2 états de $C$, selon le même argument.
+
+ Dès lors, l'automate minimisé, dit \emph{canonique} est unique à l'exception du renommage des différents états.
+
+ \hfill$\square$
+\end{proof}

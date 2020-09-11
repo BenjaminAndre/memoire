@@ -12,7 +12,7 @@ $\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mo
 
 Cette proposition est triviale par la définition de la concaténation.
 
-\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$. L'ensemble de tous les mots possibles sur $\Sigma$ est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
+\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$. L'ensemble de \emph{tous les mots possibles sur $\Sigma$} est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
 
 
 Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
@@ -46,14 +46,15 @@ La \emph{fermeture} de $L$ est un langage constitué de tous les mots qui peuven
 
 Certains langages peuvent être exprimés par une \emph{expression régulière}.
 
-Les expressions régulières suivent un algèbre avec ses opérations et leur priorités. Le langage décrit par une expression est construit de façon inductive par ces différentes opérations. Pour une expression régulière $E$, le langage décrit est noté $L(E)$. Un langage qui peut être décrit par une expression régulière est dit \emph{langage régulier}.
+Les expressions régulières suivent un algèbre avec ses opérations et leur priorités. Une expression régulière est définie de façon récursive, étant elle même composée d'expressions régulières ou de symboles. Les différentes opérations décrivent comment une expression plus complexe est construite à partir de ses composants.
+Pour une expression régulière $E$, le langage décrit est noté $L(E)$. Un langage qui peut être décrit par une expression régulière est dit \emph{langage régulier}.
 
 
 \textbf{Cas de base}
 Certains langages peuvent être construits directement sans passer par l'induction:
 
 \begin{itemize}
-	\item $\epsilon$ est une expression régulière. Elle décirt le langage $L(\epsilon)=\{\epsilon\}$
+	\item $\epsilon$ est une expression régulière. Elle décrit le langage $L(\epsilon)=\{\epsilon\}$
 	\item $\emptyset$ est une expression régulière décrivant $L(\emptyset)=\emptyset$
 	\item Si $a$ est un symbole, alors $a$ est une expression régulière décrivant le langage $L(a) = \{a\}$.
 \end{itemize}
@@ -63,14 +64,14 @@ Certains langages peuvent être construits directement sans passer par l'inducti
 Les autres langages réguliers sont construits suivant différentes règles d'induction présentées par ordre décroissant de priorité :
 
 \begin{itemize}
-	\item Si $E$ est une expression régulière, $(E)$ est une expression régulière et $L((E)) = L(E)$.
-	\item Si $E$ est une expression régulière, $E^*$ est une expression régulière représentant la fermeture de $L(E)$, à savoir $L(E^*) = L(E)^*$.
-	\item Si $E$ et $F$ sont des expressions régulières, $EF$ est une expression régulière décrivant la concaténation des deux langages représentés, à savoir $L(EF)=L(E)L(F)$. La concaténation étant associative, l'ordre de groupement n'est pas important, mais par convention, la priorité est à gauche.
-	\item Si $E$ et $F$ sont des expressions régulières, $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est associative et la priorité est à gauche.
+	\item Si $E$ est une expression régulière, alors $(E)$ est une expression régulière et $L((E)) = L(E)$.
+	\item Si $E$ est une expression régulière, alors $E^*$ est une expression régulière représentant la fermeture de $L(E)$, à savoir $L(E^*) = L(E)^*$.
+	\item Si $E$ et $F$ sont des expressions régulières, alors $EF$ est une expression régulière décrivant la concaténation des deux langages représentés, à savoir $L(EF)=L(E)L(F)$.
+	\item Si $E$ et $F$ sont des expressions régulières, alors $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est associative et la priorité est à gauche.
 \end{itemize}
 
 \begin{example}[Expression régulière]
-	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui représente le langage $L=L(E)$.\\
+	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui décrit le langage $L=L(E)$.\\
 	\begin{itemize}
 		\item Le mot $ba$ fait partie de $L$. En effet, $ba=b\epsilon a \epsilon=(b)b^0a(a+b)^0$, ce qui respecte bien la définition de $E$.
 		\item Le mot $ababbab$ fait partie de $L$. A nouveau, $ababbab=ab\epsilon a (a+b)(a+b)(a+b)(a+b)=(ab)b^0a(a+b)^4$.
@@ -79,4 +80,4 @@ Les autres langages réguliers sont construits suivant différentes règles d'in
 	\label{ex:regex}
 \end{example}
 
-Un autre exemple d'expression régulière est $01^*0$ qui décrit le langage constitué de tous les mots commençant et finissant par $0$ avec uniquement des $1$ entre les deux.
+Un autre exemple d'expression régulière est $E=01^*0$. $E$ décrit le langage $L(E)$ constitué de tous les mots commençant et finissant par $0$ avec uniquement des $1$ entre les deux.

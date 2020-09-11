@@ -32,7 +32,7 @@ Soit la transition $\delta(q,a)=p$ (dans un ADF). Pour $q$, c'est une \emph{tran
 
 Si $\delta(q,a)=P=\{p_1,p_2,\dots,p_n\}$ dans un ANF, alors les états $\{p_1,p_2,\dots,p_n\}$ auront une transition entrante sur $a$.
 
-Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$ sur un ensemble d'états $S$. A ce moment, $\delta(S,a)=\bigcup_{q\in S}\delta(q,a)$ avec $a\in \Sigma$.
+Dans le cas des ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$ sur un ensemble d'états $S$. A ce moment, $\delta(S,a)=\bigcup_{q\in S}\delta(q,a)$ avec $a\in \Sigma$.
 
 
 % ███████ ██   ██ ███████ ███    ███ ██████  ██      ███████ ███████
@@ -66,10 +66,17 @@ Dans le cas de ANF et $\epsilon$-ANF, il peut être pratique d'utiliser $\delta$
       $q_5$&$q_3$&$q_1$\\\hline
       $q_6$&$q_4$&$q_5$\\\hline
     \end{tabular}
-    \caption{La table de transitions $\delta$ d'un ANF}
+    \caption{La \emph{table de transitions} $\delta$ d'un ANF}
     \label{table:transdelta}
   \end{table}
 \end{example}
+
+Cette table de transitions est construite comme suit :
+\begin{itemize}
+  \item Les en-têtes de colonnes sont des symboles appartenant à $\Sigma$.
+  \item Les en-têtes de lignes sont des états $q \in Q$.
+  \item Un cellule à la croisée de la ligne $q$ et du symbole $a$ contient un état $p$ avec $p=\delta(q,a)$.
+\end{itemize}
 
 Via la notation de la table \ref{table:transdelta}, $Q$ et $\Sigma$ sont explicites. En dénotant l'état initial par $\rightarrow$ et les états acceptants par $*$ en exposant, on obtient une définition complète d'un automate : $(Q,\Sigma, q_0, \delta, F)$.
 
@@ -100,7 +107,7 @@ $A$ est un $\epsilon$-ANF ; une colonne supplémentaire sert à représenter la 
 	\label{table:eanfdelta}
 \end{table}
 
-Un exemple d'ANF sans transition sur $\epsilon$ serait juste A sans ces dites transitions.
+Une table similaire sans la colonne $\epsilon$ représenterait un $ANF$ au sens strict. Celui-ci ne serait pas pour autant équivalent à l'$\epsilon-ANF$ de la table \ref{table:eanfdelta}.
 
 \end{example}
 
@@ -179,7 +186,7 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
 \end{minipage}
 \end{example}
 
- Cette représentation d'un automate peut sembler plus naturelle pour un humain alors que la table de transitions est plus proche d'un langage informatique.
+Cette représentation a l'avantage d'être plus visuelle, alors que la table de transition est plus structurée.
 
 
 
@@ -192,7 +199,7 @@ Le \emph{graphe d'un automate fini} \automaton est un graphe dirigé construit c
 
 \subsection{ECLOSE}
 
-Cette sous-section introduit l'algorithme ECLOSE. Cet algorithme permet, à partir d'un état spécifique, de calculer l'ensemble des états atteignables uniquement par des transitions sur $\epsilon$. Ce calcul sert notemment au test d'appartenance d'un mot à un $\Sigma$-ANF ainsi qu'à tous les algorithmes qui en dépendent.
+Cette sous-section introduit l'algorithme ECLOSE. Cet algorithme concerne les $\epsilon-ANF$. Ilpermet, à partir d'un état spécifique, de calculer l'ensemble des états atteignables uniquement par des transitions sur $\epsilon$. Ce calcul sert notemment au test d'appartenance d'un mot à un $\epsilon$-ANF.
 
 Soit un $\epsilon$-ANF \automaton. Il est possible de construire un fonction retournant l'ensemble des états atteints uniquement en suivant des transitions sur $\epsilon$ pour un état $q$ donné. Cette fonction est la \emph{fermeture sur epsilon} $ECLOSE : Q \rightarrow 2^Q$. Sa définition est inductive.\\
 
@@ -220,7 +227,7 @@ ECLOSE peut être utilisé indifféremment sur un ensemble d'états S ($ECLOSE :
 
 \subsection{Langage}
 
-Un automate représente un langage. Nous expliqueront ici comment il le fait pour les 3 catégories d'automates.
+Un automate représente un langage. Cette section explique comment il le fait pour les 3 catégories d'automates.
 
 \subsubsection*{Fonction de transition étendue}
 
@@ -250,17 +257,17 @@ Il se peut que la fonction de transition $\delta$ ne soit pas définie pour une 
 
 \subsubsection*{Chemin}
 
-Un \emph{chemin} est une suite d'états d'un automate. Chaque état de cette suite doit être atteignable par une transition depuis l'état précédent.
+Un \emph{chemin} est une suite d'états d'un automate. Chaque état de cette suite doit être atteignable par une transition depuis l'état précédent dans cette suite.
 
 \begin{example}[Chemin]
- Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $(q_0,q_2,q_5)$. En effet, les transitions sont définies : $\delta(q_0, a)=q_2$, $\delta(q_2, b)=q_5$. Un mot représenté par ce chemin est $ab$.
+ Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $(q_0,q_2,q_5)$. En effet, les transitions sont définies : $\delta(q_0, a)=q_2$ et $\delta(q_2, b)=q_5$. Un mot représenté par ce chemin est $ab$.
 \end{example}
 
 Dans le cas où plusieurs transitions mènent d'un état à un autre, plusieurs mots peuvent être représentés par un même chemin.
 Chaque état d'un chemin entre deux états $p$ et $q$ et distinct de ceux-ci est dit \emph{état intermédiaire}.
 
 \subsubsection*{Langage}
-Le \emph{langage représenté} par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
+Le \emph{langage représenté} par un automate \automaton peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Si deux automates représentent le même langage, ils sont dit \emph{équivalents}. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
 $$
 L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\} \hspace{0.5cm}
 L(A)= \{w \in \Sigma^* | \exists q \in \hdelta(q_0,w), q \in F\}
@@ -295,10 +302,8 @@ Ainsi, un mot $w$ appartient à un langage $L$ représenté par l'automate $A$ s
     &ECLOSE(\{q_1,q_2\})=\\
     &\{q_1,q_2\}
   \end{align*}
-  Avec $q_2\in F$.
+  On a bien l'ensemble d'états $\{q_1,q_2\}$ avec $q_2\in F$.
 \end{example}
-
-Si deux automates représentent le même langage, ils sont dit \emph{équivalents}.
 
 L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 
@@ -306,7 +311,7 @@ L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 \begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:membership}
  \begin{algorithmic}[1]
    \REQUIRE un mot $w$, un automate \automaton représentant $L$
-   \ENSURE si $w$ appartient à $L$
+   \ENSURE si $w$ appartient à $L=L(A)$
 
    \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ est l'ensemble des états courants}
    \IF {A est un $\Sigma$-ANF}
@@ -328,15 +333,15 @@ L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 
 \begin{complexity}[Lecture d'un mot par un automate]
 
- Si $|w|=n$, l'algorithme \ref{alg:membership} est en $\mathcal{O}(n)$.
+La complexité de l'algorithme \ref{alg:membership} dépend du type d'automate considéré. Considérons que $|w|=n$.
 
-L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale ($\mathcal{O}(1)$). Pour un $\Sigma$-ANF, cette opération est en $\mathcal{O}(n^2)$.
+L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale ($\mathcal{O}(1)$). Pour un $\epsilon$-ANF, cette opération est en $\mathcal{O}(n)$. En effet, $n$ états au plus peuvent être ajoutés à l'ensemble.
 
 Les opération 6 et 9 sont en temps constant. L'opération 7 à la complexité de $\delta$. Cette fonction est triviale pour un ADF. Si celui-ci est stocké dans un tableau, l'opéation est en temps constant. Pour un ANF ou $\Sigma$-ANF, comme $\delta$ porte sur un sous-ensemble de $Q$, l'opération est en $\mathcal{O}(n)$. Le pire des cas étant $C=Q$ avant ou après l'application de $\delta$. Les opérations 10 à 12 sont à nouveau une application de $ECLOSE$.
 
-Des lors, le pire des cas du corps de la boucle de l'opération 5 est le maximum entre le pire des cas de $ECLOSE$ et $\delta$. Cette boucle s'effectue au plus $n$ fois. Une lettre est enlevée à chaque itération.
+Dès lors, le pire des cas du corps de la boucle de l'opération 5 est le maximum entre le pire des cas de $ECLOSE$ et de $\delta$. Cette boucle s'effectue au plus $n$ fois. Une lettre est enlevée à chaque itération.
 
-L'opération 14 se fait en $\mathcal{O}(\log_2(n))$ pour un ADF et $\mathcal{O}(n\log_2(n))$ pour un ANF ou $\Sigma$-ANF. Cette valeur suppose une recherche efficace dans F.
+L'opération 14 se fait en $\mathcal{O}(\log_2(n))$ pour un ADF et $\mathcal{O}(n\log_2(n))$ pour un ANF ou $\Sigma$-ANF. Cette valeur suppose une recherche efficace dans F (en $\mathcal{O}(\log_2(n))$).
 
 En conclusion :
 \begin{table}[H]
@@ -370,7 +375,7 @@ En conclusion :
 \subsection{Équivalence entre expression régulière et automate}\label{ss:e-a}
 
 Certains problèmes peuvent être exprimés sous forme d'appartenance à un langage régulier, et par extension à une expression régulière.
-Pouvoir convertir une expression réguliere en automate permet d'exécuter cet automate sur un machine pour tester l'appartenance. Ainsi, grâce à cet méthode, une grande classe de problèmes peut être résolue.
+Pouvoir convertir une expression réguliere en automate permet d'exécuter cet automate sur un machine pour tester l'appartenance. Ainsi, grâce à cette méthode, une grande classe de problèmes peut être résolue.
 
 
 \begin{theorem}[ADF et expression régulière]
@@ -384,9 +389,9 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	Soit un langage $L$. Il existe un automate déterministe $A$ tel que $L(A)=L$ $\implies$ il existe une expression régulière $E$ telle que $L(E)=L$.
 \end{theorem}
 \begin{proof}
-	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés. De plus, un tel automate est aisément représenté dans un ordre séquentiel, de gauche à droite. Ceci permet de séparer visuellement les $k$ premiers états du reste. Par abus de langage, les nombres et états désignés sont utilisés indifféremment. Celà ne doit pas entraîner de confusion car chaque nombre correspond exactement à un état.
+	Supposons qu'il existe un ADF \automaton tel que $L(A)=L$. $Q$ étant un ensemble fini, on peut définir sa cardinalité : $|Q|=n$. Supposons que ses états soient nommés $\{1,2,\dots,n\}$. Il est possible de construire des expressions régulières par induction sur le nombre d'états considérés. De plus, un tel automate est aisément représenté dans un ordre séquentiel, de gauche à droite. Ceci permet de séparer visuellement les $k$ premiers états du reste.
 
-  Soient $i,j,k \in Q$, tous équivalents à des nombres inférieurs à $n$. Définissons $E_{ij}^k$ comme étant l'expression régulière décrivant un langage constitué des mots $w$ tels que $\delta^*(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre supérieur à $k$. Il n'y a pas de contrainte sur $i$ et $j$.
+  Soient $i,j,k \in Q$, tous équivalents à des nombres inférieurs ou égaux à $n$. Définissons $E_{i,j}^k$ comme étant l'expression régulière décrivant un langage constitué des mots $w$ tels que $\delta^*(i,w)=j$ et qu'aucun état intermédiaire n'ait un nombre strictement supérieur à $k$.
 
 	\begin{figure}[H]
 		\centering
@@ -419,23 +424,28 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	\end{figure}
 
 
-	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des intermédiaires. Intuitivement, il s'agit d'un automate auquel on a enlevé les transitions :
+	L'exemple ci-dessus illustre ce fait qu'aucun état supérieur à $k$ ne peut faire partie des états intermédiaires. Intuitivement, il s'agit d'un automate auquel on a enlevé les transitions :
   \begin{itemize}
     \item Allant de $i$ à un nombre supérieur à $k$ (sauf $j$)
     \item Entre deux nombres supérieurs à $k$
     \item Allant d'un nombre supérieur à $k$ (sauf $i$) à $j$
   \end{itemize}
-  En pratiques, celles-ci ne sont juste pas autorisées.
+  En pratiques, celles-ci ne sont juste pas considérées lors de l'application de $\delta$.
 
-	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté. La première possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté aux possibilités si $i=j$.
-	La deuxième possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :
+	\paragraph{Cas de base} $k=0$. Comme tout état est numéroté $1$ ou plus, aucun intermédiaire n'est accepté.
+
+  Une possibilité est $i \neq j$. Alors les chemins possibles ne se composent que d'un arc allant directement de $i$ à $j$. Pour les construire :
 
 	Pour chaque paire $i$, $j$ :
 	\begin{itemize}
-		\item Il n'existe pas de symbole $a$ tel que $\delta(i,a)=j$. Alors, $R_{ij}^0=\emptyset (+\epsilon)$
-		\item Il existe un unique symbole $a$ tel que  $\delta(i,a)=j$. Alors, $R_{ij}^0=a(+\epsilon)$
-		\item Il existe des symboles $a_1,a_2,\dots,a_k$ tels que $\forall l \in \{1,\dots, k\}, \delta(i,a_l)=j$. Alors, $R_{ij}^0=a_1+a_2+\dots+a_k(+\epsilon)$
+		\item Il n'existe pas de symbole $a$ tel que $\delta(i,a)=j$. Alors, $R_{ij}^0=\emptyset$
+		\item Il existe un unique symbole $a$ tel que  $\delta(i,a)=j$. Alors, $R_{ij}^0=a$
+		\item Il existe des symboles $a_1,a_2,\dots,a_k$ tels que $\forall l \in \{1,\dots, k\}, \delta(i,a_l)=j$. Alors, $R_{ij}^0=a_1+a_2+\dots+a_k$
 	\end{itemize}
+
+
+  Une autre possibilité est $i=j$ et indique un chemin de longueur $0$. Auquel cas l'expression régulière représentant un chemin sans symbole est $\epsilon$. Ce chemin doit être ajouté au langage décrit par $E^k_{i,j}$ si $i=j$.
+
 
 	\paragraph{Pas de récurrence} Supposons qu'il existe un chemin allant de $i$ à $j$ ne passant par aucun état ayant un numéro supérieur à $k$.	La première possibilité est que le-dit chemin ne passe pas par $k$. Alors, le mot représenté par ce chemin fait partie du langage de $E_{ij}^{k-1}$. Seconde possibilité, le chemin passe par $k$ une ou plusieurs fois comme représenté à la figure \ref{fig:ikjpath}.
 
@@ -472,7 +482,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	\caption{Un chemin de $i$ à $j$ peut être découpé en différent segment en fonction de $k$}\label{fig:ikjpath}
 	\end{figure}
 
-	Auquel cas, ces chemins sont composés d'une sous-chemin donnant un mot dans $E_{ik}^{k-1}$, suivi d'un sous-chemin donnant un ou plusieurs mots dans $E_{kk}^{k-1}$ et finalement un mot dans $E_{kj}^{k-1}$.
+	Auquel cas, ces chemins sont composés d'un sous-chemin donnant un mot dans $E_{ik}^{k-1}$, suivi d'un sous-chemin donnant un ou plusieurs mots dans $E_{kk}^{k-1}$ et finalement un mot dans $E_{kj}^{k-1}$.
 
 	En combinant les expressions des deux types, on obtient :
 	$$
@@ -485,13 +495,13 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 \end{proof}
 \stepcounter{algo}
 \begin{complexity}
-	Soit un ADF \automaton comportant $n$ états. La complexité peut se décomposer en deux facteurs : la longueur d'une expression régulière et le nombre de celles-ci.
+	Soit un ADF \automaton comportant $n$ états. Pour connaître la complexité totale de cet algorithme, il faut connaître le nombre total d'expression régulières construites et la longueur de chacune de celles-ci.
 
 	A chacune des $n$ itérations (ajoutant progressivement des nouveaux états admis pour état intermédiaire), la longueur de l'expression peut quadrupler : elle est exprimée par 4 facteurs. Ainsi, après $n$ étapes, cette expression peut être de taille $\mathcal{O}(4^n)$.
 
 	Le nombre d'expressions à construire, lui, est décomposable en deux facteurs également : le nombre d'itérations et celui de paires $i,j$ possibles. Le premier facteur est $n$, quand aux paires, leur nombre s'exprime par $n^2$. $n^3$ expressions sont construites.
 
-	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle, la première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
+	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)=\mathcal{O}(n^2)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle. La première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
 \end{complexity}
 
 
@@ -575,7 +585,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	Pour obtenir une expression régulière correspondant à l'automate, on s'intéresse à celle qui décrit un chemin entre l'état initial ($1$) et les états acceptants (uniquement $2$ ici). Dès lors,  $E^2_{12}=1^*0(1+01^*0)^*=L$.
 
-	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire se fait par paire. Cela correspond bien à un nombre impair de 0.
+	Cette expression régulière $1^*0(1+01^*0)^*$ décrit bien un nombre impair de $0$. Il en faut absolument un, et tout ajout supplémentaire se fait par paire.
 
 \end{example}
 
@@ -589,7 +599,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 \begin{proof}
 	Comme tout $\epsilon$-ANF a un ADF équivalent (théorème \ref{anf-dnf}), montrer qu'une expression régulière $E$ a un ANF équivalent est suffisant pour obtenir cet ADF.
 
-	Soit $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
+	Soit un langage $L$. Soit $E$ une expression régulière telle que $L(E)=L$. On peut construire l'automate récursivement sur la définition des expressions régulières à la section \ref{ss:regex}. Cette preuve par récurrence repose sur trois invariants portant sur chaque ANF construit :
 	\begin{enumerate}
 		\item Il y a un unique état acceptant
 		\item Aucune transition ne mène à l'état initial
@@ -759,9 +769,9 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	Les quatre règles de récurrence sur une expression régulière permettent de construire les automates:
 	\begin{itemize}
 		\item Pour une expression régulière de forme $(E)$, le langage $L(E)$ étant équivalent à $L((E))$, l'automate construit pour $E$ reste valable.
-		\item L'expression régulière est de forme $E^*$. Par induction, il existe un automate exprimant le même langage que celui exprimé par $E$. L'automate pour $E^*$ est construit comme en (a). Cet automate comprend un arc $\epsilon$ de l'état initial à l'état acceptant pour représenté le cas $E^0$. Ensuite, un arc $\epsilon$ permet de concaténer plusieurs chemins dans $E$, donnant des mots représentés par $E^1$,$E^2$,$E^3$,... Le tout complétant l'ensemble des mots possibles des $L(E)^*$. On a bien $L(E^*)=L(E)^*$.
-		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) représente bien, selon la définition d'un expression régulière $L(EF)=L(E)L(F)$.
-		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expression $E$ et $F$. Par cette construction, en particulier les transitions sur $\epsilon$, permettent à (c) de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors, en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
+		\item L'expression régulière est de forme $E^*$. Par induction, il existe un automate exprimant le même langage que celui exprimé par $E$. L'automate pour $E^*$ est construit comme en (a). Un arc $\epsilon$ entrant en $E$ permet de concaténer plusieurs chemins dans $E$, donnant des mots des langages décrits par $E^1$,$E^2$,$E^3$,... Le tout étant l'ensemble des mots possibles $L(E)^*$. On a bien $L(E^*)=L(E)^*$.
+		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) construit bien une expression régulière $L(EF)=L(E)L(F)$.
+		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expressions $E$ et $F$. Cette construction, en particulier les transitions sur $\epsilon$, permet à (c) de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
 	\end{itemize}
 
 	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
@@ -770,11 +780,11 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 \end{proof}
 \stepcounter{algo}
 \begin{complexity}
-	Soit une expression régulière $E$ contenant $n$ symboles (alphabet et opérations comprises) représentant un langage $L$. Si un \emph{arbre syntaxique} est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
+	Soit une expression régulière $E$ contenant $n$ symboles (alphabet et opérations comprises) représentant un langage $L$. Si un arbre syntaxique est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
 	\begin{itemize}
 		\item Cas de base : $n$ ANFs sont créés. Cependant, chacun est constitué de 2 états et au plus 1 transition. Ceux-ci correspondent à des feuilles de l'arbre syntaxique. Ces nombres sont des constantes. Ce cas de base est effectué en $\mathcal{O}(n*3)=\mathcal{O}(n)$
 		\item Récurrence : L'arbre syntaxique requiert au plus $n$ lectures d'opération de récurrence pour fusionner les $n$ ANF en un seul. En effet, chaque lecture consomme au moins deux expressions que ça soit par concaténation, fermeture ou union.
-    Cependant, chacune des opérations implique au plus la création de 2 états et 4 arcs au plus. Ces nombres sont des constantes. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
+    Cependant, chacune des opérations implique au plus la création de 2 états et 4 arcs au plus. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
 	\end{itemize}
 
 	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section ci-après peut quand à elle être exponentielle.
@@ -790,7 +800,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 
 \subsection{Équivalence entre un automate déterministe fini et un automate non-déterministe fini}\label{ss:eqadfanf}
-Cette section présente une méthode permettant de créer un ADF à partir d'un ANF. Ici, ANF est considéré au sens-large et peut tout aussi bien être un ANF normal qu'un $\Sigma$-ANF.
+Cette section présente une méthode permettant de créer un ADF à partir d'un ANF et réciproquement. Ici, ANF est considéré au sens-large et peut tout aussi bien être un ANF normal qu'un $\Sigma$-ANF. Ceci permet de justifier l'abstraction faite entre les différents types d'automates finis et l'utilisation du même terme pour tous ceux-ci.
 
 Soit un ANF \automaton. Alors l'ADF équivalent
 $$
@@ -798,7 +808,7 @@ D=(Q_D, \Sigma, \delta_D, q_D, F_D)
 $$
 est défini par :
 \begin{itemize}
-	\item $Q_D = \{S | S \subseteq Q \text{ et } S \text{ est \emph{fermé sur epsilon}}\}$. Concrètement, $Q_D$ est l'ensemble des parties des $Q$ fermées sur $\epsilon$. Cette fermeture s'écrit $S$=ECLOSE(S), ce qui signifie que chaque transition sur $\epsilon$ depuis un état de $S$ mène à un état également dans $S$. L'ensemble $\emptyset$ est fermé sur $\epsilon$.
+	\item $Q_D = \{S | S \subseteq Q \text{ et } S \text{ est fermé sur epsilon}\}$. Concrètement, $Q_D$ est l'ensemble des parties des $Q$ fermées sur $\epsilon$. Cette fermeture s'écrit $S$=ECLOSE(S), ce qui signifie que chaque transition sur $\epsilon$ depuis un état de $S$ mène à un état également dans $S$. L'ensemble $\emptyset$ est fermé sur $\epsilon$.
 	\item $q_D$=ECLOSE($q_0$). L'état initial de $D$ est l'ensemble des états dans la fermeture sur $\epsilon$ des états de $A$.
 	\item $F_D= \{S|S \in Q_D \text{ et } S \cap F \neq \emptyset\}$ contient les ensembles dont au moins un état est acceptant pour $A$.
 	\item $\delta_D(S,a)$ est construit, $\forall a \in \Sigma, \forall S \in Q_D$ par :
@@ -900,13 +910,13 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	Montrons que $L(D)=L(A)$. Pour ce faire, montrons que les fonctions de transition étendues sont équivalentes. Auquel cas, les chemins sont équivalents et donc les langages sont égaux.
 	Montrons que $\hdelta(q_0,w)=\hdelta_D(q_D,w)$ pour tout mot $w$, par récurrence sur $w$.
 
-	\paragraph{Cas de base} Si $|w|=0$, alors $w=\epsilon$. $\hdelta(q_0,\epsilon)=$ ECLOSE($q_0$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Finalement, pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta(q_0,\epsilon)$.
+	\paragraph{Cas de base} Si $|w|=0$, alors $w=\epsilon$. $\hdelta(q_0,\epsilon)=$ ECLOSE($q_0$), par définition de la fonction de transition étendue. $q_D$=ECLOSE($q_0$) par la construction de $q_D$. Pour un ADF (ici, $D$), $\hdelta(p,\epsilon)=p$, pour tout état $p$. Par conséquent, $\hdelta_D(q_D,\epsilon)=q_D=\text{ECLOSE(}q_0\text{)}=\hdelta(q_0,\epsilon)$.
 
 	\paragraph{Pas de récurrence} Supposons $w=xa$ avec $a$ le dernier symbole de $w$. Notre hypothèse de récurrence est que $\hdelta_D(q_D,x)=\hdelta(q_0,x)$. Ce sont bien les mêmes objets car $\hdelta_D$ retourne un état de $D$ qui correspond à un ensemble d'états de $A$. Notons celui-ci $\{p_1,p_2, \dots, p_k\}$. Par définition de $\hdelta$ pour un ANF, $\hdelta(q_0,w)$ est obtenu en :
 
 	\begin{enumerate}
-		\item Soit $\{r_1,r_2,\dots, r_m\}$ donné par $\bigcup_{i=1}^k \delta(p_i,a)$, les états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
-		\item Alors $\hdelta(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
+		\item Construisant $\{r_1,r_2,\dots, r_m\}=\bigcup_{i=1}^k \delta(p_i,a)$. Cet ensemble correspond aux états obtenus par la lecture du symbole $a$ à partir de $\{p_1,p_2,\dots,p_k\}$.
+		\item Calculant $\hdelta(q_0,w)=\bigcup_{j=1}^m$ECLOSE($r_j$). Un état atteint par la lecture de $a$ l'est aussi par $a\epsilon$.
 	\end{enumerate}
 
 	$D$ a été construit avec ces deux mêmes étapes pour $\delta_D(\{p_1,p_2,\dots, p_k\},a)$. Dès lors, $\hdelta_D(q_D,w)=\delta_D(\{p_1,p_2,\dots, p_k\},a)=\bigcup_{j=1}^k$ECLOSE($p_j$)$=\hdelta(q_0,w)$.
@@ -922,7 +932,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 
 \begin{complexity}[Conversion ANF vers ADF]
 
-	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante $k$, elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler. Ici, l'automate est stocké sous forme d'une table de transitions. Cette solution est plus facile à manipuler mais peut engendrer un surcoût en mémoire, qui n'est pas analysé ici.
+	La complexité d'une conversion ANF vers ADF peut être exprimée en fonction de $n$ le nombre d'états de l'ANF. La taille de l'alphabet $\Sigma$ est ici comptée comme une constante $k$. Elle est ignorée dans l'analyse grand-O. L'algorithme de conversion se fait en deux étapes. Le calcul de ECLOSE et la construction à proprement parler. Ici, l'automate est stocké sous forme d'une table de transitions. Cette solution est plus facile à manipuler mais peut engendrer un surcoût en mémoire, qui n'est pas analysé ici.
 
 	\begin{itemize}
 		\item ECLOSE : Chacun des $n$ états ayant une entrée pour $\epsilon$ dans la fonction $\delta$, le temps de calcul sur chaque nœud ajouté est en temps constant. Chacune des $n$ fermetures pour chacun des $n$ états $q \in Q$ pouvant au plus compter les $n$ états, le temps total de cette opération est en $n*\mathcal{O}(n)=\mathcal{O}(n^2)$.
@@ -934,7 +944,7 @@ Alors, l'automate $D=(Q_D, \Sigma, \delta_D, q_D, F_D)$ est donné par :
 	\end{itemize}
 
 	La complexité dans le pire des cas est $\mathcal{O}(n^2) + \mathcal{O}(sn) + \mathcal{O}(sn) = \mathcal{O}(sn)=\mathcal{O}(n2^n)$.
-	Le détail est donné sur $s$ car, comme mentionné par \cite{Hopcroft00}, en pratique le nombre d'états dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$. Dans ce cas là, la complexité devient $\mathcal{O}(n^2)$.
+	Le détail est donné sur $s$ car, comme prouvé dans \cite{Hopcroft00}, en pratique le nombre d'états dans l'ADF obtenu est rarement de l'ordre de $2^n$, typiquement de l'ordre de $n$. Dans ce cas là, la complexité devient $\mathcal{O}(n^2)$.
 
 \end{complexity}
 
