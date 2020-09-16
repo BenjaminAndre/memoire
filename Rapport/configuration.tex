@@ -30,7 +30,7 @@
 \usepackage[standard,thref, framed, hyperref,standard,thmmarks]{ntheorem}
 \usepackage{lmodern}
 \usepackage{thmtools}
-
+\usepackage{tikz-cd}
 
 %
 %%%%%%% Sub librairies
@@ -171,7 +171,14 @@
 	\end{scope}
 	\end{tikzpicture}%
 }
-%%%%%%%%%%%%%%%%%%   ALGORITHM %%%%%%%%%%%%%%%%%%%%%
+
+
+%  █████  ██       ██████   ██████
+% ██   ██ ██      ██       ██    ██
+% ███████ ██      ██   ███ ██    ██
+% ██   ██ ██      ██    ██ ██    ██
+% ██   ██ ███████  ██████   ██████
+
 
 \renewcommand{\algorithmicrequire}{\textbf{Requis:}}
 \renewcommand{\algorithmicensure}{\textbf{Promet:}}
@@ -232,6 +239,14 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% ████████ ██   ██ ███    ███
+%    ██    ██   ██ ████  ████
+%    ██    ███████ ██ ████ ██
+%    ██    ██   ██ ██  ██  ██
+%    ██    ██   ██ ██      ██
+
+
+
 \theoremstyle{plain}
 
 
@@ -269,6 +284,8 @@
 \newcommand{\hdelta}{\hat{\delta}}
 \newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }
 \newcommand{\automatonbis}{$B=(Q_B,\Sigma_b, q_b, \delta_b, F_b)$\ }
+\newcommand{\fifo}{$F=(Q,C, \Sigma, q_0, \Theta, \delta)$\ }
+\newcommand{\tsys}{$\mathcal{T}=(S,\Theta, \rightarrow)$\ }
 
 \newcommand{\re}{$R_E$\ }
 \newcommand{\rb}{$R_B$\ }
