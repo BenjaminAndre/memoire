@@ -148,15 +148,14 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 
 \subsection{Produit cartésien}\label{ss:cartesien}
 
-Par soucis de simplicité, un automate FIFO (et son système de transitions servant à le représenter) peut être représenté comme plusieurs systèmes de transitions utilisant les mêmes canaux. Le \emph{produit cartésien} entre deux automates FIFO $A$ et $B$ retourne un nouvel automate FIFO $F=A \times B$. Dès lors, il est possible de représenter un automate FIFO en se concentrant sur ses parties et en les isolant. Ce produit cartésien fonctionne comme suit.
+Par soucis de simplicité, un automate FIFO (et son système de transitions servant à le représenter) peut être représenté comme plusieurs systèmes de transitions utilisant les mêmes canaux. Le \emph{produit cartésien} entre deux automates FIFO $A$ et $B$ retourne un nouvel automate FIFO $F=A \times B$. Dès lors, il est possible de représenter un automate FIFO en se concentrant sur ses parties et en les isolant \cite{Suresh20}. Ce produit cartésien fonctionne comme suit.
 
 Soient les automates FIFO \fifoA et \fifoB. Alors le système de transitions \tsys de l'automate FIFO $F=A\times B$ est composé de :
 \begin{itemize}
   \item $S \subseteq (Q_A\times Q_B)\times (\Sigma^*)^C$ composé d'un couple d'états de contrôle de $Q_A$ et $Q_B$ et du contenu des différents canaux.
-  \item $\Theta = \Theta_A \bigcup \Theta_B$
+  \item $\Theta$ est un ensemble de noms de transitions.
   \item $\rightarrow$ est construit comme suit. Soit un état $((q_A,q_B), w)\in S$. Soit un triplet $(p,a,q)$ avec $p,q \in (Q_A \bigcup Q_B)$ et $a \in ((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\})$.
-  $((q_A,q_B),w)\xrightarrow{\theta}((q_{A'},q_{B'}),w')$ si et seulement si l'une des trois conditions suivantes est remplie
-
+  $((q_A,q_B),w)\xrightarrow{\theta}((q_{A'},q_{B'}),w')$ si et seulement si l'une des trois conditions suivantes est remplie.
   \begin{itemize}
     \item $\exists \theta_A\in\Theta_A, \delta_A(\theta_A)=(q_A,a,q_{A'})$ et  $(q_A,w)\xrightarrow{\theta_A}(q_{A'},w')$ dans l'automate $A$ et\\ $\exists \theta_B\in\Theta_B, \delta_B(\theta_B)=(q_B,a,q_{B'})$ et $(q_B,w)\xrightarrow{\theta_B}(q_{B'},w')$ dans l'automate $B$
     \item $\exists \theta_A\in\Theta_A, \delta_A(\theta_A)=(q_A,a,q_{A'})$ et  $(q_A,w)\xrightarrow{\theta_A}(q_{A'},w')$ dans l'automate $A$,\\
@@ -166,51 +165,13 @@ Soient les automates FIFO \fifoA et \fifoB. Alors le système de transitions \ts
   \end{itemize}
 \end{itemize}
 
+Le produit cartésien est un nouvel automate représenté par son système de transitions. Celui-ci étant suffisant pour déduire le langage tracé, il n'est pas necéssaire de décrire formellement \fifo.
 
-Dès lors, l'état initial est (($q_0,q_0$), [$\epsilon$,...,$\epsilon$]). \cite{Suresh20}
-
-
-Alors, on peut construire l'automate FIFO \fifo grâce à l'algorithme de produit cartésien \ref{alg:crossfifo} :
-
-\begin{algo}[Produit cartésien entre deux automates]\label{alg:crossfifo}
- \begin{algorithmic}[1]
-   \REQUIRE Les automates FIFO $A=(Q_A,C,\Sigma,q_{0A}, \Theta_A,\delta_A)$ et $B=(Q_B,C,\Sigma,q_{0B},\Theta_B,\delta_B)$
-   \ENSURE Un automate FIFO \fifo
-
-   \STATE $Q=Q_A\times Q_B$
-   \STATE $q_0 = (q_{0A},q_{0B})$ \COMMENT{l'état de contrôle à l'intersection de $q_{0A}$ et $q_{0B}$}
-   \STATE $\Theta=\Theta_A \times \Theta_B$
-
-   \FORALL {action $a \in (C\times\{?,!\}\times\Sigma)\bigcup\{\tau\}$}
-    \FORALL {$\theta_A \in \Theta_A$ tels que $\delta_A(\theta_A)=(q_A,a,q_{A'})$ avec $q_A,q_{A'}\in Q_A$}
-      \FORALL {$\theta_B \in \Theta_B$ tels que $\delta_B(\theta_B)=(q_B,a,q_{B'})$ avec $q_B,q_{B'}\in Q_B$}
-        \STATE $\delta((\theta_A, \theta_B))=((q_A,q_B),a,(q_{A'},q_{B'}))$
-      \ENDFOR
-    \ENDFOR
-    \FORALL {$\theta \in \Theta_A$ tels que $\delta_A(\theta)=(q_A,a,q_{A'})$ avec $q_A,q_{A'}\in Q_A$ qui n'ont pas été utilisés dans la boucle 6}
-      \FORALL {$q_B\in Q_B$}
-        \STATE  $\delta((\theta,))=((q_A,q_B),a,(q_{A'},_B))$
-      \ENDFOR
-    \ENDFOR
-
-    \FORALL {$\theta \in \Theta_B$ tels que $\delta_B(\theta)=(q_B,a,q_{B'})$ avec $q_B,q_{B'}\in Q_B$ qui n'ont pas été utilisés dans la boucle 6}
-      \FORALL {$q_A\in Q_A$}
-        \STATE  $\delta((,\theta))=((q_A,q_B),a,(q_A,_{B'}))$
-      \ENDFOR
-    \ENDFOR
-
-   \ENDFOR
-
-
-   \RETURN \fifo
- \end{algorithmic}
-\end{algo}
-
-L'automate produit par cet algorithme \ref{alg:crossfifo} est différents des deux autres, il n'est alors pas pertinent de prouver une égalité. Il s'agit juste d'un autre mode de représentation.
+De plus, ce nouvel automate est différent des deux autres, il n'est alors pas pertinent de prouver une égalité. Il s'agit juste d'un autre mode de représentation.
 
 
 \begin{example}
-  Soient deux automates FIFO $A$ et $B$ tels que représentés par leur systèmes de transitions donnés par la figure \ref{fig:fifoAB}. L'automate FIFO $AB=A \times B$ est représenté par son sytème de transitions à la figure \ref{fig:fifocross}.
+  Soient deux automates FIFO $A$ et $B$ tels que représentés par leur systèmes de transitions donnés par la figure \ref{fig:fifoAB}.
 
   \begin{figure}[H]
     \centering
@@ -250,48 +211,53 @@ L'automate produit par cet algorithme \ref{alg:crossfifo} est différents des de
       \label{fig:fifoAB}
     \end{figure}
 
-
+   L'automate FIFO $AB=A \times B$ est représenté par son sytème de transitions à la figure \ref{fig:fifocross}.
 
     \begin{figure}[H]
       \centering
       \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1.5cm, semithick, bend angle=15]
         \tikzstyle{every state}=[circle]
 
-        \node[initial,state] (A)  {$q_{0A}$};
-        \node[state]         (B) [below=of A]  {$q_{1A}$};
-        \node[state]         (C) [below=of B]  {$q_{2A}$};
+        \node[initial,state] (A)  {$(q_0, q_A)$};
+        \node[state]         (B) [below=of A]  {$(q_1, q_A)$};
+        \node[state]         (C) [below=of B]  {$(q_2, q_A)$};
 
-        \node[state]         (D) [right=of A] {$q_{0B}$};
-        \node[state]         (E) [below=of D]  {$q_{1B}$};
-        \node[state]         (F) [below=of E]  {$q_{2B}$};
+        \node[state]         (D) [right=of A] {$(q_0, q_B)$};
+        \node[state]         (E) [below=of D]  {$(q_1, q_B)$};
+        \node[state]         (F) [below=of E]  {$(q_2, q_B)$};
 
         \path
-        (A) edge node {$\theta(a!1)$} (B)
-        (A) edge[bend left] node {$\theta(a?0)$} (D)
+        (A) edge node {$\theta_1(a!1)$} (B)
+        (A) edge[bend left] node {$\theta_2(a?0)$} (D)
 
-        (B) edge node {$\theta(a?1)$} (C)
-        (B) edge[bend left] node {$\theta{a?0}$} (E)
+        (B) edge node {$\theta_3(a?1)$} (C)
+        (B) edge[bend left] node {$\theta_4(a?0)$} (E)
 
-        (C) edge[bend left=35] node {$\theta(a!0)$} (A)
-        (C) edge node {$\theta(a?0)$} (F)
+        (C) edge[bend left=35] node {$\theta_5(a!0)$} (A)
+        (C) edge node {$\theta_6(a?0)$} (F)
 
-        (D) edge[bend left] node {$\theta{a!0}$} (A)
-        (D) edge node {$\theta{a!1}$} (E)
+        (D) edge[bend left] node {$\theta_7(a!0)$} (A)
+        (D) edge node {$\theta_8(a!1)$} (E)
 
-        (E) edge[bend left] node {$\theta{a!0}$} (B)
-        (E) edge node {$\theta{a?1}$} (F)
+        (E) edge[bend left] node {$\theta_9(a!0)$} (B)
+        (E) edge node {$\theta_{10}(a?1)$} (F)
 
         ;
 
         \draw [->] (F) ..  controls  ($(E)+(5cm,2cm)$) and
-  ($(D)+(-0.5cm,3cm)$).. node[right] {$\theta(a!0)$} (A);
+  ($(D)+(0cm,4cm)$).. node[right] {$\theta_{11}(a!0)$} (A);
       \end{tikzpicture}
       \caption{Automate FIFO AB résultant du produit cartésien $A\times B$}
       \label{fig:fifocross}
     \end{figure}
-
   \end{example}
 
+\subsection{Trace annotée}
+
+Trouver les états \todo{atteignables} (défini ?) et les témoins (test d'appartenance pour remplir la table d'observation).
+
+
+Comprends pas
 
 
   %  █████  ██████  ██████
