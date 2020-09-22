@@ -41,7 +41,8 @@
 \usetikzlibrary{positioning}
 \usetikzlibrary{snakes}
 \usetikzlibrary{shapes,fit}
-
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata,arrows,trees,positioning,shapes,calc}
 
 %
 %%%%% Custom commands
@@ -285,6 +286,8 @@
 \newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }
 \newcommand{\automatonbis}{$B=(Q_B,\Sigma_b, q_b, \delta_b, F_b)$\ }
 \newcommand{\fifo}{$F=(Q,C, \Sigma, q_0, \Theta, \delta)$\ }
+\newcommand{\fifoA}{$A=(Q_A,C, \Sigma, q_{0A}, \Theta_A, \delta_A)$\ }
+\newcommand{\fifoB}{$B=(Q_B,C, \Sigma, q_{0B}, \Theta_B, \delta_B)$\ }
 \newcommand{\tsys}{$\mathcal{T}=(S,\Theta, \rightarrow)$\ }
 
 \newcommand{\re}{$R_E$\ }
