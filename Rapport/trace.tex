@@ -1,0 +1,163 @@
+
+% ██       █████  ███    ██  ██████
+% ██      ██   ██ ████   ██ ██
+% ██      ███████ ██ ██  ██ ██   ███
+% ██      ██   ██ ██  ██ ██ ██    ██
+% ███████ ██   ██ ██   ████  ██████
+
+\subsection{Langage tracé}
+
+Une façon de définir un langage à partir d'un automate FIFO est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section défini les éléments permettant d'arriver à la construction d'un tel langage.
+
+Dans un système de transitions \tsys, la fonction de transition $\rightarrow:S\times\Theta\rightarrow S$ permet de définir le passage d'un état à un autre.
+
+La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture transitive et réflexive de $\rightarrow$.
+
+Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1)(p_2,w_2)...(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace de chemin}.
+
+\begin{definition} Soit un automate FIFO $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
+
+  Le \emph{langage de trace} d'un automate $F$ est
+
+  $$
+  L(F)=\{\sigma\in\Theta^*|\exists s=(p,w) \text{ tel quel } s_0\xrightarrow{\sigma}s\}
+  $$
+\end{definition}
+
+\begin{example}
+  Considérons l'automate FIFO $F$ de la figure \ref{fig:fifo1}.
+
+  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas un chemin. En effet,
+  $$
+  (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
+  $$
+
+  Mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
+
+
+  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est un chemin dans $F$ :
+  \begin{equation*}
+    \begin{gathered}
+      (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_2}
+      (q_0,[1,\epsilon])\xrightarrow{\theta_5}
+      (q_0,[1,0])\xrightarrow{\theta_5}
+      (q_0,[1,00])\xrightarrow{\theta_6}
+      (q_0,[\epsilon,00])\xrightarrow{\theta_7}\\
+      (q_0,[\epsilon,0])\xrightarrow{\theta_1}
+      (q_0,[0,0])\xrightarrow{\theta_4}
+      (q_0,[\epsilon,0])\xrightarrow{\theta_7}
+      (q_0,[\epsilon,\epsilon])
+    \end{gathered}
+  \end{equation*}
+
+  On a bien un état $s$ (ici $s=(q_0,[\epsilon,\epsilon])=s_0$) tel que $s_0\xrightarrow{\sigma}s$.
+
+\end{example}
+
+  % ████████ ██   ██ ███████ ████████  █████
+  %    ██    ██   ██ ██         ██    ██   ██
+  %    ██    ███████ █████      ██    ███████
+  %    ██    ██   ██ ██         ██    ██   ██
+  %    ██    ██   ██ ███████    ██    ██   ██
+
+
+
+\subsection{Trace annotée}
+
+Un langage qui permet de trouver les états \todo{atteignables} (défini ?) et les témoins (test d'appartenance pour remplir la table d'observation).
+
+Quelle chance, on a L(F) le langage de trace ! Comme chaque trace détermine un état final unique, on sait lequels sont atteignables.
+
+$s$ tel que $s_0\xrightarrow{\sigma}s$ facile pour un $\sigma$ mais que se passe-t-il pour ensemble de $\sigma$ (potentiellement infini, l'ensemble) ?
+
+Ce qui est chaud c'est que savoir si une transition s'exécute dépend non trivialement de ce qu'il s'est passé avant. Et ça c'est chaud.
+
+Solution ? [24] - les co-noms :
+$$
+\bar{\Theta}=\{\bar{\theta}|\theta\in\Theta\wedge \delta(\theta)\neq\tau\}
+$$
+
+Nom + barre sauf pour $\tau$. Fuck $\tau$ ça sert à rien de toute façon.
+
+Comme ça on peut faire des paires $\theta$ et $\bar{\theta}$ et les simplifier après lol
+
+
+En fait on change de plan car l'autre assure pas que le langage annoté soit régulier :/
+
+$$
+\bar{\Theta}=\{\bar{\theta}|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c!a,q)\}
+$$
+Seulement les envois peuvent avoir une barre yey. Plus $T_Q = \{t_q | q\in Q\}$
+
+Du coup les traces annotées, c'est PAS SIGMA MAIS UNE AUTRE LETTRE GRECQUE. $\Phi$ ? Ouais.
+
+
+$\Phi=(\Theta-\Theta_r)\bigcup\bar{\Theta}\bigcup T_Q$
+
+Avec $\Theta_r$ c'est toutes les transitions receive.
+
+Séquence de transitions $l$ pas égal à $\sigma$ : sigma montre les états et est d'office valide !
+Wait. Si $l\in L(F)$ mon argument s'évapore.
+
+
+
+
+
+Comprends pas
+
+
+  %  █████  ██████  ██████
+  % ██   ██ ██   ██ ██   ██
+  % ███████ ██████  ██████
+  % ██   ██ ██   ██ ██
+  % ██   ██ ██████  ██
+
+  \subsection{Alternating Bit Protocol}\label{ss:abp}
+
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.5cm, semithick, bend angle=10]
+
+      \tikzstyle{every state}=[circle]
+
+      \node[initial,state] (A)                    {$q_0$};
+      \node[state]         (B) [right of=A] {$q_1$};
+      \node[state]         (C) [below of=B] {$q_2$};
+      \node[state]         (D) [left of=C] {$q_3$};
+
+      \node[state,draw=none]         (i1) [right=0cm of B]      {};
+      \node[state,draw=none]         (i2) [right=3.5cm of i1]      {};
+      \node[state,draw=none]         (i3) [right=0cm of C]      {};
+      \node[state,draw=none]         (i4) [right=3.5cm of i3]      {};
+
+      \node[state] (E) [right=0cm of i2]               {$q_{0'}$};
+      \node[state]         (F) [right of=E] {$q_{1'}$};
+      \node[state]         (G) [below of=F] {$q_{2'}$};
+      \node[state]         (H) [left of=G] {$q_{3'}$};
+
+
+
+      \path
+      (A) edge node {$\theta_1(A!0)$} (B)
+      (B) edge node {$\theta_4(B?ACK0)$} (C)
+      (B) edge[loop above] node {$\theta_2(A!0),\theta_3(B?ACK1)$} (B)
+      (C) edge node {$\theta_5(A!1)$} (D)
+      (D) edge node {$\theta_8(B?ACK1)$} (A)
+      (D) edge[loop below] node {$\theta_6(A!1),\theta_7(B?ACK0)$} (D)
+
+
+      (E) edge node {$\theta_{11}(A?0)$} (F)
+      (E) edge[loop above] node {$\theta_9(B!ACK1),\theta_{10}(A?1)$} (E)
+      (F) edge node {$\theta_{12}(B!ACK0)$} (G)
+      (G) edge node {$\theta_{15}(A?1)$} (H)
+      (G) edge[loop below] node {$\theta_{13}(B!ACK0),\theta_{14}(A?0)$} (G)
+      (H) edge node {$\theta_{16}(B!ACK1)$} (E)
+      ;
+
+      \draw[<-] (E) -- node[above left] {start} ++(-1cm,-1cm);
+
+      \draw[double,->] (i1) -- node[above] {canal A} (i2);
+      \draw[double,->] (i4) -- node[below] {canal B} (i3);
+    \end{tikzpicture}
+    \caption{Automate Fifo du ABP (\cite{Finkel03}, Fig.1.)}\label{fig:fifoabp}
+  \end{figure}

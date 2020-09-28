@@ -1,36 +1,12 @@
-Sixième version du document.
-\todo{Construire une introduction}
-
-\subsection*{Contenu du mail introductif}
-
-\paragraph{Objectif}
-
-Le but ultime du mémoire est de comprendre l’approche de l’article "Actively learning to verify safety for FIFO automata" \cite{Vardhan04} et de reproduire une partie des expérimentations.
-
-Les différentes étapes sont
-\begin{itemize}
-	\item te rappeler la notion d’automate fini (voir cours de compilation et de calculabilité et complexité)
-	\item comprendre la notion d’automate fini minimal
-	\item comprendre l’algorithme L* d’Angluin pour l’apprentissage d’un automate
-	\item implémenter l'algorithme de Vardhan pour tester les résultats
-\end{itemize}
+Septième version du document.
 
 
-\paragraph{Contexte}
+Le but de ce mémoire est de comprendre et implémenter l'article "Actively learning to verify safety for FIFO automata" \cite{Vardhan04}.
 
-Un professeur connaît un automate A. Un élève veut l'apprendre en posant deux types de questions, celles de \emph{membership} et d'\emph{equivalence}. Si on a un automate équivalent, on peut utiliser un algorithme pour obtenir l'automate minimal qui calcule le même langage que A.
+Pour ce faire, plusieurs étapes sont necéssaires. Dans le chapitre \ref{ch:bases}, les bases théoriques et leurs notations sont rappelées. Celles-ci concernent les automates, les langages et l'algorithme d'Angluin.
 
-Cet algorithme A* (ou variantes) a plein d'applications, notamment décrites dans l'article \cite{Vardhan04}. On y considères des automates FIFO, plus généraux. (\emph{de ce que j'ai compris, ils sont équivalent à des automates avec un nombre d'état infini}). Pour ceux-ci, on voudrait savoir si les configurations calculées à partir de l’état initial évitent certaines mauvaises configurations.
+Dans le chapitre \ref{ch:learning}, l'article en question est discuté. La technique choisie est expliquée et les concepts spécifiques et ceux introduits par l'article sont définis. Ceux-ci concernent les automates FIFO, la notion de sécurité, et des notations propres à cet article. La section se fini par une explication de l'algorithme obtenu.
 
-Vu la puissance des automates FIFO, il est algorithmiquement impossible de calculer toutes les configurations atteignables à partir de l’état initial. (\emph{ce qui serait cohérent avec ma compréhension})
+Ensuite, le chapitre \ref{ch:impl} mentionne les choix techniques faits pour l'implémentation avant de présenter et discuter les résultats obtenus.
 
-L’idée est alors de calculer (par apprentissage) un automate fini qui est une sur-approximation de cet ensemble de configurations et ensuite de tester si oui ou non on peut éviter les mauvaises configurations.
-
-
-\subsection{Reformulation du but général}
-
-Il existe les automates FIFO, qui ont des canaux pouvant contenir une infinité de symboles. Ceux-ci sont équivalents à des automates sans canaux mais avec un nombre infini d'états. Ceux-ci peuvent être utilisés pour faire du model checking, c'est-à-dire s'assurer de ne pas atteindre certains états peut importe la suite d'instructions.
-
-\subsection{Utilité des sections}
-
-Dans la section \ref{sec:langage}, les notions de langage sont posées. Elles sont ensuite utilisées dans la section \ref{sec:automaton} sur les automates. L'algorithme "Table Filling" de la section \ref{sec:tfa} se base sur ces automates et permet de minimiser et répondre à la requête d'équivalence. Cette requête d'équivalence est une des deux requêtes necéssaire au fonctionnement de l'algorithme d'angluin de la section \ref{sec:angluin}.
+Finalement, le chapitre \ref{ch:ccl} résume l'apport et les conséquences de ce travail avant de proposer des pistes d'amélioration.
