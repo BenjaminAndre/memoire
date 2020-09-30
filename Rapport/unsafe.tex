@@ -1,0 +1,37 @@
+Comme mentionné au début du chapitre, ce travail s'intéresse à la propriété de unsafe dans les automates FIFO. Contrairement aux ADF construits dans le chapitre \ref{ch:bases}, les automates FIFO ont un nombre potentiellement infini d'états. Dans ces conditions, il n'est pas possible d'énumérer l'ensemble des états acceptants.
+
+Au lieu de proposer un ensemble d'état acceptants, on va fixer une propriété. Si un état respecte cette propriété, il est dit safe. Il est donc unsafe s'il ne respecte pas cette propriété de safety. Par la suite, la section \ref{ss:tracesafety} propose une technique permettant de calculer les états unsafe pour un langage de traces annotées. Ceci permet de répondre à la question de safety directement depuis ce langage au lieu de devoir construire le langage de l'automate FIFO.
+
+
+\subsection{Définition}
+Dans un automate FIFO \fifo, chaque état de contrôle $q\in Q$ est associé à un union finie de langage réguliers pour chacun des canaux $c\in C$.
+
+
+$$\bigcup_{0 \leq i \leq n_q}\Pi_{0 \leq j \leq k}U_q(i,c_j)$$
+
+Où $U_q(i,c_j)$ est un langage régulier pour le contenu du canal $c_j$ sur l'état $q$. $n_q$ est le nombre de langages réguliers utilisés pour définir cette propriété par union.
+
+Un état $s=(q,[w_0,w_1,\dots,w_k])$ est \emph{unsafe} s'il existe $i,j \in \mathcal{N}$ tels que $w_j \in U_q(i,c_j)$.
+
+
+
+\subsection{Traces annotées menant à des états unsafe}\label{ss:tracesafety}
+
+
+
+
+$$
+W(L)=\bigcup_{q\in Q}\big(\bigcup_{0\leq i\leq n_q}\big(\bigcap_{0\leq j \leq k}h_{c_j}^{-1}(U_q(i,c_j))\big)\big)
+$$
+
+
+\begin{theorem}
+  Pour vérifier la propriété de safety des automates FIFO, l'algorithme LeVer respecte les propriétés suivantes :
+  \begin{enumerate}
+    \item Si l'algorithme retourne une réponse, celle-ci est correcte
+    \item Si $AL(F)$ est régulier, la procédure s'arrête.
+    \item Le nombre de test d'appartenance et d'éuivalence dépend principalement de l'algorithme d'Angluin. Le temps total est borné en temps polynomial du nombre d'états de l'automate minimal pour $AL(F)$ et linéaire en le temps pris pour une requête d'appartenance à $AL(F)$
+  \end{enumerate}
+\end{theorem}
+
+La preuve est disponible en annexe du document \cite{Vardhan04} mais c'est un résultat tellement important, il est peut-être pertinent que celle-ci soit rediscutée ici.
