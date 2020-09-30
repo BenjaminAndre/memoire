@@ -111,3 +111,11 @@ Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces 
 
 
 Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il fini par un symbole de $T_Q$ qui qu'aucun autre symbole de cet ensemble n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots de $L$ le sont.
+
+
+\begin{example}
+Soit l'automate $F$ représenté par la figure \ref{fig:fifoAB}. Soient les séquences $\sigma_1=\theta_2\theta_8$ et $\sigma_2=\theta_1\theta_3\theta_5\theta_2$. Alors, les traces annotées de ces traces sont : $\mathcal{A}(\sigma_1)=\theta_2\theta_8t_{(q_1,q_B)}=\gamma_1$ et $\mathcal{A}(\sigma_2)=\bar{\theta_1}\bar{\theta_5}t_{(q_0,q_B)}=\gamma_2$.
+Bien qu'elles soient toutes deux correctement formatées, $\gamma_1$ ne correspond à aucune exécution valide de $F$. Dès lors, $\gamma_1$ n'appartient pas au langage de traces annotées de $AL(F)$ contrairement à $\gamma_2$.
+
+Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'est pas correctement formaté : il est impossible que ce mot appartienne à $AL(F)$.
+\end{example}
