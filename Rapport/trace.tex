@@ -83,36 +83,31 @@ Avec $\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sig
 \subsection{Trace annotée}
 
 
-Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate. Soit une séquence de transitions $\sigma\in\Theta^*$. Pour chaque transition $\theta_{ri}\in\sigma$ associée à une action de réception,
+Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate. Cette fonction est décrite par l'algorithme \ref{alg:A}.
 
 
 \begin{algorithm}[H]
   	\begin{algorithmic}[1]
-    \REQUIRE une suite de noms de transitions $\sigma\in\Theta^*$
+    \REQUIRE un automate FIFO \fifo , une suite de noms de transitions $\sigma\in\Theta^*$
 		\ENSURE une trace annotée $\gamma\in\Phi^*$ représentant $\sigma$
 
     \STATE $\gamma\leftarrow\epsilon$
     \FORALL {transition $\theta\in\sigma$}
       \IF {$\theta$ correspond à une action de réception}
         \STATE trouver $\theta_s\in\Theta$ correspondant à une action d'envoi antécédant dans $\sigma$ tel que les actions s'appliquent sur le même canal et le même symbole
-        \STATE remplacer $\theta_s$ par $\bar{\theta_s}\in\bar{\Theta}$
+        \STATE $\gamma\leftarrow$ $\gamma$ où $\theta_s$ est remplacé par $\bar{\theta_s}\in\bar{\Theta}$ \COMMENT {$\theta$ n'est pas ajouté à $\gamma$}
       \ELSIF {$\theta$ correspond à une action d'envoi}
-        \STATE ah
+        \STATE $\gamma\leftarrow\gamma\theta$
       \ENDIF
     \ENDFOR
-
-		\RETURN Vrai
+    \STATE trouver $q$ l'état de contrôle tel que $\delta(\theta)=(p,a,q)$ avec $p\in Q,a\in((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\})$
+    \STATE $\gamma\leftarrow\gamma t_q$ avec $t_q\in T_Q$ le symbole de contrôle associé à $q$
+		\RETURN $\gamma$
 	\end{algorithmic}
 	\caption{$\mathcal{A}:\Theta^*\rightarrow\Phi^*$}\label{alg:A}
 \end{algorithm}
 
+Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité des états.
 
 
-
-
-
-
-
-Intuitivement, le \emph{langage de trace annotée} est composé d'éléments de \barTheta désignant des actions d'envoi qui n'ont plus d'impact (une action de réception pour le même symbole dans le même canal a eu lieu), suivie d'actions d'envoi impactant encore l'exécution de l'automate. Pour respecter la propriété attendue de donner un état et son témoin, le symbole de contrôle de l'état de contrôle obtenu par la liste de symboles est ajouté à la fin.
-Séquence de transitions $l$ pas égal à $\sigma$ : sigma montre les états et est d'office valide !
-Wait. Si $l\in L(F)$ mon argument s'évapore.
+Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il fini par un symbole de $T_Q$ qui qu'aucun autre symbole de cet ensemble n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots de $L$ le sont.
