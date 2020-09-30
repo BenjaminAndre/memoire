@@ -67,3 +67,61 @@ Ce qui donne l'automate de la figure \ref{fig:an}
 \end{figure}
 
 Cet automate est bien une représentation du langage $L_N$. Seul un mot finissant par $b$ mais ne contenant pas $bb$ se termine à l'état $q_b$.
+
+
+
+  %  █████  ██████  ██████
+  % ██   ██ ██   ██ ██   ██
+  % ███████ ██████  ██████
+  % ██   ██ ██   ██ ██
+  % ██   ██ ██████  ██
+
+  \subsection{Alternating Bit Protocol}\label{ss:abp}
+
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3.5cm, semithick, bend angle=10]
+
+      \tikzstyle{every state}=[circle]
+
+      \node[initial,state] (A)                    {$q_0$};
+      \node[state]         (B) [right of=A] {$q_1$};
+      \node[state]         (C) [below of=B] {$q_2$};
+      \node[state]         (D) [left of=C] {$q_3$};
+
+      \node[state,draw=none]         (i1) [right=0cm of B]      {};
+      \node[state,draw=none]         (i2) [right=3.5cm of i1]      {};
+      \node[state,draw=none]         (i3) [right=0cm of C]      {};
+      \node[state,draw=none]         (i4) [right=3.5cm of i3]      {};
+
+      \node[state] (E) [right=0cm of i2]               {$q_{0'}$};
+      \node[state]         (F) [right of=E] {$q_{1'}$};
+      \node[state]         (G) [below of=F] {$q_{2'}$};
+      \node[state]         (H) [left of=G] {$q_{3'}$};
+
+
+
+      \path
+      (A) edge node {$\theta_1(A!0)$} (B)
+      (B) edge node {$\theta_4(B?ACK0)$} (C)
+      (B) edge[loop above] node {$\theta_2(A!0),\theta_3(B?ACK1)$} (B)
+      (C) edge node {$\theta_5(A!1)$} (D)
+      (D) edge node {$\theta_8(B?ACK1)$} (A)
+      (D) edge[loop below] node {$\theta_6(A!1),\theta_7(B?ACK0)$} (D)
+
+
+      (E) edge node {$\theta_{11}(A?0)$} (F)
+      (E) edge[loop above] node {$\theta_9(B!ACK1),\theta_{10}(A?1)$} (E)
+      (F) edge node {$\theta_{12}(B!ACK0)$} (G)
+      (G) edge node {$\theta_{15}(A?1)$} (H)
+      (G) edge[loop below] node {$\theta_{13}(B!ACK0),\theta_{14}(A?0)$} (G)
+      (H) edge node {$\theta_{16}(B!ACK1)$} (E)
+      ;
+
+      \draw[<-] (E) -- node[above left] {start} ++(-1cm,-1cm);
+
+      \draw[double,->] (i1) -- node[above] {canal A} (i2);
+      \draw[double,->] (i4) -- node[below] {canal B} (i3);
+    \end{tikzpicture}
+    \caption{Automate Fifo du ABP (\cite{Finkel03}, Fig.1.)}\label{fig:fifoabp}
+  \end{figure}
