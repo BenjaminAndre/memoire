@@ -3,7 +3,7 @@ Comme mentionné au début du chapitre, ce travail s'intéresse à la propriét�
 Au lieu de proposer un ensemble d'état acceptants, on va fixer une propriété. Si un état respecte cette propriété, il est dit safe. Il est donc unsafe s'il ne respecte pas cette propriété de safety. Par la suite, la section \ref{ss:tracesafety} propose une technique permettant de calculer les états unsafe pour un langage de traces annotées. Ceci permet de répondre à la question de safety directement depuis ce langage au lieu de devoir construire le langage de l'automate FIFO.
 
 
-\subsection{Définition}
+\subsection{Définitions}
 Dans un automate FIFO \fifo, chaque état de contrôle $q\in Q$ est associé à un union finie de langage réguliers pour chacun des canaux $c\in C$.
 
 
@@ -11,21 +11,37 @@ $$\bigcup_{0 \leq i \leq n_q}\Pi_{0 \leq j \leq k}U_q(i,c_j)$$
 
 Où $U_q(i,c_j)$ est un langage régulier pour le contenu du canal $c_j$ sur l'état $q$. $n_q$ est le nombre de langages réguliers utilisés pour définir cette propriété par union.
 
-Un état $s=(q,[w_0,w_1,\dots,w_k])$ est \emph{unsafe} s'il existe $i,j \in \mathcal{N}$ tels que $w_j \in U_q(i,c_j)$.
+Un état $s=(q,[w_0,w_1,\dots,w_k])$ est \emph{sûr} s'il n'existe pas $i,j \in \mathbb{N}$ tels que $w_j \in U_q(i,c_j)$.
 
 
 
-\subsection{Traces annotées menant à des états unsafe}\label{ss:tracesafety}
+\subsection{Traces annotées menant à des états n'étant pas sûrs}\label{ss:tracesafety}
+
+Soit la fonction $h_c:\Phi^*\rightarrow\Sigma^*$ qui, pour un trace annotée donnée, ne retourne que les messages envoyés mais non réceptionnés sur le canal $c$.
+
+$h_c$ est l'unique homomorphisme qui étend la fonction suivante de $\Phi$ à $\Phi^*$:
+$$ h_c(\theta) = \left\{ \begin{array}{ll}
+      m & \text{si } \theta\in\Theta\text{ et }\delta(\theta)=(p,c!m,q)\\
+      \epsilon & \text{sinon}\end{array} \right. $$
 
 
 
+Si $L$ est le langage représenté par $F$ alors $L_q$ l'ensemble des mots correctements formés pour $L$.
 
+Si il existe un état non sûr $s$, alors il existe une trace $\sigma \in \Theta^*$ telle que $s_0\xrightarrow{\sigma}s$ où $s_0$ est l'état initial. Si les transitions dénotant des actions d'envoi et de réception d'un même symbole sur un même canal sont enlevées par paire, il ne reste que les transitions participant au contenu final des différents canaux de $s$. Par définition de $h_c$, pour chaque contenu $w_j$ de chaque canal $c_j$, $w_j=h_{cj}(\mathcal{A}(\sigma))$. Dès lors, pour que $s$ soit atteignable, il faut qu'il existe une trace annotée $\gamma \in AL(F)$ telle que $s=(q_\gamma, [h_{c0}(\gamma),h_{c1}(\gamma),\dots,h_{ck}(\gamma)])$ où $q_\gamma$ est l'état de contrôle désigné par le symbole de contrôle à la fin de $\gamma$.
+
+Soit la fonction $h^{-1}_{c}:\Sigma^*\rightarrow\Phi^*$ l'homomorphisme inverse de $h_c$. C'est-à-dire $h^{-1}_{cj}(U_q(i,c_j))$ retourne des traces annotées correspondant au contenu d'un canal. Dans ce cas particulier, un des langages réguliers servant à définir la propriété de sécurité. Comme un plusieurs traces annotées peuvent correspondre au même contenu de canaux par $h_c$, un contenu de canal peut correspondre à plusieurs traces annotées via $h^{-1}_c$.
+
+En calculant cette fonction pour l'ensemble des états, canaux et langages réguliers définissant la sécurité de $F$,et en s'assurant que ces traces sont correctement formées, on obtient un ensemble de traces menant à des états n'étant pas sûrs.
+
+Cet ensemble est décrit mathématiquement par $\mathcal{W}(L)$ :
 $$
-W(L)=\bigcup_{q\in Q}\big(\bigcup_{0\leq i\leq n_q}\big(\bigcap_{0\leq j \leq k}h_{c_j}^{-1}(U_q(i,c_j))\big)\big)
+\mathcal{W}(L)=\bigcup_{q\in Q}\big(\bigcup_{0\leq i\leq n_q}\big(\bigcap_{0\leq j \leq k}h_{c_j}^{-1}(U_q(i,c_j))\big)\big)
 $$
 
+C'est un résultat majeur. En l'exploitant sur un langage de trace appris via l'algorithme d'Angluin, il permet de se prononcer sur la sécurité d'états et a fortiori de l'automate $F$ au complet, comme le détaille le théorème \ref{thm:fifolever}.
 
-\begin{theorem}
+\begin{theorem}\label{thm:fifolever}
   Pour vérifier la propriété de safety des automates FIFO, l'algorithme LeVer respecte les propriétés suivantes :
   \begin{enumerate}
     \item Si l'algorithme retourne une réponse, celle-ci est correcte
@@ -35,3 +51,4 @@ $$
 \end{theorem}
 
 La preuve est disponible en annexe du document \cite{Vardhan04} mais c'est un résultat tellement important, il est peut-être pertinent que celle-ci soit rediscutée ici.
+\todo{preuve ?}
