@@ -1,0 +1,40 @@
+\begin{algo}[Appartenance à $AL(F)$]
+  \begin{algorithmic}[1]
+    \REQUIRE une trace annotée $t\in\Phi^*$ et un automate FIFO \fifo
+    \ENSURE si $\gamma\in AL(F)$ ou non
+    \IF {$t$ est malformé}
+      \RETURN faux
+    \ENDIF
+    \STATE candidats $\leftarrow\{(q_0,\epsilon^c)\}$
+    \FORALL {symbole $\phi \in t$}
+      \IF {$\phi \in T_Q$}
+        \STATE \COMMENT {Fin du mot}
+        \FORALL {$(q,w)\in$ candidats}
+          \IF {$\phi$ est un $t_q$ correspondant à $q$}
+            \RETURN vrai
+          \ENDIF
+        \ENDFOR
+        \RETURN faux
+      \ELSE
+        \STATE \COMMENT{Exécution de l'automate}
+        \STATE nouveau $\leftarrow\emptyset$
+        \STATE extension $\leftarrow\emptyset$
+        \FORALL {$(q,w)\in$ candidats}
+          \STATE $\phi'\leftarrow\phi$ sans l'éventuelle barre
+          \STATE ajouter $\delta(\phi', (q,w))$ à extension
+        \ENDFOR
+        \WHILE {extension est non vide}
+          \STATE \COMMENT {Créer les différents cas de consommation des canaux}
+          \STATE prendre un élément $(q,w)\in$extension
+          \FORALL {canal non-nul $c$ de $w$ commençant par un symbole $s$}
+            \IF {$\exists\theta$ correspondant à l'action $c?s$ sortant de $q$}
+              \STATE ajouter $\delta(\theta, (q,w))$ à extension
+            \ENDIF
+          \ENDFOR
+          \STATE ajouter $(q,w)$ à nouveaux
+        \ENDWHILE
+        \STATE candidats $\leftarrow$ nouveaux
+      \ENDIF
+    \ENDFOR
+  \end{algorithmic}
+\end{algo}

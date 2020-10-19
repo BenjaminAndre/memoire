@@ -1,4 +1,6 @@
-Cette section s'intéresse aux langages qui peuvent être associés à un automate. La section \ref{ss:trace} défini le langage de trace d'un automate. Celui-ci n'est pas nécessairement régulier. Les sections suivantes s'appuyent sur \cite{Vardhan04} pour proposer un langage régulier qui représente ce langage de trace.
+Cette section s'intéresse aux langages qui peuvent être associés à un automate. La section \ref{ss:trace} défini le langage de trace d'un automate. Celui-ci n'est pas nécessairement régulier. Les sections suivantes s'appuyent sur \cite{Vardhan04} pour proposer un langage régulier qui représente ce langage de trace. Finalement, la section \ref{ss:extension} défini une fonction $\mathcal{F}$ qui étend une trace et explique en quoi cela aide à faciliter le processus d'apprentissage.
+
+
 
 
 % ██       █████  ███    ██  ██████
@@ -122,6 +124,51 @@ Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'
 \end{example}
 
 
-\todo{F(L)}
+\subsection{Fonction d'extension de trace}\label{ss:extension}
 
-\todo{AL(F) est transitif la dessous ! Pratique.}
+Cette section défini \fl pour un langage arbitraire et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
+
+
+La \emph{fonction d'extension} $Post(L)$ permet d'étendre une trace annotée $\gamma$ (ou tout autre mot mais cela n'est pas pertinent) avec le symbole $\theta$. Si $\gamma$ est correctement formée, $source(\theta)$ et $cible(\theta)$ donnent respectivement la source et la cible d'une transition $\delta$.
+
+$$
+Post(\gamma,\theta) = \left\{ \begin{array}{ll}
+    \emptyset & \text{si } \gamma \text{ n'est pas correctement formé ou si } \mathcal{C}(\gamma)\neq source(\theta)\\
+    \{\mathcal{T}(\gamma)t_{cible(\theta)}\} & \text{sinon si }\delta(\theta)=(p,\tau,q) \text{ ou } \delta(\theta)=(p,c_i!a_j,q) \text{ avec }p,q\in Q\\
+    \{deriv(\mathcal{T}(\gamma),\theta)t_{cible(\theta)}\}& \text{sinon si } \delta(\theta)=(p,c_i?a_j,q) \text{ avec }p,q\in Q \\
+    \end{array} \right.
+$$
+
+Sachant que $deriv(\mathcal{T}(\gamma),\theta)$ fonctionne comme l'algorithme $\mathcal{A}$ si $\theta$ est une action de réception. Elle le fait en remplaçant un $\theta_e \in \Theta$ associé à une action d'envoi et le remplace par $\bar{\theta_e} \in \bar{\Theta}$ si l'action porte sur le même canal et le même symbole que $\theta$.
+
+Posons $Post(\gamma)=\bigcup_{\theta\in\Theta}Post(\gamma,\theta)$ et $Post(L)=\bigcup_{\gamma\in L}Post(\gamma)$.
+
+
+\begin{theorem}\label{thm:fl}
+  Soit \fl$=Post(L)\cup\{t_{q0}\}$ où $q_0$ est l'état de contrôle initial. \fl est une opération monotone sur les ensemble c'est-à-dire qu'elle préserve l'inclusion d'ensembles. De plus, $AL(F)$ est un point fixe minimal de \fl.
+\end{theorem}
+
+Les preuves sont en annexe de \cite{Vardhan04} mais peut-être est-il pertinent de les réécrire ici. \todo{étudier les preuves des théorèmes 1 et 2 de vardhan et les réécrire}
+
+Le théorème \ref{thm:fl} donne bien une façon de répondre à la requête d'équivalence dans une direction. Alors, si $A\oplus B$ donne la différence symétrique entre deux ensembles (l'union à l'exception de leur intersection), le contre-exemple à l'équivalence se trouve dans $AL(F)\oplus L$.
+
+Plusieurs cas sont possibles :
+\begin{enumerate}
+  \item \fl$-L\neq\emptyset$. Il existe un mot $w\in$\fl qui n'appartient pas à $L$.
+  \begin{itemize}
+    \item Si $w=t_{q_0}$, alors il appartient à $AL(F)\oplus L$
+    \item Sinon, il faut vérifier si $w$ est correctement formaté.
+      \begin{itemize}
+          \item Si c'est le cas, alors $w\in(AL(F)\oplus L)$
+          \item Sinon, c'est qu'il existe $w'\in L$ tel que $w\in Post(w')$ . $Post()$ d'une annotation valide retourne un annotation valide. Par contraposée, si $w$ est invalide, $w'$ l'est aussi. Dès lors, $w'\notin AL(F)$ et donc $w'\in(AL(F)\oplus L)$.
+      \end{itemize}
+  \end{itemize}
+  \item \fl$\subsetneq L$. \todo{expliquer la théorie des préfixpoints là}
+  \item \fl$=L$. Soit \wl l'ensemble des traces annotées menant à des états n'étant pas sûrs. \wl est défini et une formule est donnée pour le calculer dans la section \ref{sec:unsafe}.
+  \begin{itemize}
+    \item Si \wl est vide, comme $L$ est un point fixe (notre hypothèse pour ce point), le processus d'apprentissage peut être arrêté et la sécurité de l'automate est confirmée.
+    \item Sinon, soit $\gamma$ une trace annotée dans cet ensemble \wl. Si $\gamma$ est valide, il peut être retourné comme contre-exemple à la sécurité de $F$. Si $\gamma$ est invalide, $\gamma\in(AL(F)\oplus L)$
+  \end{itemize}
+\end{enumerate}
+
+Attention. Le langage $L$ n'est pas forcément $AL(F)$ dû à cette équivalence limitée (à un sens). Ce pourrait très bien être un autre point fixe contenant $AL(F)$ ou un autre ensemble contenant une trace annotée menant à un état qui n'est pas sûr. Cependant, ce n'est pas important tant que seule la propriété de sécurité est considérée.
