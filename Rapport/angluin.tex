@@ -1,11 +1,58 @@
-L'algorithme d'Angluin est un algorithme d'apprentissage actif d'automate. Il requiert un professeur pouvant vérifier :
-\begin{itemize}
-	\item L'équivalence entre deux automates.
-	\item L'appartenance d'un mot à un automate.
-\end{itemize}
-Grâce à ce professeur, l'élève (ici joué par l'algorithme) peut apprendre un automate.
+L'algorithme d'Angluin\cite{Angluin87} est un algorithme d'apprentissage actif d'automate. Il prend la forme d'un couple professeur/élève où l'élève applique l'algorithme d'Angluin $L^*$ en temps que tel pour apprendre l'automate et le professeur qui a accès au langage que l'élève veut apprendre.
 
-Celui-ci repose, en plus des éléments précédents, sur différents concepts expliqués dans les différentes sous-sections. Une fois toutes les bases posées, une exécution de l'algorithme d'Angluin sur un exemple est proposée en \ref{ss:a_exemple}, suivie du fonctionnement formel de l'algorithme et des preuves sur son exactitude et sa complexité. Cette section s'appuie principalement sur \cite{Neider14} en plus des notions précédentes.
+\begin{figure}[H]
+	\centering
+\begin{tikzpicture}
+	\tikzset{>=latex}
+
+	\draw (0,1) rectangle (5,0) node[pos=.5] {Élève ($L^*$)};
+	\draw (8,1) rectangle (13,-2);
+
+	\draw (8.2,-0.1) rectangle (12.8,-0.9) node[pos=.5] {Oracle d'appartenance};
+	\draw (8.2,-1.1) rectangle (12.8,-1.9) node[pos=.5] {Oracle d'équivalence};
+
+	\draw (0,-1) rectangle (5, -2) node[pos=.5] {Table d'observation $O$};
+
+	\draw (10.5, -3.5) circle (1);
+	\draw (2.5, -3.5) circle (1);
+
+	\node[draw=none] at (10.5, 0.5) {Professeur} ;
+	\node[draw=none] at (10.5,-3.5) {ADF};
+	\node[draw=none] at (2.5,-3.5) {$A_O$};
+
+	\draw[<->] (5,0.8) -- (8,0.8) node[pos=0.5,above] {appartenance ?};
+	\draw[<->] (5,0.2) -- (8,0.2) node[pos=0.5,below] {équivalence ?};
+
+	\draw[->] (2.5,-2) -- (2.5,-2.5);
+	\draw[<->] (10.5, -2) -- (10.5,-2.5);
+	\draw[<->] (2.5, 0) -- (2.5,-1);
+
+\end{tikzpicture}
+\caption{Vue schématique de l'algorithme d'Angluin}
+\end{figure}
+
+L'algorithme d'Angluin est nommé $L^*$ et est exécuté par l'élève. Par abus de language, il peut aussi désigner l'environnement complet dont il a besoin pour être fonctionnel.
+
+Celui-ci consiste, côté élève, d'une table d'observation définie à la section \ref{ss:to}, et d'un automate $A_O$ construit à partir de cette table.
+
+Côté professeur, il faut un langage régulier $L$ à apprendre, souvent représenté par un ADF. De plus, ce professeur contient deux oracles :
+\begin{itemize}
+	\item L'oracle d'appartenance. Soit un mot $w$. Appartient-il à $L$ ?
+	\item L'oracle d'équivalence. Soit un automate $A_O$. Représente-t-il $L$ ? Si non, fournir un contre-exemple $w$.
+\end{itemize}
+
+\begin{theorem}
+	S'appuyant sur un professeur pour un langage régulier $L\subseteq\Sigma^*$, un élève peut utiliser l'algorithme d'Angluin $L^*$ pour apprendre l'ADF canonique $A$ représentant $L$ en un temps polynimial à $n$ le nombre d'états de $A$ et $m$ le nombre de contre-exemples reçus du professeur.
+	Il effectue $\mathcal{O}(n)$ requêtes d'équivalence et $\mathcal{O}(mn^2)$ requêtes d'appartenance.\cite{Angluin87}
+\end{theorem}
+
+\begin{corollary}
+	Si les requêtes d'appartenance et d'équivalence se font en temps polynomial en la taille de $A$, $L^*$ est en temps polynomial.
+\end{corollary}
+
+Attention cependant : cet algorithme part du postulat que le langage étudié est régulier.
+
+Les prochaines section introduisent les différentes notion notemment necéssaires à la compréhension du fonctionnement de la table d'observation.
 
 
 % ██████  ██
@@ -18,7 +65,7 @@ Celui-ci repose, en plus des éléments précédents, sur différents concepts e
 
 Soit un langage $L$ sur un alphabet $\Sigma$.
 
-Soit la relation $R_L\subseteq\Sigma^*\Sigma^*$. Deux mots $x$ et $y$ respectent la \emph{relation de Myhill-Nérode $R_L$} si
+Soit la relation $R_L\subseteq\Sigma^*\times\Sigma^*$. Deux mots $x$ et $y$ respectent la \emph{relation de Myhill-Nérode $R_L$} si
 
 $$\forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$$
 
@@ -118,7 +165,7 @@ On peut prouver que l'automate obtenu de cette façon est l'automate minimal de 
   %    ██    ██    ██
   %    ██     ██████
 
-  \subsection{La table d'observation}
+  \subsection{La table d'observation}\label{ss:to}
 
 	Une \emph{table d'observation} est un tableau défini par $O=(R,S,T)$ avec $R\subseteq\Sigma^*$ un ensemble de mots \emph{représentants}, $S\subseteq\Sigma^*$ un ensmble de mots \emph{séparateurs} et $T:(R\bigcup R.\Sigma)\rightarrow\{0,1\}$ un mapping représentant le contenu de la table.\cite{Neider14}
 	Soit un langage $L$ qui est en train d'être appris par l'algorithme d'Angluin. Soit un mot $w\in L$. Alors, $w$ appartient à une classe d'équivalence $[[u]]$ avec $u\in L$. Dans ce cas, $T(w)=1$. Au contraire, si $w\notin L$, alors $T(w)=0$.
@@ -178,7 +225,7 @@ Cette propriété peut être vérifiée par cet algorithme, expliqué de façon 
 		\ENDFOR
 		\RETURN Vrai
 	\end{algorithmic}
-	\caption{Vérification de la clôture}\label{alg:cloture}
+	\caption{Vérification de la fermeture}\label{alg:fermeture}
 \end{algorithm}
 
 \subsubsection*{Cohérence}
@@ -217,6 +264,53 @@ Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même li
 % ██   ██ ███████  ██████   ██████
 
 \subsection{L'algorithme}\label{ss:a_exemple}
+
+Le pseudocode de l'algorithme d'Angluin est fourni par l'algorithme \ref{alg:angluin}\cite{Neider14}. Celui-ci repose sur les oracles du professeur et l'algorithme \ref{alg:corr}, remplissant les lignes de $T$ encore vides. Le code est suivi d'un exemple d'exécution.
+
+\begin{algo}[Algorithme d'Angluin $L^*$]\label{alg:angluin}
+  \begin{algorithmic}[1]
+    \REQUIRE Un professeur pour le langage régulier $L\subseteq\Sigma^*$
+		\ENSURE Un automate canonique décrivant $L$
+		\STATE Initialiser la table d'observation $O=(R,S,T)$ avec $R=S={\epsilon}$
+		\STATE $corriger(O)$
+		\REPEAT
+			\WHILE {$O$ n'est pas fermée ou pas cohérente}
+				\IF {$O$ n'est pas fermée}
+					\STATE Choisir $r\in R$ et $a\in\Sigma$ tels que $[[ua]]_O\bigcap R=\emptyset$
+					\STATE $R\leftarrow R\bigcup {ua}$
+					\STATE $corriger(O)$
+				\ENDIF
+				\IF {$O$ n'est pas cohérente}
+					\STATE Choisir $uR_Lv \in R, a\in\Sigma$ et $w\in S$ tels que $T(uaw)\neq T(vaw)$
+					\STATE $S\leftarrow S \bigcup {aw}$
+					\STATE $corriger(O)$
+				\ENDIF
+			\ENDWHILE
+			\STATE Construire $A_O$
+			\STATE Soumettre $A_O$ à l'oracle d'équivalence
+			\IF {le professeur retourne un contre-exemple $u$}
+				\STATE $R\leftarrow R\bigcup Pref(u)$
+				\STATE $corriger(O)$
+			\ENDIF
+		\UNTIL {ce que le professeur réponde "oui" à l'équivalence}
+		\RETURN $A_O$
+  \end{algorithmic}
+\end{algo}
+
+\begin{algo}[$corriger(O)$]\label{alg:corr}
+  \begin{algorithmic}[1]
+		\REQUIRE une table d'observation $O$, un professeur pour le langage régulier $L\subseteq\Sigma^*$
+		\ENSURE les entrées de $O$ sont valide dans $L$
+		\FORALL {entrée $u \in (R\bigcup R\Sigma)$ pour laquelle $T(u)$ n'est pas encore définie}
+			\IF {$u\in L$ par le test d'appartenance }
+				\STATE $T(u)\leftarrow 1$
+			\ELSE
+				\STATE $T(u)\leftarrow 0$
+			\ENDIF
+		\ENDFOR
+	\end{algorithmic}
+\end{algo}
+
 Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:mini} sur la minimisation.
 
 %\todo{Marquer la différence entre $R_L$ et $R_O$}
@@ -257,7 +351,7 @@ L'étape suivante consiste à vérifier la fermeture de la table d'observation $
 
 $$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
 
-Intuitivement, pour chaque symbole (ici, $\{a,b\}$, et ce sera vrai jusqu'à la dernière itération), tout mot candidat (dans $R$, la partie supérieure de la table) doit se retrouver, complété de ce symbole, dans une classe d'équivalence d'un autre candidat de $R$. Ici, de toute évidence, les mots $a$ et $b$ sont dans la même classe d'équivalence que $\epsilon$. Dès lors, la propriété de clôture est respectée.
+Intuitivement, pour chaque symbole (ici, $\{a,b\}$, et ce sera vrai jusqu'à la dernière itération), tout mot candidat (dans $R$, la partie supérieure de la table) doit se retrouver, complété de ce symbole, dans une classe d'équivalence d'un autre candidat de $R$. Ici, de toute évidence, les mots $a$ et $b$ sont dans la même classe d'équivalence que $\epsilon$. Dès lors, la propriété de fermeture est respectée.
 
 Si la fermeture est respectée, alors la question de la cohérence se pose. Pour rappel :
 
@@ -458,4 +552,4 @@ Un manquement à la fermeture est détecté : le mot $a$. En effet, en lui ajout
 
 $O_4$ ne respecte pas la cohérence. Les mots $\epsilon$ et $aa$ respectent \ro (leur ligne a la même valeur dans la table) mais $\neg b R_O aab$. $b$ est alors ajouté à $S$ et une nouvelle colonne associée est ajoutée à la table, donnant le table $O_5$. Celle-ci a toujours un soucis de cohérence entre $\epsilon$ et $aa$, menant à l'ajout de $ab$ à $S$ et à la création de $O_6$. Finalement, pour régler le soucis de cohérence dans $O_6$ entre $a$ et $aa$, le mot $ba$ est ajouté à $S$ et une table $O_7$ est ainsi créée avec la nouvelle colonne associée.
 
-Cette table $O_7$ respectant la clôture et la cohérence, l'automate associé $O_7$ est construit et soumis à l'enseignant pour être comparé à $A_3$. Celui-ci valide l'égalité et l'algorithme s'arrête : l'automate a été construit.
+Cette table $O_7$ respectant la fermeture et la cohérence, l'automate associé $O_7$ est construit et soumis à l'enseignant pour être comparé à $A_3$. Celui-ci valide l'égalité et l'algorithme s'arrête : l'automate a été construit.
