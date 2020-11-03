@@ -7,32 +7,42 @@ L'objectif dès lors n'est pas d'apprendre le language de l'automate à file mai
 
 \begin{figure}[H]
 	\centering
+
+	\resizebox{\textwidth}{!}{
 \begin{tikzpicture}
 	\tikzset{>=latex}
 
-  \draw (0,-3.4) rectangle (3,-4.4) node[pos=.5] {Élève ($L^*$)};
+  \draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
   \draw (5,0) rectangle (17.5,-4);
-	\draw[->] (3,-3.5) -- (5.3,-3.5) node[pos=0.5,below] {L ok ?};
+	\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
 
-  \draw (0,-1.4) rectangle (3,-2.4) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
-  \draw[->] (1.6,-3.4) -- (1.6,-2.4) node[pos=0.5,right] {appartenance ?};
-  \draw[<-] (1.4,-3.4) -- (1.4,-2.4) node[pos=0.5,left] {oui/non};
+  \draw (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+  \draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$w$ appartient-il au language à apprendre ?};
+  \draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
 
-  \node[draw=none] at (11.5, -0.5) {Oracle d'équivalence};
+  \node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
 
-  \draw (5.3, -0.8) rectangle (8.6, -3.7) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
-  \draw (9.4, -0.8) rectangle (12.9, -3.7) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région insécure ?};
-  \draw (13.7, -0.8) rectangle (17.2, -3.7) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état insécure est-il valide ?};
+  \draw (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+  \draw (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+  \draw (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
 
-  \draw[->] (8.6, -2.25) -- (9.4,-2.25) node[pos=0.5,below] {oui};
-  \draw[->] (12.9, -2.25) -- (13.7,-2.25) node[pos=0.5,below] {oui};
-  \draw[->] (15.45, -4.3) -- (3, -4.3) node[pos=0.35,below] {non};
-  \draw[-] (7.05, -3.7) -- (7.05, -4.3);
-  \draw[-] (15.45, -3.7) -- (15.45, -4.3);
+  \draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+  \draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+  \draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non};
+  \draw[-] (7.05, -3.2) -- (7.05, -4.3);
+  \draw[-] (15.45, -3.2) -- (15.45, -4.3);
+
+	\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+	\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+
+	\node[draw=none] at (11.25, 1.15) {Sécurité respectée};
+	\node[draw=none,text width=4.5cm] at (15.45, 1.45) {Sécurité violée, contre-exemple fourni};
 
 
 \end{tikzpicture}
-\caption{Vue schématique de l'algorithme d'Angluin}
+}
+\caption{Vue schématique de l'algorithme d'Angluin pour LeVer\cite{Vardhan04}}
+
 \end{figure}
 
 
