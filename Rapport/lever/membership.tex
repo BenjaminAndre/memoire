@@ -1,3 +1,22 @@
-\todo{Cette section explique comment l'appartenance est appliquée aux FIFO, et surtout ce que ça signifie dans notre contexte}
+Lorsqu'un mot $\gamma$ est fourni à l'oracle d'appartenance la question est de savoir s'il apparatient à $AL(F)$, le langage de trace annotée. Comme l'oracle ne possède pas d'automate pour représenter ce langage, il doit répondre en se basant sur $F$.
 
-\todo{Well formed, et trouver une trace depuis une exécution (membership.tex ?)}
+Ainsi donc, un mot $\gamma$ appartient à $AL(F)$ s'il représente au moins un chemin $\theta$ valide dans $F$.
+
+Soit une fonction $\mathcal{A}^{-1}(\gamma)$ donnant l'ensemble des chemins $\theta$ pour lesquels $\mathcal{A}(\theta)=\gamma$. Si $\mathcal{A}^{-1}(\gamma)\neq\emptyset$, c'est que $\gamma$ correspond bien à un chemin dans $F$; que $\gamma\in AL(F)$.
+
+Premièrement, si $\gamma$ est incorrectement formaté, $\mathcal{A^{-1}}(\gamma)=\emptyset$ puisque tout mot de $AL(F)$ est conforme par définition.
+
+Supposant que $\gamma$ est correctement formaté, on peut remplacer les symboles barrés (appartenant à \barTheta) par leur équivalent non barré (de $\Theta$). De plus, l'état final est omis. De la sorte, on obtient un mot $\theta'$ qui pourrait appartenir à $\mathcal{A}^{-1}$ si les transitions de réceptions correspondant aux états d'envois qui étaient barrés n'étaient pas omises.
+
+Il est possible d'identifier ces transitions de réception. Dans le corps de $\gamma$, chaque envoi barré peut être associé à une transition de réception sur le même canal pour le même symbole. Cependant, la position à laquelle insérer de telles transitions dans le mot est inconnue.
+
+Pour ce faire, il est possible de tester toutes les différentes positions (qui est un ensemble fini), et tester celles-ci sur l'automate $F$. Dès lors, toute séquence $\theta$ valide pour laquelle $\mathcal{A}(\theta)=\gamma$ appartient à $\mathcal{A}^{-1}(\gamma)$, rendant l'ensemble non-vide. Une seule séquence est suffisante pour garantir que $\gamma\in AL(F)$.
+
+\begin{example}
+Considérons l'automate \ref{fig:fifoA}. Pour rappel, celui-ci comprend trois transitions ($\delta(\theta_1)=(q_0, a!1, q_1)$, $\delta(\theta_2)=(q_1,a?1,q_2)$, et $\delta(\theta_3)=(q_2, a!0, q_0)$).
+
+Une trace annotée $\gamma=\bar{\theta_1}\theta_3\theta_1q_1$ appartient bien à $AL(A)$. En effet, $\mathcal{A}^-1(\gamma)=\{\theta_1\theta_2\theta_3\theta_1\}$.
+
+Par contre, la trace $\gamma=\bar{\theta_1}\bar{\theta_1}\theta_3q_0$ ne convient pas. Aucun chemin $\theta$ ne permet $\mathcal{A}(\theta)=\gamma$. Il est facile de s'en convaincre : le chemin passe deux fois par $\theta_1$ sans passer par $\theta_3$ qui est ici inévitable pour retourner à l'état de contrôle $q_0$.
+
+\end{example}
