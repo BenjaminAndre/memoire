@@ -38,17 +38,3 @@ Cet ensemble est décrit mathématiquement par $\mathcal{W}(L)$ :
 $$
 \mathcal{W}(L)=\bigcup_{q\in Q}\big(\bigcup_{0\leq i\leq n_q}\big(\bigcap_{0\leq j \leq k}h_{c_j}^{-1}(U_q(i,c_j))\big)\big)
 $$
-
-C'est un résultat majeur. En l'exploitant sur un langage de trace appris via l'algorithme d'Angluin, il permet de se prononcer sur la sécurité d'états et a fortiori de l'automate $F$ au complet, comme le détaille le théorème \ref{thm:fifolever}.
-
-\begin{theorem}\label{thm:fifolever}
-  Pour vérifier la propriété de safety des automates FIFO, l'algorithme LeVer respecte les propriétés suivantes :
-  \begin{enumerate}
-    \item Si l'algorithme retourne une réponse, celle-ci est correcte
-    \item Si $AL(F)$ est régulier, la procédure s'arrête.
-    \item Le nombre de test d'appartenance et d'éuivalence dépend principalement de l'algorithme d'Angluin. Le temps total est borné en temps polynomial du nombre d'états de l'automate minimal pour $AL(F)$ et linéaire en le temps pris pour une requête d'appartenance à $AL(F)$
-  \end{enumerate}
-\end{theorem}
-
-La preuve est disponible en annexe du document \cite{Vardhan04} mais c'est un résultat tellement important, il est peut-être pertinent que celle-ci soit rediscutée ici.
-\todo{preuve ?}

@@ -1,8 +1,8 @@
-\begin{algo}[Appartenance à $AL(F)$]
+\begin{algo}[Appartenance à $AL(F)$]\label{alg:membership}
   \begin{algorithmic}[1]
-    \REQUIRE une trace annotée $t\in\Phi^*$ et un automate FIFO \fifo
+    \REQUIRE une trace annotée $\gamma\in\Phi^*$ et un automate FIFO \fifo
     \ENSURE si $\gamma\in AL(F)$ ou non
-    \IF {$t$ est malformé}
+    \IF {$t$ est mal formaté}
       \RETURN faux
     \ENDIF
     \STATE candidats $\leftarrow\{(q_0,\epsilon^c)\}$
@@ -16,22 +16,26 @@
         \ENDFOR
         \RETURN faux
       \ELSE
-        \STATE \COMMENT{Exécution de l'automate}
+        \STATE \COMMENT{Exécution de l'automate sur une étape}
         \STATE nouveau $\leftarrow\emptyset$
         \STATE extension $\leftarrow\emptyset$
         \FORALL {$(q,w)\in$ candidats}
           \STATE $\phi'\leftarrow\phi$ sans l'éventuelle barre
-          \STATE ajouter $\delta(\phi', (q,w))$ à extension
+          \STATE \COMMENT {Permet de rejeter les chemins incorrects sans effectuer l'exécution complète}
+          \STATE ajouter $\delta(\phi', (q,w))$ à extension si $\delta$ est définie pour ces valeurs
         \ENDFOR
+        \STATE \COMMENT {Complète avec les actions de réception possibles}
         \WHILE {extension est non vide}
           \STATE \COMMENT {Créer les différents cas de consommation des canaux}
           \STATE prendre un élément $(q,w)\in$extension
           \FORALL {canal non-nul $c$ de $w$ commençant par un symbole $s$}
             \IF {$\exists\theta$ correspondant à l'action $c?s$ sortant de $q$}
+              \STATE \COMMENT {Comme une extension est elle-même étendue, on a récursivement les cas avec plusieurs réceptions bout à bout jusqu'à vider un canal}
               \STATE ajouter $\delta(\theta, (q,w))$ à extension
             \ENDIF
           \ENDFOR
           \STATE ajouter $(q,w)$ à nouveaux
+          \STATE retirer $(q,w)$ d'extension
         \ENDWHILE
         \STATE candidats $\leftarrow$ nouveaux
       \ENDIF

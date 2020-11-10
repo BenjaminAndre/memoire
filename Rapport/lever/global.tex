@@ -1,1 +1,15 @@
-\todo{On fait un retour sur le schéma, on confirme avoir bien fait le tour et on explique pourquoi ça marche. Au besoin, on sort le théorème 2 et fourni une preuve.}
+Ce chapitre a décrit l'adaptation de l'algorithme d'Angluin à l'étude de la sécurité d'automates à file. Grâce à $\mathcal{W}(L)$ et $\mathcal{F}(L)$, des oracles ont pu être construits pour couvrir certains cas. De par les garanties del'algorithme d'Angluin\cite{Angluin87} et la construction utilisée \cite{Vardhan04}, certaines propriétés peuvent être prouvées, énoncées dans le théorème \ref{thm:fifolever}.
+
+\begin{theorem}\label{thm:fifolever}
+  Pour vérifier la propriété de safety des automates FIFO, l'algorithme LeVer respecte les propriétés suivantes :
+  \begin{enumerate}
+    \item Si l'algorithme retourne une réponse, celle-ci est correcte
+    \item Si $AL(F)$ est régulier, la procédure s'arrête.
+    \item Le nombre de test d'appartenance et d'éuivalence dépend principalement de l'algorithme d'Angluin. Le temps total est borné en temps polynomial du nombre d'états de l'automate minimal pour $AL(F)$ et linéaire en le temps pris pour une requête d'appartenance à $AL(F)$
+  \end{enumerate}
+\end{theorem}
+
+Ce théorème rappelle la limite de la méthode. Il existe toutes une classe d'automates à file pour lesquels $AL(F)$ n'est pas régulier. À ce moment, aucune garantie ne peut-être fournie quand à l'exécution.
+
+
+La preuve est disponible dans l'annexe du travail de Vardhan et al.\cite{Vardhan04}.
