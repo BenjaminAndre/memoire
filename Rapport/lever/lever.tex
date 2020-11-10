@@ -28,7 +28,7 @@ L'objectif dès lors n'est pas d'apprendre le language de l'automate à file mai
 
   \draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
   \draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
-  \draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non};
+  \draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
   \draw[-] (7.05, -3.2) -- (7.05, -4.3);
   \draw[-] (15.45, -3.2) -- (15.45, -4.3);
 
@@ -45,7 +45,15 @@ L'objectif dès lors n'est pas d'apprendre le language de l'automate à file mai
 
 \end{figure}
 
+Contrairement à la version proposée dans la section \ref{sec:angluin}, ici il n'est pas possible de tester directement l'équivalence entre $L$ et le language à apprendre. En effet, ce dernier peut ne pas être régulier et de façon générale le professeur ne connaît justement pas l'automate permettant une telle comparaison si celle-ci existe.
 
-\todo{Ce chapitre décrit le fonctionnement de LeVer en se basant sur tout le reste. Concrètement, il s'agit d'une reformulation de l'algorithme d'Angluin pour les automates FIFO selon la méthode de Vardhan}
+Ici, le professeur passera par trois questions mais à aucun moment il saura dire si $L$ est le language à apprendre. Il pourra soit se prononcer sur la sécurité, soit dire avec certitude qu'il existe une meilleure approximation.
 
-\todo{Cette section explique le but recherché, son importance et la structure du chapitre}
+\begin{itemize}
+	\item \emph{L est-il un point fixe ?} Cette question fait référence à l'application de la fonction d'extension de trace de la section \ref{ss:extension}.
+	\item \emph{L intersecte-t-il une région à risque ?} Si $L$ est un point fixe de $\mathcal{F}$, il est soit le language à apprendre soit un point fixe le contenant. Si une surapproximation n'a pas d'intersection avec une région à risque, $L$ n'en a pas non plus.
+	\item \emph{Le chemin vers l'état à risque est-il valide ?} Si un chemin à risque (menant à un état à risque) existe dans $L$, est-il valide ? C'est-à-dire, appartient-il au language visé et représente-t-il bien un chemin dans l'automate à file étudié ?
+\end{itemize}
+
+
+Les prochaines sections décrivent ce nouvel oracle d'appartenance, celui d'équivalence avec les trois questions posées avant de revenir sur une vue d'ensemble. De la sorte, la section \ref{sec:global} résume quand et pourquoi cette méthode fonctionne.
