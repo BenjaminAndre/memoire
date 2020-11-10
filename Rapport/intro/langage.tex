@@ -6,13 +6,13 @@ Un \emph{alphabet} $\Sigma$ est un ensemble fini et non vide de \emph{symboles}.
 
 La \emph{concaténation} de deux mots $w=a_1a_2\dots a_k$ et $x=b_1b_2\dots b_j$ est l'opération consistant à créer un nouveau mot $wx=a_1a_2\dots a_kb_1b_2\dots b_j$ de longueur $i=k+j$.
 
-\begin{proposition}[$\epsilon$ et la concaténation]
-$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$.
+\begin{proposition}[$\epsilon$ et la concaténation]\emph{
+$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$.}
 \end{proposition}
 
 Cette proposition est triviale par la définition de la concaténation.
 
-\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est l'ensemble des mots sur $\Sigma$ de longueur $k$. L'ensemble de \emph{tous les mots possibles sur $\Sigma$} est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
+\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est \emph{l'ensemble des mots sur $\Sigma$} de longueur $k$. L'ensemble de \emph{tous les mots possibles sur $\Sigma$} est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
 
 
 Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
@@ -46,9 +46,9 @@ La \emph{fermeture} de $L$ est un langage constitué de tous les mots qui peuven
 
 Certains langages peuvent être exprimés par une \emph{expression régulière}.
 
-Les expressions régulières suivent un algèbre avec ses opérations et leur priorités. Une expression régulière est définie de façon récursive, étant elle même composée d'expressions régulières ou de symboles. Les différentes opérations décrivent comment une expression plus complexe est construite à partir de ses composants.
-Pour une expression régulière $E$, le langage décrit est noté $L(E)$. Un langage qui peut être décrit par une expression régulière est dit \emph{langage régulier}.
+Une expression régulière est un mot utilisant les symboles à représenter ainsi que les symboles (,),*,| qui sont réservés pour différentes opérations. Une expression régulière est construite à partir d'élements atomiques (les symboles du langage à représenter) et assemblés pour obtenir des langages plus complexes. Un language qui peut-être représenté par une expression régulière est dit \emph{langage régulier}.
 
+Si plusieurs expressions régulières peuvent être composées en une expression plus complexe, une expression régulière peut aussi être décomposée en ses différents composants.
 
 \textbf{Cas de base}
 Certains langages peuvent être construits directement sans passer par l'induction:

@@ -310,8 +310,8 @@ L'algorithme \ref{alg:membership} représente cette appartenance pour un mot.
 
 \begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:membership}
  \begin{algorithmic}[1]
-   \REQUIRE un mot $w$, un automate \automaton représentant $L$
-   \ENSURE si $w$ appartient à $L=L(A)$
+   \REQUIRE un mot $w$, un automate \automaton représentant $L=L(A)$
+   \ENSURE si $w$ appartient à $L$
 
    \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ est l'ensemble des états courants}
    \IF {A est un $\Sigma$-ANF}
@@ -501,7 +501,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	Le nombre d'expressions à construire, lui, est décomposable en deux facteurs également : le nombre d'itérations et celui de paires $i,j$ possibles. Le premier facteur est $n$, quand aux paires, leur nombre s'exprime par $n^2$. $n^3$ expressions sont construites.
 
-	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)=\mathcal{O}(n^2)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle. La première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
+	En regroupant ces deux facteurs, on obtient $n^3\mathcal{O}(4^n)=\mathcal{O}(n^34^n)=\mathcal{O}(2^n)$. Comme $n$ correspond au nombre d'états, si la transformation se fait depuis un ANF, via un ADF, vers une expression régulière, la complexité devient doublement exponentielle. La première transformation étant elle-même exponentielle en le nombre d'états de l'ANF.
 \end{complexity}
 
 
@@ -530,7 +530,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	La construction par récurrence commençant avec $k=0$ le processus peut être représenté par des tableaux correspondant à différents $k$ de façon croissante.
 
-	\paragraph{Première itération} Dans la première itération, chaque expression se résume à un des trois cas de base, avec éventuellement $\epsilon$ si $i=j$ pour l'expression analysée.
+	\paragraph{Première itération} Dans la première itération, chaque expression se résume à un des trois cas de base, avec éventuellement $\epsilon$ si $i=j$ pour l'expression analysée. Ici, $k=0$.
 
 	\begin{figure}[H]
 		\centering
@@ -567,7 +567,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 	\end{figure}
 
 
-	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire.
+	\paragraph{Troisième itération} A la troisième itération, l'état $2$ est autorisé comme état intermédiaire($k=2$).
 
 	\begin{figure}[H]
     \centering
@@ -664,7 +664,7 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	En effet, l'automate (a) représente le langage $\{\epsilon\}$ égal à $L(E)$ : le seul arc de l'état initial à un état final est $\epsilon$. L'automate (b) ne propose pas d'arc atteignant l'état final. Aucun mot n'appartient au langage représenté par cet automate qui vaut donc $\emptyset=L(\emptyset)$. Finalement, (c) propose un arc pour $a$. Dès lors, il existe un unique chemin de longueur 1 correspondant au mot $a$. Ainsi, le langage exprimé par cet automate $\{a\}$ est bien égal à $L(E)=L(a)$. De plus, ces automates respectent bien l'invariant de récurrence proposé.
 
-	\paragraph{Pas de récurrence} Les ANF \emph{abstraits} de la figure \ref{fig:regexadfrec} représentent la façon dont un automate peut être construit récursivement en fonction des règles de récurrence des expressions régulières. Ces ANF sont abstraits car le contenu d'un bloc $E$ ou $F$ n'est pas représenté explicitement. Cependant, celui-ci respecte les invariants de récurrence.
+	\paragraph{Pas de récurrence} Les ANF \emph{ abstraits} de la figure \ref{fig:regexadfrec} représentent la façon dont un automate peut être construit récursivement en fonction des règles de récurrence des expressions régulières. Ces ANF sont abstraits car le contenu d'un bloc $E$ ou $F$ n'est pas représenté explicitement. Cependant, celui-ci respecte les invariants de récurrence.
 
 	\begin{figure}[H]
 
