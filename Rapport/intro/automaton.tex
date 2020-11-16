@@ -768,10 +768,10 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 
 	Les quatre règles de récurrence sur une expression régulière permettent de construire les automates:
 	\begin{itemize}
-		\item Pour une expression régulière de forme $(E)$, le langage $L(E)$ étant équivalent à $L((E))$, l'automate construit pour $E$ reste valable.
-		\item L'expression régulière est de forme $E^*$. Par induction, il existe un automate exprimant le même langage que celui exprimé par $E$. L'automate pour $E^*$ est construit comme en (a). Un arc $\epsilon$ entrant en $E$ permet de concaténer plusieurs chemins dans $E$, donnant des mots des langages décrits par $E^1$,$E^2$,$E^3$,... Le tout étant l'ensemble des mots possibles $L(E)^*$. On a bien $L(E^*)=L(E)^*$.
-		\item L'expression régulière est de forme $EF$. Par induction, il existe des automates représentants les mêmes langages que $E$ et $F$ et respectant notre invariant. L'automate abstrait (b) représente cette concaténation. En effet, un mot de cet automate doit se composer d'un mot $v\in L(E)$ et d'un mot $w \in L(F)$. Les mots possibles sont alors de la forme $v\epsilon w$. Donc (b) construit bien une expression régulière $L(EF)=L(E)L(F)$.
-		\item L'expression régulière est de forme $E+F$. Alors, comme mis en évidence par l'automate abstrait (c), il existe des automates correspondants aux expressions $E$ et $F$. Cette construction, en particulier les transitions sur $\epsilon$, permet à (c) de représenter tout mot de $L(E)$ ou $L(F)$. Le langage est alors en concordance avec la définition d'une expression régulière $L(E+F)=L(E)\cup L(F)$.
+    \item $L((E))=L(E)$ ne necéssite pas de construction supplémentaire.
+    \item $L(E^*)=L(E)^*$ est construit comme en (a). En effet, l'arc revenant au début de $E$ permet d'exprimer $E^1$,$E^2$,$E^3$,...
+    \item $L(EF)=L(E)L(F)$ est construit comme en (b). En effet, tout mot de cet automate est de la forme $v\epsilon w$ avec $v\in L(E)$ et $w\in L(F)$.
+    \item $L(E+F)=L(E)\bigcup L(F)$ est construit comme en (c). En effet, tout mot de cet automate est de la forme $\epsilon v\epsilon$ ou $\epsilon w \epsilon$ avec $v\in L(E)$ et $w\in L(F)$, en accord avec la définition de l'union ensembliste.
 	\end{itemize}
 
 	Les automates (a), (b) et (c) respectent bien l'invariant de récurrence : pas de transition vers l'état initial, un seul état acceptant n'ayant pas de transition sortante. Chaque automate abstrait pour $E$ ou $F$ peut lui même être construit récursivement jusqu'au cas de base.
@@ -780,11 +780,11 @@ Ce théorème étant une double implication, il est vrai si les deux implication
 \end{proof}
 \stepcounter{algo}
 \begin{complexity}
-	Soit une expression régulière $E$ contenant $n$ symboles (alphabet et opérations comprises) représentant un langage $L$. Si un arbre syntaxique est créé pour $E$, il est possible de construire un ANF pour $L$ en $\mathcal{O}(n)$. En effet :
+	Soit une expression régulière $E$ contenant $n$ symboles (alphabet et opérations comprises) représentant un langage $L=L(E)$.
+  La construction d'un ANF pour $L$ peut se faire en $\mathcal{O}(n)$. En effet :
 	\begin{itemize}
-		\item Cas de base : $n$ ANFs sont créés. Cependant, chacun est constitué de 2 états et au plus 1 transition. Ceux-ci correspondent à des feuilles de l'arbre syntaxique. Ces nombres sont des constantes. Ce cas de base est effectué en $\mathcal{O}(n*3)=\mathcal{O}(n)$
-		\item Récurrence : L'arbre syntaxique requiert au plus $n$ lectures d'opération de récurrence pour fusionner les $n$ ANF en un seul. En effet, chaque lecture consomme au moins deux expressions que ça soit par concaténation, fermeture ou union.
-    Cependant, chacune des opérations implique au plus la création de 2 états et 4 arcs au plus. La récurrence s'effectue en $\mathcal{O}(n*6)=\mathcal{O}(n)$
+		\item Cas de base : Au plus $n$ ANFs sont créés. Chacun correspond à un symbole (opérations non comprises). Chaque ANF a un état, rendant la création en temps constant. La création de tous ces ANFs est alors en $\mathcal{O}(n)$
+		\item Récurrence : Il reste au plus $n$ symboles correspondant à des opérations, ce qui implique au plus $n$ opérations. Chaque opération se base sur les 4 règles de récurrences définies précédemment. Dans les cas necéssitant une construction, celle-ci peut se faire en temps constant (ajout d'au plus deux états et quatre transitions). Chaque opération n'est à effectuer qu'une seule fois, consommant le symbole, et que chacune se fait en temps constant. Dès lors, la totalité des étapes de récurrence se fait au plus en $\mathcal{O}(n)$
 	\end{itemize}
 
 	La complexité totale de cette conversion est en $\mathcal{O}(n)$ vers un ANF. La conversion vers un ADF, comme mentionné dans la section ci-après peut quand à elle être exponentielle.
