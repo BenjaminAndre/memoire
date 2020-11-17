@@ -9,7 +9,7 @@ Cette section s'intéresse aux langages qui peuvent être associés à un automa
 
 \subsection{Langage tracé}\label{ss:trace}
 
-Une façon de définir un langage à partir d'un automate FIFO est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section défini les éléments permettant d'arriver à la construction d'un tel langage.
+Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section défini les éléments permettant d'arriver à la construction d'un tel langage.
 
 Dans un système de transitions \tsys, la fonction de transition $\rightarrow:S\times\Theta\rightarrow S$ permet de définir le passage d'un état à un autre.
 
@@ -17,7 +17,7 @@ La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture tra
 
 Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1)(p_2,w_2)...(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace de chemin}.
 
-\begin{definition} Soit un automate FIFO $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
+\begin{definition} Soit un automate à files $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
 
   Le \emph{langage de trace} d'un automate $F$ est
 
@@ -27,15 +27,14 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 \end{definition}
 
 \begin{example}
-  Considérons l'automate FIFO $F$ de la figure \ref{fig:fifo1}.
+  Considérons l'automate $F$ de la figure \ref{fig:fifo1}.
 
   Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas un chemin. En effet,
   $$
   (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
   $$
 
-  Mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
-
+  Mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas. Noter quer $\sigma$ est un mot du langage de trace et un chemin dans l'automate à files.
 
   Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est un chemin dans $F$ :
   \begin{equation*}
@@ -57,6 +56,11 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 \end{example}
 
 
+
+
+
+
+
   % ████████ ██   ██ ███████ ████████  █████
   %    ██    ██   ██ ██         ██    ██   ██
   %    ██    ███████ █████      ██    ███████
@@ -67,7 +71,7 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 
 \subsection{Alphabet d'annotation}
 
-Le langage de trace n'est pas nécessairement régulier. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un qui est régulier et qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
+Le langage de trace en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
 
 Pour ce faire, pour chaque nom de transition correspondant à une action d'envoi, un \emph{co-nom} est défini :
 $$
@@ -78,7 +82,7 @@ De plus, un \emph{symbole de contrôle} est créé pour chaque état de contrôl
 
 En combinant les noms de transitions, les co-noms et les symboles de contrôlé, un nouvel alphabet peut-être défini, l'\emph{alphabet d'annotation} : $\Phi=(\Theta-\Theta_r)\bigcup\bar{\Theta}\bigcup T_Q$.
 
-Avec $\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c?a,q)\}$, similaire à $\bar{\Theta}$ mais avec un nom pour chaque transition pour les actions de réception.
+$\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c?a,q)\}$, similaire à $\bar{\Theta}$ mais avec un nom pour chaque transition pour les actions de réception.
 
 
 \subsection{Trace annotée}
@@ -86,18 +90,17 @@ Avec $\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sig
 
 Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate. Cette fonction est décrite par l'algorithme \ref{alg:A}.
 
-
 \begin{algorithm}[H]
   	\begin{algorithmic}[1]
-    \REQUIRE un automate FIFO \fifo , une suite de noms de transitions $\sigma\in\Theta^*$
+    \REQUIRE un automate à files \fifo , une suite de noms de transitions $\sigma\in\Theta^*$
 		\ENSURE une trace annotée $\gamma\in\Phi^*$ représentant $\sigma$
 
     \STATE $\gamma\leftarrow\epsilon$
-    \FORALL {transition $\theta\in\sigma$}
-      \IF {$\theta$ correspond à une action de réception}
-        \STATE trouver $\theta_s\in\Theta$ correspondant à une action d'envoi antécédant dans $\sigma$ tel que les actions s'appliquent sur le même canal et le même symbole
+    \FORALL {nom de transition $\theta\in\sigma$}
+      \IF {$\delta(\theta)$ est une action de réception}
+        \STATE trouver $\theta_s\in\Theta$ correspondant à une action d'envoi antécédant dans $\sigma$ telle que les actions s'appliquent sur le même canal et le même symbole
         \STATE $\gamma\leftarrow$ $\gamma$ où $\theta_s$ est remplacé par $\bar{\theta_s}\in\bar{\Theta}$ \COMMENT {$\theta$ n'est pas ajouté à $\gamma$}
-      \ELSIF {$\theta$ correspond à une action d'envoi}
+      \ELSIF {$\delta(\theta)$ est une action d'envoi}
         \STATE $\gamma\leftarrow\gamma\theta$
       \ENDIF
     \ENDFOR
@@ -108,26 +111,24 @@ Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{tr
 	\caption{$\mathcal{A}:\Theta^*\rightarrow\Phi^*$}\label{alg:A}
 \end{algorithm}
 
-Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité des états.
+Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité.
 
-
-Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il fini par un symbole de $T_Q$ qui qu'aucun autre symbole de cet ensemble n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots de $L$ le sont.
+Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il fini par un symbole de $T_Q$ qui qu'aucun autre symbole de cet ensemble n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots $w\in L$ le sont.
 
 
 \begin{example}
-Soit l'automate $F$ représenté par la figure \ref{fig:fifoAB}. Soient les séquences $\sigma_1=\theta_2\theta_8$ et $\sigma_2=\theta_1\theta_3\theta_5\theta_2$. Alors, les traces annotées de ces traces sont : $\mathcal{A}(\sigma_1)=\theta_2\theta_8t_{(q_1,q_B)}=\gamma_1$ et $\mathcal{A}(\sigma_2)=\bar{\theta_1}\bar{\theta_5}t_{(q_0,q_B)}=\gamma_2$.
+Soit l'automate $F$ représenté par la figure \ref{fig:fifoAB}. Soient les traces $\sigma_1=\theta_2\theta_8$ et $\sigma_2=\theta_1\theta_3\theta_5\theta_2$. Alors, les traces annotées de ces traces sont : $\mathcal{A}(\sigma_1)=\theta_2\theta_8t_{(q_1,q_B)}=\gamma_1$ et $\mathcal{A}(\sigma_2)=\bar{\theta_1}\bar{\theta_5}t_{(q_0,q_B)}=\gamma_2$.
 Bien qu'elles soient toutes deux correctement formatées, $\gamma_1$ ne correspond à aucune exécution valide de $F$. Dès lors, $\gamma_1$ n'appartient pas au langage de traces annotées de $AL(F)$ contrairement à $\gamma_2$.
 
-Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'est pas correctement formaté : il est impossible que ce mot appartienne à $AL(F)$.
+Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'est pas correctement formatée : il est impossible que cette trace annotée appartienne à $AL(F)$.
 \end{example}
 
 
 \subsection{Fonction d'extension de trace}\label{ss:extension}
 
-Cette section défini \fl pour un langage arbitraire et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
+Cette section défini \fl pour un langage arbitraire $L$ et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
 
-
-La \emph{fonction d'extension} $Post(L)$ permet d'étendre une trace annotée $\gamma$ (ou tout autre mot mais cela n'est pas pertinent) avec le symbole $\theta$. Si $\gamma$ est correctement formée, $source(\theta)$ et $cible(\theta)$ donnent respectivement la source et la cible d'une transition $\delta$.
+La \emph{fonction d'extension} $Post(L)$ permet d'étendre une trace annotée $\gamma$ avec le symbole $\theta$. Si $\gamma$ est correctement formée, $source(\theta)$ et $cible(\theta)$ donnent respectivement la source et la cible d'une transition $\delta$.
 
 $$
 Post(\gamma,\theta) = \left\{ \begin{array}{ll}
@@ -146,7 +147,7 @@ Posons $Post(\gamma)=\bigcup_{\theta\in\Theta}Post(\gamma,\theta)$ et $Post(L)=\
   Soit \fl$=Post(L)\cup\{t_{q0}\}$ où $q_0$ est l'état de contrôle initial. \fl est une opération monotone sur les ensemble c'est-à-dire qu'elle préserve l'inclusion d'ensembles. De plus, $AL(F)$ est un point fixe minimal de \fl.
 \end{theorem}
 
-Les preuves sont en annexe de \cite{Vardhan04} mais peut-être est-il pertinent de les réécrire ici. \todo{étudier les preuves des théorèmes 1 et 2 de vardhan et les réécrire}
+La preuve de ce théorème est disponible en annexe de \cite{Vardhan04}.
 
 Le théorème \ref{thm:fl} donne bien une façon de répondre à la requête d'équivalence dans une direction. Alors, si $A\oplus B$ donne la différence symétrique entre deux ensembles (l'union à l'exception de leur intersection), le contre-exemple à l'équivalence se trouve dans $AL(F)\oplus L$.
 
@@ -169,4 +170,4 @@ Plusieurs cas sont possibles :
   \end{itemize}
 \end{enumerate}
 
-Attention. Le langage $L$ n'est pas forcément $AL(F)$ dû à cette équivalence limitée (à un sens). Ce pourrait très bien être un autre point fixe contenant $AL(F)$ ou un autre ensemble contenant une trace annotée menant à un état qui n'est pas sûr. Cependant, ce n'est pas important tant que seule la propriété de sécurité est considérée.
+Le langage $L$ n'est pas forcément $AL(F)$ dû à cette équivalence limitée (à un sens). Ce pourrait très bien être un autre point fixe contenant $AL(F)$ ou un autre ensemble contenant une trace annotée menant à un état qui n'est pas sûr. Cependant, ce n'est pas important tant que seule la propriété de sécurité est considérée.
