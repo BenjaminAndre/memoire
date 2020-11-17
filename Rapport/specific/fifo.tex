@@ -1,4 +1,4 @@
-L'article \cite{Vardhan04} se concentre sur un automate plus général : l'automate FIFO. Celui-ci est Turing Complete. De la sorte, l'équipe propose une réponse pour un ensemble plus large de langage. Cette section décrit les automates FIFO.
+L'article \cite{Vardhan04} se concentre sur un automate plus général : l'automate à files. Celui-ci est Turing Complete. De la sorte, l'équipe propose une réponse pour un ensemble plus large de langage. Cette section décrit les automates à files.
 
 
 
@@ -11,7 +11,7 @@ L'article \cite{Vardhan04} se concentre sur un automate plus général : l'autom
 \subsection{Définitions}\label{ss:fifodef}
 
 \begin{definition}
-  Un \emph{automate FIFO} \fifo est défini comme suit :
+  Un \emph{automate à files} \fifo est défini comme suit :
   \begin{itemize}
     \item $Q$ est un ensemble fini d'\emph{états de contrôle}
     \item $C$ est un ensemble fini de \emph{noms de canaux}
@@ -22,16 +22,16 @@ L'article \cite{Vardhan04} se concentre sur un automate plus général : l'autom
     \begin{itemize}
       \item $c!m$ : C'est une action d'envoi. Le symbole $m$ est ajouté en fin de canal $c$.
       \item $c?m$ : C'est une action de réception. Le symbole $m$ est consommé en début de canal $c$.
-      \item $\tau$ : C'est une action interne. Aucun canal n'est manipulé.
+      \item $\tau$ : C'est une action interne. Aucun canal n'est modifié.
     \end{itemize}
   \end{itemize}
 \end{definition}
 
 Un automate $F$ défini un \emph{système de transitions} \tsys. $\mathcal{T}$ est l'objet qui permet de passer d'un \emph{état} à un autre.
 
-En effet, il existe les états de contrôles $q\in Q$, mais les états au sens d'un automate FIFO sont de forme $s \in S=Q\times(\Sigma^*)^C$. En particulier, un état $s=(q,w)$ avec $q\in Q$ un état de contrôle et $w\in (\Sigma^*)^C$ est un vecteur qui fait correspondre à chaque canal $c\in C$ un mot $w[c] \in \Sigma^*$ représentant le contenu de ce canal.
+En effet, il existe les états de contrôles $q\in Q$, mais les états au sens d'un automate à files sont de forme $s \in S=Q\times(\Sigma^*)^C$. En particulier, $s=(q,w)$ avec $q\in Q$ un état de contrôle et $w\in (\Sigma^*)^C$ est un vecteur qui fait correspondre à chaque canal $c\in C$ un mot $w[c] \in \Sigma^*$ représentant le contenu de ce canal.
 
-Dès lors, un état $s$ peut être compris comme étant composé d'un état et du contenu des différents canaux.
+Un état $s$ est composé d'un état de contrôle et du contenu des différents canaux.
 
 De plus, la \emph{fonction de transition} $\rightarrow:S\times\Theta\rightarrow S$ associe un état $s$ et un nom de transition $\theta$ à un état $s'$.
 
@@ -51,7 +51,7 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
 
 
 \begin{example}
-  Soit un automate FIFO $F$ tel que sont système de transitions corresponde à la figure \ref{fig:fifo1}. Chaque état de l'automate correspondant à un couple état de contrôle/mot, il est imprécis de référer au système de transitions comme étant l'automate. Cependant, par abus de langage, ceux-ci seront souvent confondus dans ce document.
+  Soit un automate à files $F$ tel que sont système de transitions corresponde à la figure \ref{fig:fifo1}. Chaque état de l'automate correspondant à un couple état de contrôle/mot, il est imprécis de référer au système de transitions comme étant l'automate. Cependant, par abus de langage, ceux-ci seront souvent confondus dans ce document.
 
   \begin{figure}[H]
     \centering
@@ -74,10 +74,10 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
       (D) edge node[above] {$\theta_7(b?0)$} (A)
       ;
     \end{tikzpicture}
-    \caption{Système de transitions de l'automate FIFO $F$}\label{fig:fifo1}
+    \caption{Système de transitions de l'automate à files $F$}\label{fig:fifo1}
   \end{figure}
 
-  On retrouve bien la définition d'un automate fifo \fifo avec :
+  On retrouve bien la définition d'un automate à files \fifo avec :
   \begin{itemize}
     \item $Q=\{q_0,q_1,q_2,q_3\}$
     \item $C=\{a,b\}$
@@ -104,9 +104,11 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
 
 \subsection{Produit cartésien}\label{ss:cartesien}
 
-Par soucis de simplicité, un automate FIFO (et son système de transitions servant à le représenter) peut être représenté comme plusieurs systèmes de transitions utilisant les mêmes canaux. Le \emph{produit cartésien} entre deux automates FIFO $A$ et $B$ retourne un nouvel automate FIFO $F=A \times B$. Dès lors, il est possible de représenter un automate FIFO en se concentrant sur ses parties et en les isolant \cite{Suresh20}. Ce produit cartésien fonctionne comme suit.
+Par soucis de simplicité, un automate à files (et son système de transitions servant à le représenter) peut être représenté comme plusieurs systèmes de transitions utilisant les mêmes canaux. Le \emph{produit cartésien} entre deux automates à files $A$ et $B$ retourne un nouvel automate $F=A \times B$. Dès lors, il est possible de représenter un automate à files en se concentrant sur ses parties et en les isolant \cite{Suresh20}. Cette propriété fait de l'automate à file un choix pertinent pour représenter des automates différents communiquant par des canaux. Dans une application pratique, cela pourrait être des programmes communiquant sur un réseau.
 
-Soient les automates FIFO \fifoA et \fifoB. Alors le système de transitions \tsys de l'automate FIFO $F=A\times B$ est composé de :
+Ce produit cartésien fonctionne comme suit.
+
+Soient les automates à files \fifoA et \fifoB. Alors le système de transitions \tsys de l'automate à files $F=A\times B$ est composé de :
 \begin{itemize}
   \item $S \subseteq (Q_A\times Q_B)\times (\Sigma^*)^C$ composé d'un couple d'états de contrôle de $Q_A$ et $Q_B$ et du contenu des différents canaux.
   \item $\Theta$ est un ensemble de noms de transitions.
@@ -133,7 +135,7 @@ De plus, ce nouvel automate est différent des deux autres, il n'est alors pas p
 
 
 \begin{example}
-  Soient deux automates FIFO $A$ et $B$ tels que représentés par leur systèmes de transitions donnés par la figure \ref{fig:fifoAB}.
+  Soient deux automates à files $A$ et $B$ tels que représentés par leur systèmes de transitions donnés par la figure \ref{fig:fifoAB}.
 
   \begin{figure}[H]
     \centering
@@ -151,7 +153,7 @@ De plus, ce nouvel automate est différent des deux autres, il n'est alors pas p
         (C) edge[bend left=40] node {$\theta_3(a!0)$} (A)
         ;
       \end{tikzpicture}
-      \caption{Automate FIFO A}
+      \caption{Automate à files A}
       \label{fig:fifoA}
       \end{subfigure}%
       \begin{subfigure}{0.5\textwidth}
@@ -166,14 +168,14 @@ De plus, ce nouvel automate est différent des deux autres, il n'est alors pas p
           (B) edge[bend left=20] node {$\theta_6(a!0)$} (A)
           ;
         \end{tikzpicture}
-        \caption{Automate FIFO B}
+        \caption{Automate à files B}
         \label{fig:fifoB}
       \end{subfigure}
-      \caption{Automates FIFO A et B représentés par leur système de transitions}
+      \caption{Automates à files A et B représentés par leur système de transitions}
       \label{fig:fifoAB}
     \end{figure}
 
-   L'automate FIFO $AB=A \times B$ est représenté par son sytème de transitions à la figure \ref{fig:fifocross}.
+   L'automate $AB=A \times B$ est représenté par son sytème de transitions à la figure \ref{fig:fifocross}.
 
     \begin{figure}[H]
       \centering
@@ -209,10 +211,10 @@ De plus, ce nouvel automate est différent des deux autres, il n'est alors pas p
         \draw [->] (F) ..  controls  ($(E)+(5cm,2cm)$) and
   ($(D)+(0cm,4cm)$).. node[right] {$\theta_{11}(a!0)$} (A);
       \end{tikzpicture}
-      \caption{Automate FIFO AB résultant du produit cartésien $A\times B$}
+      \caption{Automate AB résultant du produit cartésien $A\times B$}
       \label{fig:fifocross}
     \end{figure}
   \end{example}\label{ex:fifocross}
 
 
-  L'exemple \ref{ex:fifocross} suffit à se convaincre qu'on peut parler indistinctement de plusieurs systèmes de transition comme représentant un seul automate. Dans ce cas, il est sous-entend que l'automate en question est celui obtenu par produit cartésien.
+  L'exemple \ref{ex:fifocross} suffit à se convaincre qu'on peut parler indistinctement de plusieurs systèmes de transitions comme représentant un seul automate. Dans ce cas, il est sous-entendu que l'automate en question est celui obtenu par produit cartésien.
