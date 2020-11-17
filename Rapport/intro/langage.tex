@@ -17,12 +17,12 @@ Cette proposition est triviale par la définition de la concaténation.
 
 Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
 
-\begin{example}[Définition d'un langage] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
+\begin{example}[Langages] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
 	\begin{itemize}
 		\item $L=\{12,35,42,7,0\}$, un langage défini explicitement
 		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro, un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
 		\item $L$ contient tous les noms de villes belges. Ici $L$ est défini en langage courant.
-		\item $\emptyset$ est un langage pour tout alphabet.
+		\item $\emptyset$ est un langage sur tout alphabet.
 		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
 	\end{itemize}
 \end{example}
@@ -70,7 +70,7 @@ Les autres langages réguliers sont construits suivant différentes règles d'in
 	\item Si $E$ et $F$ sont des expressions régulières, alors $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est associative et la priorité est à gauche.
 \end{itemize}
 
-\begin{example}[Expression régulière]
+\begin{example}[Expressions régulières]
 	Soit l'expression $E = (b+ab)b^*a(a+b)^*$ qui décrit le langage $L=L(E)$.\\
 	\begin{itemize}
 		\item Le mot $ba$ fait partie de $L$. En effet, $ba=b\epsilon a \epsilon=(b)b^0a(a+b)^0$, ce qui respecte bien la définition de $E$.

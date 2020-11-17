@@ -8,18 +8,18 @@ Cette section décrit le \emph{Table Filling Algorithm}, algorithme permettant d
 
 
 
-\subsection{Relation \re}\label{ss:re}
+\subsection{Relation \rf}\label{ss:re}
 
-Soit un ADF \automaton. Définissons la relation \re entre deux états :
-$$xR_Ey \iff (\forall w \in \Sigma^*,\hdelta(x,w) \in F \iff \hdelta(y,w) \in F)$$
+Soit un ADF \automaton. Définissons la relation \rf entre deux états :
+$$xR_Fy \iff (\forall w \in \Sigma^*,\hdelta(x,w) \in F \iff \hdelta(y,w) \in F)$$
 
 Intuitivement, ces deux états sont en relation si tout mot lu à partir de ceux-ci mène à des états étant simultanément acceptants ou non.
 
-\begin{proposition}[\re]
- \re est une relation d'équivalence.
+\begin{proposition}[\rf]
+ \rf est une relation d'équivalence.
 \end{proposition}
 
-\begin{proof}[\re est une relation d'équivalence] Montrer que \re est une relation d'équivalence revient à montrer qu'elle est réflexive, transitive et symétrique.
+\begin{proof}[\rf est une relation d'équivalence] Montrer que \rf est une relation d'équivalence revient à montrer qu'elle est réflexive, transitive et symétrique.
  \begin{itemize}
 	 \item \textbf{Réflexive :} Soient un état $x \in Q_M$ et un mot $w \in \Sigma^*$. Alors, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(x,w) \in F$ et par définition, $xR_Ex$.
 	 \item \textbf{Transitive :} Soient les états $x,y,z \in Q_M$ tels que $xR_Ey$ et $yR_Ez$ ainsi que $w \in \Sigma^*$. Par hypothèse, $\hat{\delta}(x,w) \in F \iff \hat{\delta}(y,w)\in F$ et $\hat{\delta}(y,w) \in F\iff \hat{\delta}(z,w) \in F$. Par transitivité de l'implication, on obtient $\hat{\delta}(x,w) \in F \iff \hat{\delta}(z,w)\in F$. On a donc $xR_Ez$.
@@ -29,21 +29,21 @@ Intuitivement, ces deux états sont en relation si tout mot lu à partir de ceux
 \end{proof}
 
 \begin{corollary}
- \re répartit les états de $Q$ en classes d'équivalence.
+ \rf répartit les états de $Q$ en classes d'équivalence.
 \end{corollary}
 
-La classe d'équivalence de tous les états en relation \re avec $q$ (qui sert alors de \emph{représentant}) se note $[[q]]$ ou par une lettre majuscule, typiquement $S$ ou $T$.
+La classe d'équivalence de tous les états en relation \rf avec $q$ (qui sert alors de \emph{représentant}) se note $[[q]]$ ou par une lettre majuscule, typiquement $S$ ou $T$.
 
 \begin{corollary}\label{col:qclasses}
   Si $Q$ est fini, alors le nombre de classe d'équivalences est fini aussi. Chaque classe d'équivalence $[[q]]$ contient un nombre d'états fini.
 \end{corollary}
 
-\begin{proposition}[Congruence de \re]
- \re est congruente à droite, c'est-à-dire $$xR_Ey \implies \forall a \in \Sigma, \delta(x,a)R_E\delta(y,a)$$
+\begin{proposition}[Congruence de \rf]
+ \rf est congruente à droite, c'est-à-dire $$xR_Fy \implies \forall a \in \Sigma, \delta(x,a)R_F\delta(y,a)$$
 \end{proposition}
 
-\begin{proof}[Congruence de \re]\label{proof:rmcongruency}
- Montrons que si la relation est vraie pour deux états, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_Ey$. Soit un symbole $a \in \Sigma$. Par hypothèse,
+\begin{proof}[Congruence de \rf]\label{proof:rmcongruency}
+ Montrons que si la relation est vraie pour deux états, elle reste valable pour les états atteints par la lecture d'un symbole quelconque. Soient les états $x,y \in Q_M$ tels que $xR_Fy$. Soit un symbole $a \in \Sigma$. Par hypothèse,
  $$\forall w \in \Sigma^*, \hat{\delta}(x, w) \in F \iff \hat{\delta}(y, w) \in F$$
  C'est donc vrai en particulier pour $w = au, u \in \Sigma^*$. Dès lors,
  $$\hat{\delta}(x, au) \in F\iff \hat{\delta}(y, au)\in F$$
@@ -67,16 +67,16 @@ La classe d'équivalence de tous les états en relation \re avec $q$ (qui sert a
 
 \subsection{Algorithme}\label{ss:tfa}
 
-Certains états d'un automate peuvent être \emph{équivalents} selon la relation \re. L'information que ceux-ci proposent est alors redondante. Dès lors, l'automate peut être simplifié pour offrir la même information de façon plus compacte. Une façon de détecter ces équivalences est de construire un tableau via le \emph{table filling algorithm}. Le tableau obtenu est la \emph{table de différenciation}.
+Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rf. L'information que ceux-ci proposent est alors redondante. Dès lors, l'automate peut être simplifié pour offrir la même information de façon plus compacte. Une façon de détecter ces équivalences est de construire un tableau via le \emph{table filling algorithm}. Le tableau obtenu est la \emph{table de différenciation}.
 
-Celui-ci détecte les paires \emph{différenciables} (cochées dans le tableau construit par l'algorithme) récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel que $\hdelta(p,w)$ est un état acceptant et $\hdelta(q,w)$ ne l'est pas ou vice-versa. $w$ sert alors de \emph{mot témoin}. L'algorithme procède récursivement comme suit :
+Celui-ci détecte les paires \emph{différenciables} récursivement sur un automate \automaton. Un paire $\{p,q\}$ est différenciable s'il existe un mot $w$ tel que $\hdelta(p,w)$ est un état acceptant et $\hdelta(q,w)$ ne l'est pas ou vice-versa. $w$ sert alors de \emph{mot témoin}. L'algorithme procède récursivement comme suit :
 
 \textbf{Cas de base :} Si $p$ est un état acceptant et que $q$ ne l'est pas, alors la paire $\{p,q\}$ est différenciable. Le mot témoin est $\epsilon$. La cellule correspondante dans le tableau est cochée.
 
 \textbf{Pas de récurrence : } Soient $p,q,r,s$ des états de $Q$ et un symbole $a \in \Sigma$ tel que $\delta(p,a)=r$ et $\delta(q,a)=s$. Si $r$ et $s$ sont différenciables (les cellules sont cochées dans le tableau) alors $p$ et $q$ le sont aussi. En effet, il existe un mot \emph{témoin} $w$ qui permet de différencier $r$ et $s$. Alors le mot $aw$ est le mot témoin qui permet de différencier $p$ et $q$. Les cellules de ces états sont cochées.
 
 \begin{theorem}[Table de différenciation]
- Si deux états ne sont pas différenciés par le table filling algorithm, les états sont équivalents (ils respectent la relation \re).
+ Si deux états ne sont pas différenciés par le table filling algorithm, les états sont équivalents (ils respectent la relation \rf).
 \end{theorem}
 
 \begin{example}[Table de différenciation] Voici une application du table filling algorithm sur l'automate $A_2$, version réduite de l'automate $A_1$ de la figure \ref{fig:a1}.
@@ -190,7 +190,7 @@ La première étape est de remplir la table de différenciation avec l'algorithm
 \label{tab:tfaa2}
 \end{table}
 
-D'après le théorème, comme $q_1$ et $q_5$ ne sont pas différenciés, on a $q_1$\re$q_5$.
+D'après le théorème, comme $q_1$ et $q_5$ ne sont pas différenciés, on a $q_1$\rf$q_5$.
 
 \end{example}
 
@@ -243,10 +243,10 @@ La complexité totale alors revient à $\mathcal{O}(kn^2)$.
 
 
 \subsection{Appartenance et équivalence}\label{ss:eqauto}
-Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer des langages représentés au complet n'est pas toujours possible et rarement efficace. Grâce à de légères modifications à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
+Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer des langages représentés de façon ensembliste n'est pas toujours possible et rarement efficace. Grâce à de légères modifications apportées à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
 
 
-Considérons les ADF $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}
+Considérons les ADF $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \ref{fig:ai}. Les états ont été renommés pour simplifier la suite de l'exemple. 
 
 \begin{minipage}{0.4\linewidth}
  \begin{figure}[H]
@@ -300,7 +300,7 @@ Considérons les ADF $A_H$ et $A_I$ donnés dans les figures \ref{fig:ah} et \re
 
 	 ;
 	 \end{tikzpicture}
-	 \caption{Automate $A_I$, provenant également de \cite{Hopcroft79}. Les états ont été renommés. }\label{fig:ai}
+	 \caption{Automate $A_I$, provenant également de \cite{Hopcroft79}.}\label{fig:ai}
  \end{figure}
 \end{minipage}
 

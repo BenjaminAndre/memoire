@@ -55,13 +55,14 @@ Attention cependant : cet algorithme part du postulat que le langage étudié es
 Les prochaines section introduisent les différentes notion notemment necéssaires à la compréhension du fonctionnement de la table d'observation.
 
 
-% ██████  ██
-% ██   ██ ██
-% ██████  ██
-% ██   ██ ██
-% ██   ██ ███████
+% ██████  ██     ██
+% ██   ██ ██     ██
+% ██████  ██  █  ██
+% ██   ██ ██ ███ ██
+% ██   ██  ███ ███
 
-\subsection{La relation \rl}
+
+\subsection{La relation \rw}
 
 Soit un langage $L$ sur un alphabet $\Sigma$.
 
@@ -96,28 +97,28 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 
 \subsection{Théorème de Myhill-Nerode}
 
-	Avant d'introduire la théorème de Myhill-Nérode, il faut s'intéresser à la relation d'équivalence \rb, qui facilite l'écriture de la preuve du théorème.
+	Avant d'introduire la théorème de Myhill-Nérode, il faut s'intéresser à la relation d'équivalence \rc, qui facilite l'écriture de la preuve du théorème.
 
-	\begin{definition}[Relation \rb]
-		Soit un automate \automaton. Soient deux mots $x,y\in\Sigma^*$. Alors la relation $xR_By$ est vraie si et seulement si $\hdelta(q_0,x)=\hdelta(q_0,y)$.
+	\begin{definition}[Relation \rc]
+		Soit un automate \automaton. Soient deux mots $x,y\in\Sigma^*$. Alors la relation $xR_Cy$ est vraie si et seulement si $\hdelta(q_0,x)=\hdelta(q_0,y)$.
 	\end{definition}
 
-	Intuitivement, deux mots sont en relation \rb par rapport à un automate s'ils mènent à un même état dans celui-ci.
+	Intuitivement, deux mots sont en relation \rc par rapport à un automate s'ils mènent à un même état dans celui-ci (ou des états équivalents).
 
 	\begin{lemma}
-		\rb est une relation d'équivalence congruente à droite.
+		\rc est une relation d'équivalence congruente à droite.
 	\end{lemma}
 
 	\begin{proof}
 		Prouver qu'une relation est dite d'équivalence, il faut prouver que celle-ci est transitive, réflexive et symétrique.
 		Soit un automate \automaton.
 		\begin{itemize}
-		\item \rb est transitive. Soient $x,y,z\in\Sigma^*$. Supposons que $xR_By$ et $yR_Bz$. On a bien $\hdelta(q_0,x)=\hdelta(q_0,y)=\hdelta(q_0,z)$ par la transitivité de l'équivalence entre deux états.
-		\item \rb est réflexive. Soit $y\in\Sigma^*$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,y)$ par réflexiviré de l'équivalence sur un état.
-		\item \rb est symétrique. Soient $x,y\in\Sigma^*$. Supposons que $xR_By$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,x)$ par symétrie de l'équivalence entre deux états.
+		\item \rc est transitive. Soient $x,y,z\in\Sigma^*$. Supposons que $xR_Cy$ et $yR_Bz$. On a bien $\hdelta(q_0,x)=\hdelta(q_0,y)=\hdelta(q_0,z)$ par la transitivité de l'équivalence entre deux états.
+		\item \rc est réflexive. Soit $y\in\Sigma^*$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,y)$ par réflexiviré de l'équivalence sur un état.
+		\item \rc est symétrique. Soient $x,y\in\Sigma^*$. Supposons que $xR_Cy$. On a bien $\hdelta(q_0,y)=\hdelta(q_0,x)$ par symétrie de l'équivalence entre deux états.
 		\end{itemize}
 
-		\rb est congruente à droite. Soient $x,y\in\Sigma^*$ tels que $xR_By$. Soit $z\in\Sigma^*$. Montrons que $xzR_Byz$. $\hdelta(q_0,xz)=\hdelta(\hdelta(q_0,x),z)=\hdelta(\hdelta(q_0,y),z)=\hdelta(q_0,yz)$.
+		\rc est congruente à droite. Soient $x,y\in\Sigma^*$ tels que $xR_Cy$. Soit $z\in\Sigma^*$. Montrons que $xzR_Cyz$. $\hdelta(q_0,xz)=\hdelta(\hdelta(q_0,x),z)=\hdelta(\hdelta(q_0,y),z)=\hdelta(q_0,yz)$.
 
 		\hfill$\square$
 	\end{proof}
@@ -135,25 +136,25 @@ Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène
 	\begin{proof}\label{proof:mn}
 		La preuve d'équivalence se fait en prouvant chaque implication de façon cyclique :\\
 
-		$(1)\rightarrow(2)$ Supposons que (1) soit vrai, c'est-à-dire que le langage $L$ est accepté par un automate déterministe \automaton. Considérons la relation d'équivalence congruente à droite \rb. Soit un mot $w\in\Sigma^*$. Alors tout mot $x\in\Sigma^*$ tel que $\hdelta(q_0,x)=\hdelta(q_0,w)$ appartient à la même classe d'équivalence $[w]$. Or, la fonction $\hdelta$ retourne un état $q\in Q$. Chaque classe d'équivalence sur $\Sigma$ correspond alors à un état de l'automate. Comme $Q$ est fini, \rb est d'index fini. De plus, un sous-ensemble des classes d'équivalences doit correspondre aux états acceptants $q\in F$. Alors, $L$ est l'union de ces classes d'équivalence.
+		$(1)\rightarrow(2)$ Supposons que (1) soit vrai, c'est-à-dire que le langage $L$ est accepté par un automate déterministe \automaton. Considérons la relation d'équivalence congruente à droite \rc. Soit un mot $w\in\Sigma^*$. Alors tout mot $x\in\Sigma^*$ tel que $\hdelta(q_0,x)=\hdelta(q_0,w)$ appartient à la même classe d'équivalence $[w]$. Or, la fonction $\hdelta$ retourne un état $q\in Q$. Chaque classe d'équivalence sur $\Sigma$ correspond alors à un état de l'automate. Comme $Q$ est fini, \rc est d'index fini. De plus, un sous-ensemble des classes d'équivalences doit correspondre aux états acceptants $q\in F$. Alors, $L$ est l'union de ces classes d'équivalence.
 
-		$(2)\rightarrow(3)$ Supposons qu'il existe une relation $E$ satisfaisant (2). Montrons que chaque classe de celle-ci est intégralement contenue dans une seule classe de \rl. Puisque $E$ est d'index fini, c'est un argument suffisant pour montrer que \rl est d'index fini. Soit $x,y$ tels que $xEy$. Comme $E$ est congruente à droite, pour tout mot $z \in \Sigma^*$, on sait que $xzEyz$. Comme $L$ est un union de ces classes d'équivalence, $xzEyz$ implique que $xz \in L \Leftrightarrow yz \in L$, ce qui revient à $xR_Ly$. Cela signifie que tout mot dans la classe d'équivalence de $x$ définie par $E$ se retrouve dans la même classe d'équivalence que $x$ cette fois définie par \rl. Ceci permet de conclure que chaque classe d'équivalence de $E$ est contenue dans une classe d'équivalence de \rl et donc que \rl est d'index fini.
+		$(2)\rightarrow(3)$ Supposons qu'il existe une relation $E$ satisfaisant (2). Montrons que chaque classe de celle-ci est intégralement contenue dans une seule classe de \rw. Puisque $E$ est d'index fini, c'est un argument suffisant pour montrer que \rw est d'index fini. Soit $x,y$ tels que $xEy$. Comme $E$ est congruente à droite, pour tout mot $z \in \Sigma^*$, on sait que $xzEyz$. Comme $L$ est un union de ces classes d'équivalence, $xzEyz$ implique que $xz \in L \Leftrightarrow yz \in L$, ce qui revient à $xR_Wy$. Cela signifie que tout mot dans la classe d'équivalence de $x$ définie par $E$ se retrouve dans la même classe d'équivalence que $x$ cette fois définie par \rw. Ceci permet de conclure que chaque classe d'équivalence de $E$ est contenue dans une classe d'équivalence de \rw et donc que \rw est d'index fini.
 
-		$(3)\rightarrow(1)$ Considérons la relation \rl définie précédemment. Soit un automate \automaton défini comme suit :
+		$(3)\rightarrow(1)$ Considérons la relation \rw définie précédemment. Soit un automate \automaton défini comme suit :
 		\begin{itemize}
-			\item Chaque état $q\in Q$ correspond à une classe d'équivalence de \rl.
-			\item Comme \rl porte sur un langage, l'alphabet $\Sigma$ de celui-ci est déjà défini.
-			\item Si $[[\epsilon]]$ est la classe d'équivalence de $\epsilon$ sur \rl, $q_0$ correspond à cette classe.
-			\item Si $q$ représente $[[x]]$ et $q_1$ représente $[[xa]]$, alors $\delta(q,a)=q_1$. Cette définition est cohérente car \rl est congruente à droite.
+			\item Chaque état $q\in Q$ correspond à une classe d'équivalence de \rw.
+			\item Comme \rw porte sur un langage, l'alphabet $\Sigma$ de celui-ci est déjà défini.
+			\item Si $[[\epsilon]]$ est la classe d'équivalence de $\epsilon$ sur \rw, $q_0$ correspond à cette classe.
+			\item Si $q$ représente $[[x]]$ et $q_1$ représente $[[xa]]$, alors $\delta(q,a)=q_1$. Cette définition est cohérente car \rw est congruente à droite.
 			\item $F = \{[[x]]|x \in L\}$.
 		\end{itemize}
-		Cet automate est déterministe par la définition de $\delta$ et fini car $Q$ l'est, le nombre de classes de \rl étant fini par hypothèse. De plus, cet automate accepte tout mot $x\in L$ puisque $\delta(q_0,x)=[[x]]\in F$(par définition, puisque $x\in L$).
+		Cet automate est déterministe par la définition de $\delta$ et fini car $Q$ l'est, le nombre de classes de \rw étant fini par hypothèse. De plus, cet automate accepte tout mot $x\in L$ puisque $\delta(q_0,x)=[[x]]\in F$(par définition, puisque $x\in L$).
 		\hfill$\square$
 	\end{proof}
 
 
 	\begin{corollary}
-		La partie $(3)\rightarrow(1)$ de la preuve \ref{proof:mn} donne une méthode permettant de construire un ADF à partir des classes d'équivalences de la relation \rl.
+		La partie $(3)\rightarrow(1)$ de la preuve \ref{proof:mn} donne une méthode permettant de construire un ADF à partir des classes d'équivalences de la relation \rw.
 	\end{corollary}
 
 On peut prouver que l'automate obtenu de cette façon est l'automate minimal de $L$. Une preuve est disponible dans l'ouvrage \cite{Hopcroft79} en lien avec le théorème 3.10.
@@ -183,7 +184,7 @@ On peut prouver que l'automate obtenu de cette façon est l'automate minimal de 
 	\end{proof}
 
 	\begin{corollary}
-		Le nombre de classes d'équivalence sur \ro est inférieur ou égal à celui de classes d'équivalence sur \rl.
+		Le nombre de classes d'équivalence sur \ro est inférieur ou égal à celui de classes d'équivalence sur \rw.
 	\end{corollary}
 
 	Cette table $O$ représente la compréhension actuelle de l'élève du langage $L$. D'itération en itération, $R_O$ représente de mieux en mieux $R_L$ jusqu'à ce que l'automate induit de cette table soit jugé équivalent par le professeur.
@@ -310,7 +311,7 @@ Le pseudocode de l'algorithme d'Angluin est fourni par l'algorithme \ref{alg:ang
 		\ENDFOR
 	\end{algorithmic}
 \end{algo}
- 
+
 Considérons l'automate $A_3$ de la figure \ref{fig:a3} construit à la section \ref{ss:mini} sur la minimisation.
 
 %\todo{Marquer la différence entre $R_L$ et $R_O$}
