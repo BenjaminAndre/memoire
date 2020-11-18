@@ -11,9 +11,9 @@ $$\bigcup_{0 \leq i \leq n_q}\Pi_{0 \leq j \leq k}U_q(i,c_j)$$
 
 Où $U_q(i,c_j)$ est un langage régulier pour le contenu du canal $c_j$ sur l'état $q$. $n_q$ est le nombre de langages réguliers utilisés pour définir cette propriété par union.
 
-Un état $s=(q,[w_0,w_1,\dots,w_k])$ est \emph{sécurisé} s'il n'existe pas $i,j \in \mathbb{N}$ tels que $w_j \in U_q(i,c_j)$.
+Un état $s=(q,[w_0,w_1,\dots,w_k])$ est \emph{sécurisé} s'il n'existe pas $i,j \in \mathbb{N}$ tels que $w_j \in U_q(i,c_j)$. Si tous les états d'un automate sont sécurisé, l'automate est également \emph{sécurisé}.
 
-Si un état n'est pas sécurisé, il est \emph{à risque}.
+Si un état n'est pas sécurisé, il est \emph{à risque}. S'il existe au moins un état à risque dans un automate, celui-ci est \emph{à risque}.
 
 
 

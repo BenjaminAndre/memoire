@@ -162,7 +162,13 @@ Plusieurs cas sont possibles :
           \item Sinon, c'est qu'il existe $w'\in L$ tel que $w\in Post(w')$ . $Post()$ d'une annotation valide retourne un annotation valide. Par contraposée, si $w$ est invalide, $w'$ l'est aussi. Dès lors, $w'\notin AL(F)$ et donc $w'\in(AL(F)\oplus L)$.
       \end{itemize}
   \end{itemize}
-  \item \fl$\subsetneq L$. \todo{expliquer la théorie des préfixpoints là}
+  \item \fl$\subsetneq L$. Si un \emph{point préfixe} est un ensemble $Z$ qui réduit par l'application de $\mathcal{F}$ ($\mathcal{F}(Z)\subseteq Z$), alors $L$ est un point préfixe.
+
+   En appliquant $\mathcal{F}$ des deux côtés, ce qui préserve l'inclusion car $\mathcal{F}$ est monotone, on obtient $\mathcal{F}(\mathcal{F}(L))\subsetneq\mathcal{F}(L)$.
+
+   Donc, $\mathcal{F}(L)$ est également un point préfixe. Soit $w$ un mot dans l'ensemble $L-\mathcal{F}(L)$. Comme $w$ n'est pas dans l'intersection de ces deux point préfixes, il ne fait pas partie du point fixe minimum $AL(F)$. En effet, selon la théorie des points fixes de Knaster-Tarski (annexe \ref{app:tarski}), un point fixe minimal est également l'intersection de tous les points préfixes de $\mathcal{F}$.
+
+   Dès lors, $w\in AL(F)\oplus L$.
   \item \fl$=L$. Soit \wl l'ensemble des traces annotées menant à des états n'étant pas sûrs. \wl est défini et une formule est donnée pour le calculer dans la section \ref{sec:unsafe}.
   \begin{itemize}
     \item Si \wl est vide, comme $L$ est un point fixe (notre hypothèse pour ce point), le processus d'apprentissage peut être arrêté et la sécurité de l'automate est confirmée.
