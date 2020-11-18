@@ -1,12 +1,12 @@
 \begin{algo}[Appartenance à $AL(F)$]\label{alg:membership}
   \begin{algorithmic}[1]
-    \REQUIRE une trace annotée $\gamma\in\Phi^*$ et un automate FIFO \fifo
+    \REQUIRE une trace annotée $\gamma\in\Phi^*$ et un automate à files \fifo
     \ENSURE si $\gamma\in AL(F)$ ou non
-    \IF {$t$ est mal formaté}
+    \IF {$\gamma$ est mal formatée}
       \RETURN faux
     \ENDIF
     \STATE candidats $\leftarrow\{(q_0,\epsilon^c)\}$
-    \FORALL {symbole $\phi \in t$}
+    \FORALL {symbole $\phi \in \gamma$}
       \IF {$\phi \in T_Q$}
         \STATE \COMMENT {Fin du mot}
         \FORALL {$(q,w)\in$ candidats}
@@ -42,3 +42,16 @@
     \ENDFOR
   \end{algorithmic}
 \end{algo}
+
+
+\subsubsection*{Note d'aide à la lecture}
+
+Cet algorithme a 3 étapes principales :
+\begin{itemize}
+  \item La progression : un nouveau symbole est lu et les états qui le peuvent passent au nouvel état en suivant une transition. Les canaux sont mis à jour.
+  \item L'extension : chaque candidat génère tous les candidats atteignables en consommant ce qu'il reste dans les canaux jusqu'à ce qu'ils soient vide ou qu'aucune transition ne permette de continuer.
+  \item La vérification : une fois que l'algorithme a progressé jusqu'à la fin de $\gamma$, s'il reste des candidats, il vérifie si l'état de contrôle final correspond bien au symbole en fin de $\gamma$.
+\end{itemize}
+
+Intuitivement, si il y a $n$ états de contrôle et $m$ symboles, cet algorithme me semble être dans le pire des cas en $\mathcal{O}(mn^m)$. \todo{une vérification formelle s'il est validé}. Il est est linéaire en le nombre d'états explorés.
+Par contre comme un symbole est consommé à chaque étape, il s'arrête toujours.
