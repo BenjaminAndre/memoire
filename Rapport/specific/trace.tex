@@ -1,4 +1,4 @@
-Cette section s'intéresse aux langages qui peuvent être associés à un automate. La section \ref{ss:trace} défini le langage de trace d'un automate. Celui-ci est rarement régulier. Les sections suivantes s'appuyent sur \cite{Vardhan04} pour proposer un langage simplifié, plus souvent régulier, qui représente ce langage de trace. Finalement, la section \ref{ss:extension} défini une fonction $\mathcal{F}$ qui étend une trace et explique en quoi cela aide à faciliter le processus d'apprentissage.
+Cette section s'intéresse aux langages qui peuvent être associés à un automate. La section \ref{ss:trace} définit le langage de traces d'un automate. Celui-ci est rarement régulier. Les sections suivantes s'appuyent sur \cite{Vardhan04} pour proposer un langage simplifié, plus souvent régulier, qui représente ce langage de traces. Finalement, la section \ref{ss:extension} définit une fonction $\mathcal{F}$ qui étend une trace et explique en quoi cela aide à faciliter le processus d'apprentissage. \todo{changer formulation ou expliquer ce qu'on apprend}
 
 
 % ██       █████  ███    ██  ██████
@@ -9,17 +9,17 @@ Cette section s'intéresse aux langages qui peuvent être associés à un automa
 
 \subsection{Langage tracé}\label{ss:trace}
 
-Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section défini les éléments permettant d'arriver à la construction d'un tel langage.
+Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section définit les éléments permettant d'arriver à la construction d'un tel langage.
 
 Dans un système de transitions \tsys, la fonction de transition $\rightarrow:S\times\Theta\rightarrow S$ permet de définir le passage d'un état à un autre.
 
 La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture transitive et réflexive de $\rightarrow$.
 
-Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1)(p_2,w_2)...(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace de chemin}.
+Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace de chemin}.
 
 \begin{definition} Soit un automate à files $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
 
-  Le \emph{langage de trace} d'un automate $F$ est
+  Le \emph{langage de traces} d'un automate $F$ est
 
   $$
   L(F)=\{\sigma\in\Theta^*|\exists s=(p,w) \text{ tel quel } s_0\xrightarrow{\sigma}s\}
@@ -29,14 +29,14 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 \begin{example}
   Considérons l'automate $F$ de la figure \ref{fig:fifo1}.
 
-  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas un chemin. En effet,
+  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas une trace. En effet, on a
   $$
   (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
   $$
 
-  Mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas. Noter quer $\sigma$ est un mot du langage de trace et un chemin dans l'automate à files.
+  mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
 
-  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est un chemin dans $F$ :
+  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est une trace. En effet, on a :
   \begin{equation*}
     \begin{gathered}
       (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_2}
@@ -56,7 +56,7 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 \end{example}
 
 
-
+\todo{Explication du problème laissant le calcul de W à plus tard}
 
 
 
@@ -71,7 +71,7 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 
 \subsection{Alphabet d'annotation}
 
-Le langage de trace en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
+Le langage de traces en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
 
 Pour ce faire, pour chaque nom de transition correspondant à une action d'envoi, un \emph{co-nom} est défini :
 $$
@@ -80,19 +80,17 @@ $$
 
 De plus, un \emph{symbole de contrôle} est créé pour chaque état de contrôle : $T_Q = \{t_q | q\in Q\}$.
 
-En combinant les noms de transitions, les co-noms et les symboles de contrôlé, un nouvel alphabet peut-être défini, l'\emph{alphabet d'annotation} : $\Phi=(\Theta-\Theta_r)\bigcup\bar{\Theta}\bigcup T_Q$.
-
-$\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c?a,q)\}$, similaire à $\bar{\Theta}$ mais avec un nom pour chaque transition pour les actions de réception.
+En combinant les noms de transitions, les co-noms et les symboles de contrôle, un nouvel alphabet peut être défini, l'\emph{alphabet d'annotation} : $\Phi=(\Theta-\Theta_r)\bigcup\bar{\Theta}\bigcup T_Q$. Dans cet alphabet, on a $\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c?a,q)\}$, similaire à $\bar{\Theta}$ mais avec un nom pour chaque transition pour les actions de réception.
 
 
 \subsection{Trace annotée}
 
 
-Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate. Cette fonction est décrite par l'algorithme \ref{alg:A}.
+Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate à file $F$. Cette fonction est décrite par l'algorithme \ref{alg:A}.
 
 \begin{algorithm}[H]
   	\begin{algorithmic}[1]
-    \REQUIRE un automate à files \fifo , une suite de noms de transitions $\sigma\in\Theta^*$
+    \REQUIRE un automate à files \fifo , une trace $\sigma\in L(F)^*$
 		\ENSURE une trace annotée $\gamma\in\Phi^*$ représentant $\sigma$
 
     \STATE $\gamma\leftarrow\epsilon$
@@ -104,16 +102,16 @@ Soit $\mathcal{A}:\Theta^*\rightarrow\Phi^*$ une fonction associant une \emph{tr
         \STATE $\gamma\leftarrow\gamma\theta$
       \ENDIF
     \ENDFOR
-    \STATE trouver $q$ l'état de contrôle tel que $\delta(\theta)=(p,a,q)$ avec $p\in Q,a\in((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\})$
+    \STATE trouver $q$ l'état de contrôle tel que $s_O\xrightarrow{\sigma}s=(q,w)$ pour un certain $w\in(\Sigma^*)^c$
     \STATE $\gamma\leftarrow\gamma t_q$ avec $t_q\in T_Q$ le symbole de contrôle associé à $q$
 		\RETURN $\gamma$
 	\end{algorithmic}
-	\caption{$\mathcal{A}:\Theta^*\rightarrow\Phi^*$}\label{alg:A}
+	\caption{$\mathcal{A}:L(F)^*\rightarrow\Phi^*$}\label{alg:A}
 \end{algorithm}
 
 Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité.
 
-Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il fini par un symbole de $T_Q$ qui qu'aucun autre symbole de cet ensemble n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots $w\in L$ le sont.
+Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il finit par un symbole de $T_Q$ et aucune autre occurence d'un symbole de $T_Q$ n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots $\gamma\in L$ le sont.
 
 
 \begin{example}
@@ -126,13 +124,13 @@ Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'
 
 \subsection{Fonction d'extension de trace}\label{ss:extension}
 
-Cette section défini \fl pour un langage arbitraire $L$ et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
+Cette section définit \fl pour un langage arbitraire $L$ et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
 
-La \emph{fonction d'extension} $Post(L)$ permet d'étendre une trace annotée $\gamma$ avec le symbole $\theta$. Si $\gamma$ est correctement formée, $source(\theta)$ et $cible(\theta)$ donnent respectivement la source et la cible d'une transition $\delta$.
+La \emph{fonction d'extension} $Post(L)$ permet d'étendre une trace annotée $\gamma$ avec le symbole $\theta$. Si $\gamma$ est correctement formatée, $source(\theta)$ et $cible(\theta)$ donnent respectivement la source et la cible d'une transition $\delta$.
 
 $$
 Post(\gamma,\theta) = \left\{ \begin{array}{ll}
-    \emptyset & \text{si } \gamma \text{ n'est pas correctement formé ou si } \mathcal{C}(\gamma)\neq source(\theta)\\
+    \emptyset & \text{si } \gamma \text{ n'est pas correctement formaté ou si } \mathcal{C}(\gamma)\neq source(\theta)\\
     \{\mathcal{T}(\gamma)t_{cible(\theta)}\} & \text{sinon si }\delta(\theta)=(p,\tau,q) \text{ ou } \delta(\theta)=(p,c_i!a_j,q) \text{ avec }p,q\in Q\\
     \{deriv(\mathcal{T}(\gamma),\theta)t_{cible(\theta)}\}& \text{sinon si } \delta(\theta)=(p,c_i?a_j,q) \text{ avec }p,q\in Q \\
     \end{array} \right.
@@ -144,13 +142,14 @@ Posons $Post(\gamma)=\bigcup_{\theta\in\Theta}Post(\gamma,\theta)$ et $Post(L)=\
 
 
 \begin{theorem}\label{thm:fl}
-  Soit \fl$=Post(L)\cup\{t_{q0}\}$ où $q_0$ est l'état de contrôle initial. \fl est une opération monotone sur les ensemble c'est-à-dire qu'elle préserve l'inclusion d'ensembles. De plus, $AL(F)$ est un point fixe minimal de \fl.
+  Soit \fl$=Post(L)\cup\{t_{q0}\}$ où $q_0$ est l'état de contrôle initial. \fl est une opération monotone sur les ensemble c'est-à-dire qu'elle préserve l'inclusion d'ensembles. De plus, $AL(F)$ est le plus petit point fixe de \fl.
 \end{theorem}
 
 La preuve de ce théorème est disponible en annexe de \cite{Vardhan04}.
 
 Le théorème \ref{thm:fl} donne bien une façon de répondre à la requête d'équivalence dans une direction. Alors, si $A\oplus B$ donne la différence symétrique entre deux ensembles (l'union à l'exception de leur intersection), le contre-exemple à l'équivalence se trouve dans $AL(F)\oplus L$.
 
+\todo{reformuler et approprier}
 Plusieurs cas sont possibles :
 \begin{enumerate}
   \item \fl$-L\neq\emptyset$. Il existe un mot $w\in$\fl qui n'appartient pas à $L$.
@@ -172,7 +171,7 @@ Plusieurs cas sont possibles :
   \item \fl$=L$. Soit \wl l'ensemble des traces annotées menant à des états n'étant pas sûrs. \wl est défini et une formule est donnée pour le calculer dans la section \ref{sec:unsafe}.
   \begin{itemize}
     \item Si \wl est vide, comme $L$ est un point fixe (notre hypothèse pour ce point), le processus d'apprentissage peut être arrêté et la sécurité de l'automate est confirmée.
-    \item Sinon, soit $\gamma$ une trace annotée dans cet ensemble \wl. Si $\gamma$ est valide, il peut être retourné comme contre-exemple à la sécurité de $F$. Si $\gamma$ est invalide, $\gamma\in(AL(F)\oplus L)$
+    \item Sinon, soit $\gamma$ un mot dans cet ensemble \wl. Si $\gamma$ est valide c'est-à-dire $\gamma\in AL(F)$, il peut être retourné comme contre-exemple à la sécurité de $F$. Si $\gamma$ est invalide, $\gamma\in(AL(F)\oplus L)$
   \end{itemize}
 \end{enumerate}
 

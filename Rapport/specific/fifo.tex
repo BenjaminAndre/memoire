@@ -14,13 +14,13 @@ L'article \cite{Vardhan04} se concentre sur un automate plus général : l'autom
   Un \emph{automate à files} \fifo est défini comme suit :
   \begin{itemize}
     \item $Q$ est un ensemble fini d'\emph{états de contrôle}
-    \item $C$ est un ensemble fini de \emph{noms de canaux}
+    \item $C$ est un ensemble fini de \emph{canaux}
     \item $\Sigma$ est un alphabet
     \item $q_0 \in Q$ est l'\emph{état de contrôle initial}
     \item $\Theta$ est un ensemble fini de \emph{noms de transitions}
     \item $\delta$ est la \emph{fonction nommante}. $\delta : \Theta \rightarrow Q \times ((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\}) \times Q$. Un nom de transition $\theta$ correspond à une transition de la forme $\delta(\theta)=(p,\text{"action"},q)$. Cette action a une des trois formes suivantes :
     \begin{itemize}
-      \item $c!m$ : C'est une action d'envoi. Le symbole $m$ est ajouté en fin de canal $c$.
+      \item $c!m$ : C'est une action d'envoi. Le symbole $m\in\Sigma$ est ajouté en fin de canal $c$.
       \item $c?m$ : C'est une action de réception. Le symbole $m$ est consommé en début de canal $c$.
       \item $\tau$ : C'est une action interne. Aucun canal n'est modifié.
     \end{itemize}
@@ -35,7 +35,7 @@ Un état $s$ est composé d'un état de contrôle et du contenu des différents 
 
 De plus, la \emph{fonction de transition} $\rightarrow:S\times\Theta\rightarrow S$ associe un état $s$ et un nom de transition $\theta$ à un état $s'$.
 
-$\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'actions mentionnés précédemment. En plus de la notation $w[c]$, celles-ci utilisent la notation $w[c\mapsto c']$ signifiant $w$ à l'exception du canal $c$ dont le contenu a été remplacé par le mot $c'$.
+$\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'actions mentionnés précédemment. En plus de la notation $w[c]$, celles-ci utilisent la notation $w[c\mapsto c']$ signifiant $w$ à l'exception du canal $c$ dont le contenu a été remplacé par le mot $c'$.
 \begin{itemize}
   \item Si $\delta(\theta)=(p,c?m,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w=w'[c\mapsto mw'[c]]$
   \item Si $\delta(\theta)=(p,c!m,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w'=w[c\mapsto mw[c]]$
@@ -51,7 +51,7 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
 
 
 \begin{example}
-  Soit un automate à files $F$ tel que sont système de transitions corresponde à la figure \ref{fig:fifo1}. Chaque état de l'automate correspondant à un couple état de contrôle/mot, il est imprécis de référer au système de transitions comme étant l'automate. Cependant, par abus de langage, ceux-ci seront souvent confondus dans ce document.
+  Soit un automate à files $F$ donné à la figure \ref{fig:fifo1}.
 
   \begin{figure}[H]
     \centering
@@ -74,7 +74,7 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
       (D) edge node[above] {$\theta_7(b?0)$} (A)
       ;
     \end{tikzpicture}
-    \caption{Système de transitions de l'automate à files $F$}\label{fig:fifo1}
+    \caption{Automate à files $F$}\label{fig:fifo1}
   \end{figure}
 
   On retrouve bien la définition d'un automate à files \fifo avec :
@@ -84,7 +84,7 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
     \item $\Sigma=\{0,1\}$
     \item $q_0\in Q$
     \item $\Theta=\{\theta_1, \theta_2, \theta_3, \theta_4, \theta_5, \theta_6\}$
-    \item $\delta$ associant à chaque $\theta_i$ un triplet état/action/état. Celui-ci est représenté entre parenthèses à côté du nom de transition associé
+    \item $\delta$ associant à chaque $\theta_i$ un triplet état/action/état telle que l'action est représentée entre parenthèses à côté du nom de transition associé
   \end{itemize}
 
   De plus, on peut déduire le système de transition $\mathcal{T}$ défini par $F$. Considérons le mot $w=[\epsilon,\epsilon]$ où le premier élément du vecteur est le contenu du canal $a$ et le second celui du canal $b$.
@@ -95,126 +95,4 @@ $\mathcal{T}$ respecte trois règles, correspondants chacune à un des types d'a
 
 \end{example}
 
-%  ██████ ██████   ██████  ███████ ███████
-% ██      ██   ██ ██    ██ ██      ██
-% ██      ██████  ██    ██ ███████ ███████
-% ██      ██   ██ ██    ██      ██      ██
-%  ██████ ██   ██  ██████  ███████ ███████
-
-
-\subsection{Produit cartésien}\label{ss:cartesien}
-
-Par soucis de simplicité, un automate à files (et son système de transitions servant à le représenter) peut être représenté comme plusieurs systèmes de transitions utilisant les mêmes canaux. Le \emph{produit cartésien} entre deux automates à files $A$ et $B$ retourne un nouvel automate $F=A \times B$. Dès lors, il est possible de représenter un automate à files en se concentrant sur ses parties et en les isolant \cite{Suresh20}. Cette propriété fait de l'automate à file un choix pertinent pour représenter des automates différents communiquant par des canaux. Dans une application pratique, cela pourrait être des programmes communiquant sur un réseau.
-
-Ce produit cartésien fonctionne comme suit.
-
-Soient les automates à files \fifoA et \fifoB. Alors le système de transitions \tsys de l'automate à files $F=A\times B$ est composé de :
-\begin{itemize}
-  \item $S \subseteq (Q_A\times Q_B)\times (\Sigma^*)^C$ composé d'un couple d'états de contrôle de $Q_A$ et $Q_B$ et du contenu des différents canaux.
-  \item $\Theta$ est un ensemble de noms de transitions.
-  \item $\rightarrow$ est construit comme suit. Soit un état $((q_A,q_B), w)\in S$. Soit un triplet $(p,a,q)$ avec $p,q \in (Q_A \bigcup Q_B)$ et $a \in ((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\})$.
-  $((q_A,q_B),w)\xrightarrow{\theta}((q_{A'},q_{B'}),w')$ si et seulement si l'une des trois conditions suivantes est remplie.
-  \begin{itemize}
-    \item $\exists \theta_A\in\Theta_A, \delta_A(\theta_A)=(q_A,a,q_{A'})$ et  $(q_A,w)\xrightarrow{\theta_A}(q_{A'},w')$ dans l'automate $A$ et\\ $\exists \theta_B\in\Theta_B, \delta_B(\theta_B)=(q_B,a,q_{B'})$ et $(q_B,w)\xrightarrow{\theta_B}(q_{B'},w')$ dans l'automate $B$
-    \item $\exists \theta_A\in\Theta_A, \delta_A(\theta_A)=(q_A,a,q_{A'})$ et  $(q_A,w)\xrightarrow{\theta_A}(q_{A'},w')$ dans l'automate $A$,\\
-    $\forall \theta_B\in\Theta_B,\forall q \in Q_B,\delta_B(\theta_B)\neq(q_B,a,q)$ dans l'automate $B$ et $q_{B'}=q_B$
-    \item $\forall \theta_A\in\Theta_A,\forall q \in Q_A,\delta_A(\theta_A)\neq(q_A,a,q)$ dans l'automate $A$ et $q_{A'}=q_A$,\\
-    $\exists \theta_B\in\Theta_B, \delta_B(\theta_B)=(q_B,a,q_{B'})$ et  $(q_B,w)\xrightarrow{\theta_B}(q_{B'},w')$ dans l'automate $B$
-  \end{itemize}
-\end{itemize}
-
-Le produit cartésien est un nouvel automate représenté par son système de transitions. Celui-ci étant suffisant pour déduire le langage tracé, il n'est pas necéssaire de décrire formellement \fifo.
-
-De plus, ce nouvel automate est différent des deux autres, il n'est alors pas pertinent de prouver une égalité. Il s'agit juste d'un autre mode de représentation.
-
-% ███████ ██   ██
-% ██       ██ ██
-% █████     ███
-% ██       ██ ██
-% ███████ ██   ██
-
-
-\begin{example}
-  Soient deux automates à files $A$ et $B$ tels que représentés par leur systèmes de transitions donnés par la figure \ref{fig:fifoAB}.
-
-  \begin{figure}[H]
-    \centering
-    \begin{subfigure}{0.5\textwidth}
-      \centering
-      \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1.5cm, semithick, bend angle=10]
-        \tikzstyle{every state}=[circle]
-
-        \node[initial,state] (A)  {$q_{0}$};
-        \node[state]         (B) [right=of A]  {$q_{1}$};
-        \node[state]         (C) [right=of B]  {$q_{2}$};
-        \path
-        (A) edge node {$\theta_1(a!1)$} (B)
-        (B) edge node {$\theta_2(a?1)$} (C)
-        (C) edge[bend left=40] node {$\theta_3(a!0)$} (A)
-        ;
-      \end{tikzpicture}
-      \caption{Automate à files A}
-      \label{fig:fifoA}
-      \end{subfigure}%
-      \begin{subfigure}{0.5\textwidth}
-        \centering
-        \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1.5cm, semithick, bend angle=10]
-          \tikzstyle{every state}=[circle]
-
-          \node[initial,state] (A)  {$q_{A}$};
-          \node[state]         (B) [right=of A]  {$q_{B}$};
-          \path
-          (A) edge[bend left=20] node {$\theta_5(a?0)$} (B)
-          (B) edge[bend left=20] node {$\theta_6(a!0)$} (A)
-          ;
-        \end{tikzpicture}
-        \caption{Automate à files B}
-        \label{fig:fifoB}
-      \end{subfigure}
-      \caption{Automates à files A et B représentés par leur système de transitions}
-      \label{fig:fifoAB}
-    \end{figure}
-
-   L'automate $AB=A \times B$ est représenté par son sytème de transitions à la figure \ref{fig:fifocross}.
-
-    \begin{figure}[H]
-      \centering
-      \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=1.5cm, semithick, bend angle=15]
-        \tikzstyle{every state}=[circle]
-
-        \node[initial,state] (A)  {$(q_0, q_A)$};
-        \node[state]         (B) [below=of A]  {$(q_1, q_A)$};
-        \node[state]         (C) [below=of B]  {$(q_2, q_A)$};
-
-        \node[state]         (D) [right=of A] {$(q_0, q_B)$};
-        \node[state]         (E) [below=of D]  {$(q_1, q_B)$};
-        \node[state]         (F) [below=of E]  {$(q_2, q_B)$};
-
-        \path
-        (A) edge node {$\theta_1(a!1)$} (B)
-        (A) edge[bend left] node {$\theta_2(a?0)$} (D)
-
-        (B) edge node {$\theta_3(a?1)$} (C)
-        (B) edge[bend left] node {$\theta_4(a?0)$} (E)
-
-        (C) edge[bend left=35] node {$\theta_5(a!0)$} (A)
-        (C) edge node {$\theta_6(a?0)$} (F)
-
-        (D) edge[bend left] node {$\theta_7(a!0)$} (A)
-        (D) edge node {$\theta_8(a!1)$} (E)
-
-        (E) edge[bend left] node {$\theta_9(a!0)$} (B)
-        (E) edge node {$\theta_{10}(a?1)$} (F)
-
-        ;
-
-        \draw [->] (F) ..  controls  ($(E)+(5cm,2cm)$) and
-  ($(D)+(0cm,4cm)$).. node[right] {$\theta_{11}(a!0)$} (A);
-      \end{tikzpicture}
-      \caption{Automate AB résultant du produit cartésien $A\times B$}
-      \label{fig:fifocross}
-    \end{figure}
-  \end{example}\label{ex:fifocross}
-
-
-  L'exemple \ref{ex:fifocross} suffit à se convaincre qu'on peut parler indistinctement de plusieurs systèmes de transitions comme représentant un seul automate. Dans ce cas, il est sous-entendu que l'automate en question est celui obtenu par produit cartésien.
+\todo{Déplacer ici la définition système de transition et donner un exemple}
