@@ -1,0 +1,66 @@
+\include{res/configuration}
+
+\newcommand{\student}{Benjamin André}
+\newcommand{\grade}{MAB2 Sciences Informatiques}
+\newcommand{\director}{Véronique Bruyère}
+\renewcommand{\title}{Vérification de la sécurité d'automates à file par apprentissage actif}
+\renewcommand{\date}{\today}
+
+\begin{document}
+
+	\include{res/couverture}
+
+	\tableofcontents
+	\newpage
+
+	\section*{Environnements théoriques}
+	\theoremlisttype{allname}
+	\listtheorems{lemma,proposition,theorem,corrolary,proof}
+
+	\section*{Exemples}
+	\theoremlisttype{allname}
+	\listtheorems{example}
+
+	\section*{Environnements algorithmiques}
+	\theoremlisttype{allname}
+	\listtheorems{algo,algoproof,complexity}
+
+	\newpage
+
+	\chapter{Introduction}\label{ch:intro}\input{intro/introduction}
+	\chapter{Bases théoriques}\label{ch:bases}\input{intro/bases}
+	\section{Langage}\label{sec:langage}\input{intro/langage}
+	\section{Automate Fini}\label{sec:automaton}\input{intro/automaton}
+	\section{Table Filling Algorithm}\label{sec:tfa}\input{intro/tfa}
+	\section{Algorithme d'Angluin}\label{sec:angluin}\input{intro/angluin}
+
+	\chapter{Notions spécifiques à LeVer}\label{ch:specific}\input{specific/specific}
+	\section{Problème}\label{sec:prob}\input{specific/prob}%problème et générale proposée par le papier
+	\section{Automate à files}\label{sec:fifo}\input{specific/fifo}
+	\section{Langage de traces d'un automate à file}\label{sec:trace}\input{specific/trace}%trace d'automate, Theta, Theta-, AL, etc
+	\section{Sécurité d'un automate à files}\label{sec:unsafe}\input{specific/unsafe}%W(L) et tout ce qu'il faut pour le calculer
+
+	\chapter{LeVer}\label{ch:lever}\input{lever/lever}
+	\section{Appartenance}\label{sec:membership}\input{lever/membership}
+	\section{Équivalence}\label{sec:equivalence}\input{lever/equivalence}
+	\section{Vue d'ensemble}\label{sec:global}\input{lever/global}
+
+
+	\chapter{Implémentation}\label{ch:impl}
+	\section{Choix}\label{sec:choix}
+	\section{Résultats}\label{sec:res}
+
+	\chapter{Conclusion}\label{ch:ccl}
+
+	%\chapter{Brouillon}
+	%\section{Lost}\input{lost}
+
+	\newpage
+	\bibliographystyle{siam}
+	\bibliography{refs.bib}
+
+	\appendix
+	\chapter{Algorithme d'appartenance}\label{app:membership}\input{appendix/membership}
+	\chapter{Théorème de Knaster-Tarski}\label{app:tarski}\input{appendix/tarski}
+
+\end{document}

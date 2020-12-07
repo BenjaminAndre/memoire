@@ -1,0 +1,58 @@
+Les propriété de fermeture (\ref{ss:ferm}) et de cohérence (\ref{ss:coh}) qui sont définies ici sont à respecter à chaque itération de l'algorithme d'Angluin.
+
+
+\subsection{Fermeture}\label{ss:ferm}
+La propriété de \emph{fermeture} s'exprime mathématiquement par
+
+$$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
+
+Cette propriété peut être vérifiée par cet algorithme, expliqué de façon visuelle sur la table O :
+
+\begin{algorithm}[H]
+	\begin{algorithmic}[1]
+		\ENSURE si la fermeture est respectée ou non
+
+		\FORALL {élément $w$ de la section $R$}
+		\FORALL {symbole $a$ dans $\Sigma$}
+			\IF {$wa$ est dans $R$}
+				\STATE continuer
+			\ELSE
+				\STATE \COMMENT{$wa$ est dans $R.\Sigma$ par construction}
+				\IF {La ligne de $wa$ dans $T$ est différente de celle de $w$}
+					\RETURN Faux
+				\ENDIF
+			\ENDIF
+		\ENDFOR
+		\ENDFOR
+		\RETURN Vrai
+	\end{algorithmic}
+	\caption{Vérification de la fermeture}\label{alg:fermeture}
+\end{algorithm}
+
+\subsection{Cohérence}\label{ss:coh}
+
+La propriété de \emph{cohérence} se définit mathématiquement comme
+
+$$ \forall u,v \in R, u R_O v \Rightarrow \forall a \in \Sigma, ua R_O va$$
+
+Concrètement, il s'agit de prendre deux mots ($u,v$) dans $R$ ayant la même ligne dans $T$ et vérifier, pour chaque symbole ($a$), s'ils ($ua,va$) ont la même ligne dans $T$.
+
+\begin{example}
+	Soit la table d'observation O de la table \ref{tab:Oex} :
+
+	\begin{table}[H]
+		\centering
+	\begin{tabular}{|c|c|c|}
+		\hline
+		$O$ & $\epsilon$ & a\\
+		\hline
+		$\epsilon$ & 0 & 0\\
+		$a$ & 0 & 0\\
+		\hline
+		$aa$ & 0 & 1\\
+		\hline
+	\end{tabular}\caption{Table d'observation O}\label{tab:Oex}
+\end{table}
+	\vspace{0.5cm}
+	Cette table n'est pas cohérente. En effet, $\epsilon R_O a$ mais en ajoutant le symbole $a\in \Sigma$, on obtient $\neg (a R_O aa)$. Les lignes ont les mêmes valeurs, mais les lignes obtenues par la concaténation du symbole $a$ ont des valeurs différentes.
+\end{example}

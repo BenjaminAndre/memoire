@@ -1,0 +1,9 @@
+Dixième version du document.
+
+Le but de ce mémoire est de comprendre et implémenter l'article "Actively learning to verify safety for FIFO automata" \cite{Vardhan04} donnant son nom à ce mémoire.
+
+Cet article s'intéresse à la sûreté d'automates à files. Les automates à files sont définis dans le chapitre \ref{ch:fifo}. Celui-ci explore aussi la complexité des automates à files. La notion de sûreté de ceux-ci est discutée au chapitre \ref{ch:wl}.
+
+Le chapitre \ref{ch:lever} donne le fonctionnement de l'algorithme employé, LeVer (\emph{learn to verify}) pour tenter d'apprendre activement si un automate à file est sûr ou non. Cet algorithme repose principalement sur un autre algorithme, l'algorithme d'Angluin du chapitre \ref{ch:l*}. L'algorithme d'Angluin cependant n'est pas conçu pour des automates à files mais pour des automates déterministes finis, définis dans le chapitre \ref{ch:adf}.
+
+Chaque type d'automate peut représenter un langage comme défini dans le chapitre \ref{ch:lr}. Dans le cas des automates à files, l'article \cite{Vardhan04} introduit la notion de langage de trace définie au chapitre \ref{ch:trace}, permettant de faire le lien entre les automates déterministes finis et les automates à files, aidant à l'utilisation de l'algorithme d'Angluin par LeVer.

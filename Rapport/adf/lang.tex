@@ -1,0 +1,137 @@
+Un automate représente un langage. Cette section explique comment il le fait pour les 3 catégories d'automates.
+
+\subsubsection*{Fonction de transition étendue}
+
+La \emph{fonction de transition étendue} $\hdelta$ est une extension de la fonction de transition, acceptant plusieurs symboles de façon consécutive. Intuitivement, il s'agit de suivre plusieurs arcs sur le graphe.
+
+Comme $\delta$ est différente en fonction du type d'automate considéré, $\hdelta$ l'est aussi.
+
+\begin{itemize}
+  \item \textbf{ADF :} $\hdelta : Q \times \Sigma^* \rightarrow Q$. $\hdelta$ prend en entrée un état de $Q$ et un mot $w$ sur $\Sigma$ et retourne un état de $Q$.
+  \item \textbf{ANF et $\epsilon$-ANF :} $\hdelta : Q \times \Sigma^* \rightarrow 2^Q$. $\hdelta$ prend en entrée un état de $Q$ et un mot $w$ sur $\Sigma$ et retourne un ensemble d'états de $Q$.
+\end{itemize}
+
+Soit un état $q \in Q$ et un mot $w \in \Sigma^*$. Alors $\hdelta$ est définie par:\\
+\textbf{Cas de base} $w$ est un mot vide :
+  \begin{itemize}
+    \item Pour un ADF ou ANF : $\hdelta(q, \epsilon) = q$.
+    \item Pour un $\epsilon$-ANF : $\hdelta(q, \epsilon) = ECLOSE(q)$.
+  \end{itemize}
+\textbf{Pas de récurrence} Si $|w|\ge 1$, alors $w=xa$ avec $x$ un mot sur $\Sigma$ et $a$ un symbole de $\Sigma$.
+\begin{itemize}
+  \item Pour un ADF ou ANF : $\hdelta(q,w) = \hdelta(q,xa)= \delta(\hdelta(q,x),a)$
+  \item Pour un $\epsilon$-ANF : $\hdelta(q,w) = \hdelta(q,xa)= ECLOSE(\delta(\hdelta(q,x),a))$.
+\end{itemize}
+Dans le cas particulier où $|w|=1$, $w=xa=\epsilon a$, ce qui mène au cas de base.
+
+Il se peut que la fonction de transition $\delta$ ne soit pas définie pour une paire d'arguments. Auquel cas, $\hdelta$ ne l'est pas non plus.\\
+
+\subsubsection*{Chemin}
+
+Un \emph{chemin} est une suite d'états d'un automate. Chaque état de cette suite doit être atteignable par une transition depuis l'état précédent dans cette suite.
+
+\begin{example}[Chemin]
+ Considérons l'automate $A$ de la figure \ref{fig:a1}. Il existe un chemin de $q_0$ à $q_5$ : $(q_0,q_2,q_5)$. En effet, les transitions sont définies : $\delta(q_0, a)=q_2$ et $\delta(q_2, b)=q_5$. Un mot représenté par ce chemin est $ab$.
+\end{example}
+
+Dans le cas où plusieurs transitions mènent d'un état à un autre, plusieurs mots peuvent être représentés par un même chemin.
+Chaque état d'un chemin entre deux états $p$ et $q$ et distinct de ceux-ci est dit \emph{état intermédiaire}. S'il existe un chemin menant de $q_0$ à un état $p$, $p$ est dit \emph{atteignable}. Dans le cas contraire, il est \emph{inatteignable}.
+
+\subsubsection*{Langage}
+Le \emph{langage représenté} par un automate \automaton $L(A)$ peut alors se définir comme les mots qui, par l'application de $\hdelta$ sur l'état initial, donnent un état acceptant. Si deux automates représentent le même langage, ils sont dit \emph{équivalents}. Voici les définitions ensemblistes, respectivement pour un ADF et pour un $(\epsilon)$-ANF
+$$
+L(A)= \{w \in \Sigma^* | \hdelta(q_0,w) \in F\} \hspace{0.5cm}
+L(A)= \{w \in \Sigma^* | \exists q \in \hdelta(q_0,w), q \in F\}
+$$
+
+Un mot appartenant à $L(A)$ est dit \emph{accepté} par l'automate $A$.
+
+
+\begin{example}
+  Soit $A$ l'ADF de la figure \ref{fig:a1}. Alors $abaa$ est un exemple de mot appartenant à $L(A)$. En effet :
+  \begin{align*}
+    &\hdelta(q_0,abaa)=\\
+    &\delta(\hdelta(q_0,aba),a)=\\
+    &\delta(\delta(\hdelta(q_0,ab),a),a)=\\
+    &\delta(\delta(\delta(\hdelta(q_0,a),b),a),a)=\\
+    &\delta(\delta(\delta(\delta(q_0,a),b),a),a)=\\
+    &\delta(\delta(\delta(q_2,b),a),a)=\\
+    &\delta(\delta(q_5,a),a)=\\
+    &\delta(q_3,a)=\\
+    &q_3 \in F
+  \end{align*}
+\end{example}
+
+\begin{example}
+  Soit $A$ le $\Sigma$-ANF de la figure \ref{fig:eanf}. Alors $cb$ est un exemple de mot appartenant à $L(A)$. En effet :
+  \begin{align*}
+    &\hdelta(q_0,cb)=\\
+    &ECLOSE(\delta(\hdelta(q_0, c),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(\hdelta(q_0,\epsilon),c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(ECLOSE(q_0),c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\delta(\{q_0,q_1,q_2\},c)),b))=\\
+    &ECLOSE(\delta(ECLOSE(\{q_0,q_1,q_2\}),b))=\\
+    &ECLOSE(\delta(\{q_0,q_1,q_2\},b))=\\
+    &ECLOSE(\{q_1,q_2\})=\\
+    &\{q_1,q_2\}
+  \end{align*}
+  On a bien l'ensemble d'états $\{q_1,q_2\}$ avec $q_2\in F$.
+\end{example}
+
+L'algorithme \ref{alg:membership_auto} représente cette appartenance pour un mot.
+
+
+\begin{algo}[Appartenance d'un mot à un langage défini par un automate]\label{alg:membership_auto}
+ \begin{algorithmic}[1]
+   \REQUIRE un mot $w$, un automate \automaton représentant $L=L(A)$
+   \ENSURE si $w$ appartient à $L$
+
+   \STATE $C \leftarrow \{q_0\}$ \COMMENT{$C$ est l'ensemble des états courants}
+   \IF {A est un $\epsilon$-ANF}
+   \STATE $C \leftarrow ECLOSE(C)$
+   \ENDIF
+   \WHILE {$|w| > 0$}
+   \STATE décomposer $w$ en $ax$ avec $a\in\Sigma$ et $x$ le reste du mot
+   \STATE $C \leftarrow \delta(C,a)$ \COMMENT{passage à l'ensemble des états suivants}
+   \STATE \COMMENT{Si l'automate est un ADF, C ne contient toujours qu'un seul état}
+   \STATE $w \leftarrow x$
+   \IF {A est un $\epsilon$-ANF}
+   \STATE $C \leftarrow ECLOSE(C)$
+   \ENDIF
+   \ENDWHILE
+
+   \RETURN s'il existe un état $q \in C$ appartenant à $F$
+ \end{algorithmic}
+\end{algo}
+
+\begin{complexity}[Lecture d'un mot par un automate]
+
+La complexité de l'algorithme \ref{alg:membership_auto} dépend du type d'automate considéré. Considérons que $|w|=n$.
+
+L'opération 1 est en temps constant. Les opérations 2 à 4 ont la complexité d'ECLOSE. Pour un ADF ou ANF, cette opération est triviale ($\mathcal{O}(1)$). Pour un $\epsilon$-ANF, cette opération est en $\mathcal{O}(n)$. En effet, $n$ états au plus peuvent être ajoutés à l'ensemble.
+
+Les opération 6 et 9 sont en temps constant. L'opération 7 à la complexité de $\delta$. Cette fonction est triviale pour un ADF. Si celui-ci est stocké dans un tableau, l'opéation est en temps constant. Pour un ANF ou $\epsilon$-ANF, comme $\delta$ porte sur un sous-ensemble de $Q$, l'opération est en $\mathcal{O}(n)$. Le pire des cas étant $C=Q$ avant ou après l'application de $\delta$. Les opérations 10 à 12 sont à nouveau une application de $ECLOSE$.
+
+Dès lors, le pire des cas du corps de la boucle de l'opération 5 est le maximum entre le pire des cas de $ECLOSE$ et de $\delta$. Cette boucle s'effectue au plus $n$ fois. Une lettre est enlevée à chaque itération.
+
+L'opération 14 se fait en $\mathcal{O}(\log_2(n))$ pour un ADF et $\mathcal{O}(n\log_2(n))$ pour un ANF ou $\epsilon$-ANF. Cette valeur suppose une recherche efficace dans F (en $\mathcal{O}(\log_2(n))$).
+
+En conclusion :
+\begin{table}[H]
+  \centering
+  \resizebox{\columnwidth}{!}{
+  \begin{tabular}{|c|c|c|}
+    \hline
+    ADF & ANF & $\epsilon$-ANF\\
+    \hline
+    $\mathcal{O}(1)\!+\!n(\mathcal{O}(1)\!+\!\mathcal{O}(1))\!+\!\mathcal{O}(\log_2(n))$&$\mathcal{O}(1)\!+\!n(\mathcal{O}(1)\!+\!\mathcal{O}(n))\!+\!\mathcal{O}(nlog_2(n))$&$\mathcal{O}(n)\!+\!n(\mathcal{O}(n)\!+\!\mathcal{O}(n))\!+\!\mathcal{O}(n\log_2(n))$\\
+    \hline
+    $\mathcal{O}(n)$&$\mathcal{O}(n^2)$&$\mathcal{O}(n^2)$\\
+    \hline
+  \end{tabular}
+  }
+\end{table}
+
+
+
+\end{complexity}

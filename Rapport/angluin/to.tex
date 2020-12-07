@@ -1,0 +1,21 @@
+
+	Une \emph{table d'observation} est un tableau défini par $O=(R,S,T)$ avec $R\subseteq\Sigma^*$ un ensemble de mots \emph{représentants}, $S\subseteq\Sigma^*$ un ensmble de mots \emph{séparateurs} et $T:(R\bigcup R.\Sigma)\rightarrow\{0,1\}$ une fonction représentant le contenu de la table.\cite{Neider14}
+	Soit un langage $L$ qui est en train d'être appris par l'algorithme d'Angluin. Soit un mot $w\in L$. Alors, $w$ appartient à une classe d'équivalence $[[u]]$ avec $u\in L$. Dans ce cas, $T(w)=1$. Au contraire, si $w\notin L$, alors $T(w)=0$.
+
+	Pour une table d'observation $O$, deux mots $u,v$ peuvent être \emph{équivalents sur O}, c'est-à-dire $uR_Ov$. $u$ et $v$ sont équivalents sur $O$ si et seulement si $\forall w \in S, T(uw)=T(vw)$. Intuitivement, $uR_Ov$ si les lignes correspondant à leur classe d'équivalence ont la même séquence de $0$ et de $1$.
+
+	\begin{proposition}
+		Soient $u,v \in \Sigma^*$, un langage $L$ et une table d'observation $O$ associée à ce langage. Si $uR_Lv$, alors $uR_Ov$.
+	\end{proposition}
+
+	\begin{proof}
+		Soient un langage $L$, $u,v \in \Sigma^*$ tels que $uR_Lv$ et une table d'observation $O$ associée à $L$.
+		Comme $uR_Lv$, alors pour tout mot $w\in\Sigma^*$, $uw\in L \iff vw\in L$. C'est donc vrai en particulier pour tout $w\in S$. Dès lors, $\forall w \in S, T(uw)=T(vw)$.
+		\hfill$\square$
+	\end{proof}
+
+	\begin{corollary}
+		Le nombre de classes d'équivalence sur \ro est inférieur ou égal à celui de classes d'équivalence sur \rl.
+	\end{corollary}
+
+	Cette table $O$ représente la compréhension actuelle de l'élève du langage $L$. D'itération en itération, $R_O$ représente de mieux en mieux $R_L$ jusqu'à ce que l'automate induit de cette table soit jugé équivalent par le professeur. L'automate induit l'est par l'application du corollaire \ref{col:constadf}.

@@ -1,0 +1,35 @@
+\subsection{Définitions}
+
+Un \emph{alphabet} $\Sigma$ est un ensemble fini et non vide de \emph{symboles}. Un \emph{mot} sur cet alphabet $\Sigma$ est une suite finie de $k$ éléments de $\Sigma$ notée $ w = a_1a_2\dots a_k$ où $k$ est un nombre naturel. $k$ est la \emph{longueur} de ce mot aussi notée $|w|=k$. Le \emph{mot vide} est un mot de taille $k=0$ noté $w=\epsilon$.
+
+La \emph{concaténation} de deux mots $w=a_1a_2\dots a_k$ et $x=b_1b_2\dots b_j$ est l'opération consistant à créer un nouveau mot $wx=a_1a_2\dots a_kb_1b_2\dots b_j$ de longueur $i=k+j$.
+
+\begin{proposition}[$\epsilon$ et la concaténation]\emph{
+$\epsilon$ est \emph{l'identité pour la concaténation}, à savoir pour tout mot $w$, $w\epsilon = \epsilon w = w$.}
+\end{proposition}
+
+Cette proposition est triviale par la définition de la concaténation.
+
+\emph{L'exponentiation} d'un symbole $a$ à la puissance $k$, notée $a^k$, retourne un mot de longueur $k$ obtenu par la concaténation de $k$ copies du symbole $a$. Noter que $a^0=\epsilon$. $\Sigma^k$ est \emph{l'ensemble des mots sur $\Sigma$} de longueur $k$. L'ensemble de \emph{tous les mots possibles sur $\Sigma$} est noté $\Sigma^* = \bigcup_{k=0}^{\infty}\Sigma^k$.
+
+
+Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \subseteq \Sigma^*$. Étant donné que $\Sigma^*$ est infini, $L$ peut l'être également.
+
+\begin{example}[Langages] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
+	\begin{itemize}
+		\item $L=\{12,35,42,7,0\}$, un langage défini explicitement
+		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro, un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
+		\item $L$ contient tous les noms de villes belges. Ici $L$ est défini en langage courant.
+		\item $\emptyset$ est un langage sur tout alphabet.
+		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
+	\end{itemize}
+\end{example}
+
+
+\subsection{Opérations sur les langages}
+
+Soient $L$ et $M$ deux langages. Le langage $L \cup M = \{w | w \in L\vee w \in M\}$ est l'\emph{union} de ces deux langages. Il est composé des mots venant d'un des deux langages.
+
+Le langage composé de tous les mots produits par la concaténation d'un mot de $L$ avec un mot de $M$ est une \emph{concaténation} de ces deux langages et s'écrit $LM = \{vw | v \in L \wedge w \in M\}$.
+
+La \emph{fermeture} de $L$ est un langage constitué de tous les mots qui peuvent être construits par un concaténation d'un nombre arbitraire de mots de $L$, noté $L^*=\{w_1w_2\dots w_n|n\in \mathbb{N},\forall i \in \{1,2,\dots,n\}, w_i \in L\}$.

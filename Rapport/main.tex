@@ -27,40 +27,19 @@
 
 	\newpage
 
-	\chapter{Introduction}\label{ch:intro}\input{intro/introduction}
-	\chapter{Bases théoriques}\label{ch:bases}\input{intro/bases}
-	\section{Langage}\label{sec:langage}\input{intro/langage}
-	\section{Automate Fini}\label{sec:automaton}\input{intro/automaton}
-	\section{Table Filling Algorithm}\label{sec:tfa}\input{intro/tfa}
-	\section{Algorithme d'Angluin}\label{sec:angluin}\input{intro/angluin}
-
-	\chapter{Notions spécifiques à LeVer}\label{ch:specific}\input{specific/specific}
-	\section{Problème}\label{sec:prob}\input{specific/prob}%problème et générale proposée par le papier
-	\section{Automate à files}\label{sec:fifo}\input{specific/fifo}
-	\section{Langage de traces d'un automate à file}\label{sec:trace}\input{specific/trace}%trace d'automate, Theta, Theta-, AL, etc
-	\section{Sécurité d'un automate à files}\label{sec:unsafe}\input{specific/unsafe}%W(L) et tout ce qu'il faut pour le calculer
-
-	\chapter{LeVer}\label{ch:lever}\input{lever/lever}
-	\section{Appartenance}\label{sec:membership}\input{lever/membership}
-	\section{Équivalence}\label{sec:equivalence}\input{lever/equivalence}
-	\section{Vue d'ensemble}\label{sec:global}\input{lever/global}
-
-
-	\chapter{Implémentation}\label{ch:impl}
-	\section{Choix}\label{sec:choix}
-	\section{Résultats}\label{sec:res}
-
-	\chapter{Conclusion}\label{ch:ccl}
-
-	%\chapter{Brouillon}
-	%\section{Lost}\input{lost}
+	\chapter{Introduction}\label{intro}\input{intro/main}
+	\chapter{Langage régulier}\label{lr}\input{lr/main}
+	\chapter{Automate déterministe fini}\label{adf}\input{adf/main}
+	\chapter{Algorithme d'Angluin}\label{l*}\input{angluin/main}
+	\chapter{Automate à files}\label{fifo}\input{fifo/main}
+	\chapter{Langage de trace}\label{trace}\input{trace/main}
+	\chapter{Sécurité d'un automate à files}\label{wl}\input{safety/main}
+	\chapter{LeVer}\label{lever}\input{lever/main}
 
 	\newpage
 	\bibliographystyle{siam}
 	\bibliography{refs.bib}
 
 	\appendix
-	\chapter{Algorithme d'appartenance}\label{app:membership}\input{appendix/membership}
-	\chapter{Théorème de Knaster-Tarski}\label{app:tarski}\input{appendix/tarski}
 
 \end{document}

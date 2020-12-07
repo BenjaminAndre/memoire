@@ -1,0 +1,302 @@
+\documentclass[french,letterpaper, 12pt]{report}
+
+\usepackage[top = 1.6cm, left = 2cm, right = 2cm ]{geometry}
+\usepackage[pdftex]{graphicx}
+\usepackage{soulutf8}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage{epigraph}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{eurosym}
+\usepackage{calc}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage[Algorithme]{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumerate}
+\usepackage[french]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{etoolbox,refcount}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage[standard,thref, framed, hyperref,standard,thmmarks]{ntheorem}
+\usepackage{lmodern}
+\usepackage{thmtools}
+\usepackage{tikz-cd}
+\usepackage[title]{appendix}
+
+%
+%%%%%%% Sub librairies
+
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{decorations.pathreplacing,shapes,arrows,positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{snakes}
+\usetikzlibrary{shapes,fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata,arrows,trees,positioning,shapes,calc}
+
+%
+%%%%% Custom commands
+%
+
+
+
+\lstset{
+	keywordstyle=\color{red},
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\itshape\color{gray},
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ffff,
+	rulecolor=\color{black}
+}
+
+%
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist
+%
+\newcommand{\newlinealinea}{
+	~\\ \hspace*{0.5cm}}
+%
+\newcommand{\alinea}{
+	\hspace*{0.5cm}}
+%
+\newcommand{\alinealong}{
+	\hspace*{1.1cm}}
+%
+\newcommand{\alignparagraph}{
+	\hspace*{0.6cm}}
+%
+\newcommand{\red}[1]{
+	\textcolor{red}{#1}}
+%
+\newcommand{\green}[1]{
+	\textcolor{green}{#1}}
+%
+\newcommand{\point}{$\bullet\ $}
+%
+\makeatletter
+\newcommand*{\whiten}[1]{\llap{\textcolor{white}{{\the\SOUL@token}}\hspace{#1pt}}}
+\newcommand{\myul}[1]{
+	\underline{\smash{#1}}
+}
+\makeatother
+%
+\setlength{\fboxsep}{2pt}
+%
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+%
+%
+%%%%% Custom text
+%
+%
+\makeatletter
+\@addtoreset{section}{part}
+\makeatother
+%
+\renewcommand*\sfdefault{phv}
+\renewcommand*\rmdefault{ppl}
+%
+\renewcommand\epigraphflush{flushright}
+\renewcommand\epigraphsize{\normalsize}
+\setlength\epigraphwidth{0.7\textwidth}
+%
+\definecolor{titlepagecolor}{cmyk}{0.24,0.92,0.78,0.25}
+\definecolor{red}{cmyk}{0, 0.91, 0.91, 0.20}
+%
+\DeclareFixedFont{\titlefont}{T1}{phv}{\seriesdefault}{n}{0.375in}
+%
+%
+%%%%% Header
+%
+%
+\pagestyle{fancy}
+\lhead{\student}
+\rhead{\grade}
+\cfoot{\thepage}
+%
+%
+%%%%% Title page. The following code is borrowed from:
+%%%%%       http://tex.stackexchange.com/a/86310/10898
+%
+%
+\newcommand\titlepagedecoration{%
+	\begin{tikzpicture}[remember picture,overlay,shorten >= -10pt]
+
+	\coordinate (aux1) at ([yshift=-70pt]current page.north east);
+	\coordinate (aux2) at ([yshift=-460pt]current page.north east);
+	\coordinate (aux3) at ([xshift=-6cm]current page.north east);
+	\coordinate (aux4) at ([yshift=-150pt]current page.north east);
+
+	\begin{scope}[titlepagecolor!40,line width=12pt,rounded corners=12pt]
+	\draw
+	(aux1) -- coordinate (a)
+	++(225:5) --
+	++(-45:5.1) coordinate (b);
+	\draw[shorten <= -10pt]
+	(aux3) --
+	(a) --
+	(aux1);
+	\draw[opacity=0.6,titlepagecolor,shorten <= -10pt]
+	(b) --
+	++(225:2.2) --
+	++(-45:2.2);
+	\end{scope}
+	\draw[titlepagecolor,line width=8pt,rounded corners=8pt,shorten <= -10pt]
+	(aux4) --
+	++(225:0.8) --
+	++(-45:0.8);
+	\begin{scope}[titlepagecolor!70,line width=6pt,rounded corners=8pt]
+	\draw[shorten <= -10pt]
+	(aux2) --
+	++(225:3) coordinate[pos=0.45] (c) --
+	++(-45:3.1);
+	\draw
+	(aux2) --
+	(c) --
+	++(135:2.5) --
+	++(45:2.5) --
+	++(-45:2.5) coordinate[pos=0.3] (d);
+	\draw
+	(d) -- +(45:1);
+	\end{scope}
+	\end{tikzpicture}%
+}
+
+
+%  █████  ██       ██████   ██████
+% ██   ██ ██      ██       ██    ██
+% ███████ ██      ██   ███ ██    ██
+% ██   ██ ██      ██    ██ ██    ██
+% ██   ██ ███████  ██████   ██████
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Requis:}}
+\renewcommand{\algorithmicensure}{\textbf{Promet:}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
+\renewcommand{\algorithmicelsif}{\algorithmicelse\ \algorithmicif}
+\renewcommand{\algorithmicendif}{\algorithmicend\ \algorithmicif}
+\renewcommand{\algorithmicfor}{\textbf{pour}}
+\renewcommand{\algorithmicforall}{\textbf{pour chaque}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+\renewcommand{\algorithmicendfor}{\algorithmicend\ \algorithmicfor}
+\renewcommand{\algorithmicwhile}{\textbf{tant que}}
+\renewcommand{\algorithmicendwhile}{\algorithmicend\ \algorithmicwhile}
+\renewcommand{\algorithmicloop}{\textbf{boucle}}
+\renewcommand{\algorithmicendloop}{\algorithmicend\ \algorithmicloop}
+\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{jusqu'à}}
+\renewcommand{\algorithmicprint}{\textbf{afficher}}
+\renewcommand{\algorithmicreturn}{\textbf{retourner}}
+\renewcommand{\algorithmictrue}{\textbf{vrai}}
+\renewcommand{\algorithmicfalse}{\textbf{faux}}
+
+\renewcommand{\algorithmicand}{\textbf{et}}
+\renewcommand{\algorithmicor}{\textbf{ou}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\todo}[1]{\textcolor{red}{\emph{\textbf{TODO} : #1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\newcounter{countitems}
+\newcounter{nextitemizecount}
+\newcommand{\setupcountitems}{%
+	\stepcounter{nextitemizecount}%
+	\setcounter{countitems}{0}%
+	\preto\item{\stepcounter{countitems}}%
+}
+\makeatletter
+\newcommand{\computecountitems}{%
+	\edef\@currentlabel{\number\c@countitems}%
+	\label{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\newcommand{\nextitemizecount}{%
+	\getrefnumber{countitems@\number\c@nextitemizecount}%
+}
+\newcommand{\previtemizecount}{%
+	\getrefnumber{countitems@\number\numexpr\value{nextitemizecount}-1\relax}%
+}
+\makeatother
+\newenvironment{AutoMultiColItemize}{%
+	\ifnumcomp{\nextitemizecount}{>}{3}{\begin{multicols}{3}}{}%
+		\setupcountitems\begin{itemize}}%
+		{\end{itemize}%
+		\unskip\computecountitems\ifnumcomp{\previtemizecount}{>}{3}{\end{multicols}}{}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ████████ ██   ██ ███    ███
+%    ██    ██   ██ ████  ████
+%    ██    ███████ ██ ████ ██
+%    ██    ██   ██ ██  ██  ██
+%    ██    ██   ██ ██      ██
+
+
+
+\theoremstyle{plain}
+
+
+\renewtheorem{theorem}{Théorème}[section]
+\renewtheorem{lemma}[theorem]{Lemme}
+\renewtheorem{proposition}[theorem]{Proposition}
+
+
+\theoremstyle{break}
+
+\newtheorem{algo}{Algorithme}[section]
+
+\theoremheaderfont{\normalfont\smallskip\normalsize\itshape\bfseries}
+\theorembodyfont{\normalfont\normalsize}
+
+
+
+\renewtheorem{proof}{Preuve}[theorem]
+\renewtheorem{example}{Exemple}
+\renewtheorem{corollary}{Corollaire}[theorem]
+
+
+\newtheorem{algoproof}{Preuve}[algo]
+\newtheorem{complexity}[algoproof]{Complexité}
+
+
+% ██   ██ ███████ ██      ██████
+% ██   ██ ██      ██      ██   ██
+% ███████ █████   ██      ██████
+% ██   ██ ██      ██      ██
+% ██   ██ ███████ ███████ ██
+
+
+
+\newcommand{\hdelta}{\hat{\delta}}
+\newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }
+\newcommand{\automatonbis}{$B=(Q_B,\Sigma_b, q_b, \delta_b, F_b)$\ }
+\newcommand{\fifo}{$F=(Q,C, \Sigma, q_0, \Theta, \delta)$\ }
+\newcommand{\fifoA}{$A=(Q_A,C, \Sigma, q_{0A}, \Theta_A, \delta_A)$\ }
+\newcommand{\fifoB}{$B=(Q_B,C, \Sigma, q_{0B}, \Theta_B, \delta_B)$\ }
+\newcommand{\tsys}{$\mathcal{T}=(S,\Theta, \rightarrow)$\ }
+\newcommand{\barTheta}{$\bar{\Theta}$\ }
+
+\newcommand{\rf}{$R_F$\ } % F comme états finaux
+\newcommand{\ra}{$R_A$\ } % comme ça on sait de quel automate on parle
+\newcommand{\rl}{$R_L$\ } % comme ça on sait de quel langage on parle
+\newcommand{\ro}{$R_O$\ } % comme ça on sait de quelle table O on parle
+\newcommand{\fl}{$\mathcal{F}(L)$\ }
+\newcommand{\wl}{$\mathcal{W}(L)$\ }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

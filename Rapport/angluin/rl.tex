@@ -1,0 +1,26 @@
+Soit un langage $L$ sur un alphabet $\Sigma$.
+
+Soit la relation $R_L\subseteq\Sigma^*\times\Sigma^*$. Deux mots $x$ et $y$ respectent la \emph{relation de Myhill-Nérode $R_W$} si
+
+$$\forall z \in \Sigma^*, xz \in L \Leftrightarrow yz \in L$$
+
+Intuitivement, deux mots sont en relation si pour tout mot qu'on leur concatène, les deux mots résultants sont tous deux dans le langage $L$ ou non.
+
+Cette relation est utilisée au fondement de l'algorithme d'Anluin pour séparer le langage en différentes classes, jusqu'à identifier celles qui sont acceptées de celles qui ne le sont pas.
+
+\begin{lemma}
+	Cette relation est une relation d'équivalence. De plus, elle est congruente à droite. C'est à dire que si $xR_Ly$, alors pour tout symbole $a \in \Sigma$, $xaR_Lya$
+\end{lemma}
+
+\begin{proof}[Equivalence et Congruence à droite]
+	Dire d'une relation qu'elle décrit une équivalence, revient à dire qu'elle est réflexive, transitive et symétrique
+\begin{itemize}
+		\item\textbf{Réflexive :} Soit $x \in \Sigma^*$. Soit $z \in \Sigma^*$. Montrer que $xR_Lx$ est vrai revient à montrer que $ xz \in L \Leftrightarrow xz \in L$ est vrai. $R_L$ est donc réflexive.
+		\item \textbf{Symétrique :} Soient $x, y \in \Sigma^*$ tels que $xR_Ly$. Soit $w \in \Sigma^*$. Montrer que $yR_Lx$ revient à montrer que $ yw \in L \Leftrightarrow xw \in L$. Or, par hypothèse, $ xz \in L \Leftrightarrow yz \in L$, qui peut s'écrire aussi $ yz \in L \Leftrightarrow xz \in L$ pour tout $z \in \Sigma^*$, et en particulier $z=w$.
+		\item \textbf{Transitive :} Soient $x,y,u \in \Sigma^*$ tels que $xR_Ly$ et $yR_Lz$. Soit $w \in \Sigma^*$. Comme $ xz \in L \Leftrightarrow yz \in L$ et $ yz \in L \Leftrightarrow uz \in L$ pour tout $z \in \Sigma^*$ (par hypothèse), c'est vrai en particulier pour $z=w$. Dès lors,  $ xw \in L \Leftrightarrow yw \in L$ et $ yw \in L \Leftrightarrow uw \in L$. Par transitivité de l'implication, on obtient $ xw \in L \Leftrightarrow uw \in L$, à savoir $xR_Lu$.
+	\end{itemize}
+
+	$R_L$ est congruente à droite. Soient $x,y \in \Sigma^*$ tels que $xR_Ly$. Soit $a \in \Sigma$. Par hypothèse, $ xz \in L \Leftrightarrow yz \in L$ pour tout $z \in \Sigma^*$. Cela doit donc être vrai en particulier pour le mot $z=aw$ avec $w$ quelconque. En remplaçant dans l'hypothèse, on obtient  $ xaw \in L \Leftrightarrow yaw \in L$. Ce qui montre que $xaR_Lya$.
+
+\hfill$\square$
+\end{proof}
