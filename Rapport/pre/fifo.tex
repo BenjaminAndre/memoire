@@ -1,0 +1,98 @@
+L'article \cite{Vardhan04} se concentre sur un automate plus général : l'automate à files. Celui-ci est Turing Complete. De la sorte, l'équipe propose une réponse pour un ensemble plus large de langage. Cette section décrit les automates à files.
+
+
+
+% ██████  ███████ ███████
+% ██   ██ ██      ██
+% ██   ██ █████   █████
+% ██   ██ ██      ██
+% ██████  ███████ ██
+
+\subsection{Définitions}\label{ss:fifodef}
+
+\begin{definition}
+  Un \emph{automate à files} \fifo est défini comme suit :
+  \begin{itemize}
+    \item $Q$ est un ensemble fini d'\emph{états de contrôle}
+    \item $C$ est un ensemble fini de \emph{canaux}
+    \item $\Sigma$ est un alphabet
+    \item $q_0 \in Q$ est l'\emph{état de contrôle initial}
+    \item $\Theta$ est un ensemble fini de \emph{noms de transitions}
+    \item $\delta$ est la \emph{fonction nommante}. $\delta : \Theta \rightarrow Q \times ((C \times \{?,!\} \times \Sigma) \bigcup \{\tau\}) \times Q$. Un nom de transition $\theta$ correspond à une transition de la forme $\delta(\theta)=(p,\text{"action"},q)$. Cette action a une des trois formes suivantes :
+    \begin{itemize}
+      \item $c!m$ : C'est une action d'envoi. Le symbole $m\in\Sigma$ est ajouté en fin de canal $c$.
+      \item $c?m$ : C'est une action de réception. Le symbole $m$ est consommé en début de canal $c$.
+      \item $\tau$ : C'est une action interne. Aucun canal n'est modifié.
+    \end{itemize}
+  \end{itemize}
+\end{definition}
+
+Un automate $F$ défini un \emph{système de transitions} \tsys. $\mathcal{T}$ est l'objet qui permet de passer d'un \emph{état} à un autre.
+
+En effet, il existe les états de contrôles $q\in Q$, mais les états au sens d'un automate à files sont de forme $s \in S=Q\times(\Sigma^*)^C$. En particulier, $s=(q,w)$ avec $q\in Q$ un état de contrôle et $w\in (\Sigma^*)^C$ est un vecteur qui fait correspondre à chaque canal $c\in C$ un mot $w[c] \in \Sigma^*$ représentant le contenu de ce canal.
+
+Un état $s$ est composé d'un état de contrôle et du contenu des différents canaux.
+
+De plus, la \emph{fonction de transition} $\rightarrow:S\times\Theta\rightarrow S$ associe un état $s$ et un nom de transition $\theta$ à un état $s'$.
+
+$\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'actions mentionnés précédemment. En plus de la notation $w[c]$, celles-ci utilisent la notation $w[c\mapsto c']$ signifiant $w$ à l'exception du canal $c$ dont le contenu a été remplacé par le mot $c'$.
+\begin{itemize}
+  \item Si $\delta(\theta)=(p,c?m,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w=w'[c\mapsto mw'[c]]$
+  \item Si $\delta(\theta)=(p,c!m,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w'=w[c\mapsto mw[c]]$
+  \item Si $\delta(\theta)=(p,\tau,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w=w'$
+\end{itemize}
+
+
+% ███████ ██   ██
+% ██       ██ ██
+% █████     ███
+% ██       ██ ██
+% ███████ ██   ██
+
+
+\begin{example}
+  Soit un automate à files $F$ donné à la figure \ref{fig:fifo1}.
+
+  \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10]
+
+      \tikzstyle{every state}=[circle]
+
+      \node[initial,state] (A)                    {$q_0$};
+      \node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+      \node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+      \node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+
+      \path
+      (A) edge node {$\theta_1(a!0)$} (B)
+      (A) edge node[below left] {$\theta_2(a!1)$} (C)
+      (B) edge node {$\theta_4(a?0)$} (D)
+      (B) edge[loop above] node {$\theta_3(b!1)$} (B)
+      (C) edge node[below right] {$\theta_6(a?1)$} (D)
+      (C) edge [loop below] node{$\theta_5(b!0)$} (C)
+      (D) edge node[above] {$\theta_7(b?0)$} (A)
+      ;
+    \end{tikzpicture}
+    \caption{Automate à files $F$}\label{fig:fifo1}
+  \end{figure}
+
+  On retrouve bien la définition d'un automate à files \fifo avec :
+  \begin{itemize}
+    \item $Q=\{q_0,q_1,q_2,q_3\}$
+    \item $C=\{a,b\}$
+    \item $\Sigma=\{0,1\}$
+    \item $q_0\in Q$
+    \item $\Theta=\{\theta_1, \theta_2, \theta_3, \theta_4, \theta_5, \theta_6\}$
+    \item $\delta$ associant à chaque $\theta_i$ un triplet état/action/état telle que l'action est représentée entre parenthèses à côté du nom de transition associé
+  \end{itemize}
+
+  De plus, on peut déduire le système de transition $\mathcal{T}$ défini par $F$. Considérons le mot $w=[\epsilon,\epsilon]$ où le premier élément du vecteur est le contenu du canal $a$ et le second celui du canal $b$.
+  Dans cet exemple, comme $\delta(\theta_1)=(q_0,a!0,q_1)$, alors $(q_0,w)\xrightarrow{\theta_1}(q_1,w')$. Dans ce cas, $w'=[0,\epsilon]$. A ce moment, on a bien $w'=w[a\mapsto 0w[a]]$.
+  En utilisant ce nouveau mot $w'$, un nouvel état est atteignable : $q_3$. En effet, comme $\delta(\theta_4)=(q_1,a?0,q_3)$, alors $(q_1,w')\xrightarrow{\theta_4}(q_4,w'')$. Dans ce cas, $w''=[\epsilon,\epsilon]$. A ce moment, on a bien $w'=w''[a\mapsto 0w''[a]]$.
+
+  Intuitivement, la première transition $\theta_1$ ajoute le symbole $0$ en tête du canal $a$ en passant de l'état $q_0$ à l'état $q_1$. La transition $\theta_4$, elle, permet de passer de l'état $q_1$ à $q_3$ en consommant $0$ en tête du canal $a$.
+
+\end{example}
+
+\todo{Déplacer ici la définition système de transition et donner un exemple}

@@ -1,4 +1,4 @@
-\subsection{Définitions}
+Cette section s'intéresse à la notion de langage. Langages qui peuvent éventuellement être associés à un automate comme énoncé dans les sections \ref{adf:lang} pour un automate déterministe fini et \ref{fifo:lang} pour un automate à file. La section \ref{lr:def} en donne une définition. La section \ref{lr:regex} définit les expression régulières en faisant le lien avec les langages.
 
 Un \emph{alphabet} $\Sigma$ est un ensemble fini et non vide de \emph{symboles}. Un \emph{mot} sur cet alphabet $\Sigma$ est une suite finie de $k$ éléments de $\Sigma$ notée $ w = a_1a_2\dots a_k$ où $k$ est un nombre naturel. $k$ est la \emph{longueur} de ce mot aussi notée $|w|=k$. Le \emph{mot vide} est un mot de taille $k=0$ noté $w=\epsilon$.
 
@@ -24,9 +24,6 @@ Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \sub
 		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
 	\end{itemize}
 \end{example}
-
-
-\subsection{Opérations sur les langages}
 
 Soient $L$ et $M$ deux langages. Le langage $L \cup M = \{w | w \in L\vee w \in M\}$ est l'\emph{union} de ces deux langages. Il est composé des mots venant d'un des deux langages.
 

@@ -1,6 +1,6 @@
-Cette section s'intéresse au Table Filling Algorithm, défini dans la sous-section \ref{ss:tfa}. Cependant, celui-ci utilise la relation \rf de la section \ref{ss:re}.
+Cette section s'intéresse au Table Filling Algorithm, défini dans la sous-section \ref{tfa:tfa}. Cependant, celui-ci utilise la relation \rf de la section \ref{tfa:re}.
 
-Une fois l'algorithme défini, il est utilisé dans les sous-section \ref{ss:eqauto} et \ref{ss:mini} pour tester l'équivalence entre deux automates ou en minimiser un.
+Une fois l'algorithme défini, il est utilisé dans les sous-section \ref{tfa:eqauto} et \ref{tfa:mini} pour tester l'équivalence entre deux automates ou en minimiser un.
 
 
 % ██████  ███████
@@ -11,7 +11,7 @@ Une fois l'algorithme défini, il est utilisé dans les sous-section \ref{ss:eqa
 
 
 
-\subsection{Relation \rf}\label{ss:re}
+\subsection{Relation \rf}\label{tfa:re}
 
 Soit un ADF \automaton. Définissons la relation \rf entre deux états :
 $$xR_Fy \iff (\forall w \in \Sigma^*,\hdelta(x,w) \in F \iff \hdelta(y,w) \in F)$$
@@ -68,7 +68,7 @@ La classe d'équivalence de tous les états en relation \rf avec $q$ (qui sert a
 %    ██    ██      ██   ██
 %    ██    ██      ██   ██
 
-\subsection{Algorithme}\label{ss:tfa}
+\subsection{Algorithme}\label{tfa:tfa}
 
 Certains états d'un automate peuvent être \emph{équivalents} selon la relation \rf. L'information que ceux-ci proposent est alors redondante. Dès lors, l'automate peut être simplifié pour offrir la même information de façon plus compacte. Une façon de détecter ces équivalences est de construire un tableau via le \emph{table filling algorithm}. Le tableau obtenu est la \emph{table de différenciation}.
 
@@ -245,7 +245,7 @@ La complexité totale alors revient à $\mathcal{O}(kn^2)$.
 %             ▀▀
 
 
-\subsection{Appartenance et équivalence}\label{ss:eqauto}
+\subsection{Appartenance et équivalence}\label{tfa:eqauto}
 Comme mentionné en début de section, le test d'équivalence entre deux automates est un des piliers de l'algorithme d'Angluin. Comparer des langages représentés de façon ensembliste n'est pas toujours possible et rarement efficace. Grâce à de légères modifications apportées à l'algorithme de minimisation \ref{alg:mini}, il est possible de comparer deux automates déterministes finis et déterminer si ceux-ci sont équivalents. L'algorithme obtenu est seulement en temps quadratique par rapport au nombre d'états de l'ADF.
 
 
@@ -371,7 +371,7 @@ Les différentes notions liées à l'égalité : les propriétés de réflexivit
 % ██  ██  ██ ██ ██  ██ ██ ██ ██  ██  ██
 % ██      ██ ██ ██   ████ ██ ██      ██
 
-\subsection{Minimisation}\label{ss:mini}
+\subsection{Minimisation}\label{tfa:mini}
 
 Plusieurs automates peuvent représenter un même langage. Parmi ceux-ci, l'\emph{automate minimal} est celui comportant le moins d'états.
 
