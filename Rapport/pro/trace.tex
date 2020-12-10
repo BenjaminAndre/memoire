@@ -1,59 +1,4 @@
-Cette section s'intéresse aux langages qui peuvent être associés à un automate. La section \ref{ss:trace} définit le langage de traces d'un automate. Celui-ci est rarement régulier. Les sections suivantes s'appuyent sur \cite{Vardhan04} pour proposer un langage simplifié, plus souvent régulier, qui représente ce langage de traces. Finalement, la section \ref{ss:extension} définit une fonction $\mathcal{F}$ qui étend une trace et explique en quoi cela aide à faciliter le processus d'apprentissage. \todo{changer formulation ou expliquer ce qu'on apprend}
-
-
-% ██       █████  ███    ██  ██████
-% ██      ██   ██ ████   ██ ██
-% ██      ███████ ██ ██  ██ ██   ███
-% ██      ██   ██ ██  ██ ██ ██    ██
-% ███████ ██   ██ ██   ████  ██████
-
-\subsection{Langage tracé}\label{ss:trace}
-
-Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution. Cette section définit les éléments permettant d'arriver à la construction d'un tel langage.
-
-Dans un système de transitions \tsys, la fonction de transition $\rightarrow:S\times\Theta\rightarrow S$ permet de définir le passage d'un état à un autre.
-
-La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture transitive et réflexive de $\rightarrow$.
-
-Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace de chemin}.
-
-\begin{definition} Soit un automate à files $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
-
-  Le \emph{langage de traces} d'un automate $F$ est
-
-  $$
-  L(F)=\{\sigma\in\Theta^*|\exists s=(p,w) \text{ tel quel } s_0\xrightarrow{\sigma}s\}
-  $$
-\end{definition}
-
-\begin{example}
-  Considérons l'automate $F$ de la figure \ref{fig:fifo1}.
-
-  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas une trace. En effet, on a
-  $$
-  (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
-  $$
-
-  mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
-
-  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est une trace. En effet, on a :
-  \begin{equation*}
-    \begin{gathered}
-      (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_2}
-      (q_0,[1,\epsilon])\xrightarrow{\theta_5}
-      (q_0,[1,0])\xrightarrow{\theta_5}
-      (q_0,[1,00])\xrightarrow{\theta_6}
-      (q_0,[\epsilon,00])\xrightarrow{\theta_7}\\
-      (q_0,[\epsilon,0])\xrightarrow{\theta_1}
-      (q_0,[0,0])\xrightarrow{\theta_4}
-      (q_0,[\epsilon,0])\xrightarrow{\theta_7}
-      (q_0,[\epsilon,\epsilon])
-    \end{gathered}
-  \end{equation*}
-
-  On a bien un état $s$ (ici $s=(q_0,[\epsilon,\epsilon])=s_0$) tel que $s_0\xrightarrow{\sigma}s$.
-
-\end{example}
+Cette section propose un nouveau langage : les traces annotées. Il se base sur les traces et permet de retrouver celles-ci. Si ce langage de trace annotées est régulier, il peut être appris conformément à \cite{Vardhan04}. Se basant sur le langage de traces défini à la section \ref{fifo}, un nouvel alphabet est proposé en \ref{trace:alpha}. Grâce à celui-ci, un algorithme est défini en \ref{trace:annot} qui permet de construire une trace annotée à partir d'une trace. Finalement, la sous-section \ref{trace:extension} propose une fonction d'extension de trace et en propose une propriété intéressante qui permet de faciliter la réponse à l'oracle d'équivalence par le professeur de l'algorithme d'Angluin défini dans la section \ref{angluin}.
 
 
   % ████████ ██   ██ ███████ ████████  █████
@@ -64,7 +9,7 @@ Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Th
 
 
 
-\subsection{Alphabet d'annotation}
+\subsection{Alphabet d'annotation}\label{trace:alpha}
 
 Le langage de traces en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
 
@@ -78,8 +23,13 @@ De plus, un \emph{symbole de contrôle} est créé pour chaque état de contrôl
 En combinant les noms de transitions, les co-noms et les symboles de contrôle, un nouvel alphabet peut être défini, l'\emph{alphabet d'annotation} : $\Phi=(\Theta-\Theta_r)\bigcup\bar{\Theta}\bigcup T_Q$. Dans cet alphabet, on a $\Theta_r=\{\theta|\theta\in\Theta\wedge\exists p,q \in Q, c\in C, a\in\Sigma,\text{tels que } \delta(\theta)=(p,c?a,q)\}$, similaire à $\bar{\Theta}$ mais avec un nom pour chaque transition pour les actions de réception.
 
 
-\subsection{Trace annotée}
+%  █████  ███    ██ ███    ██
+% ██   ██ ████   ██ ████   ██
+% ███████ ██ ██  ██ ██ ██  ██
+% ██   ██ ██  ██ ██ ██  ██ ██
+% ██   ██ ██   ████ ██   ████
 
+\subsection{Trace annotée}\label{trace:annot}
 
 Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate à file $F$. Cette fonction est décrite par l'algorithme \ref{alg:A}.
 
@@ -117,7 +67,13 @@ Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'
 \end{example}
 
 
-\subsection{Fonction d'extension de trace}\label{ss:extension}
+% ███████ ██   ██ ████████
+% ██       ██ ██     ██
+% █████     ███      ██
+% ██       ██ ██     ██
+% ███████ ██   ██    ██
+
+\subsection{Fonction d'extension de trace}\label{trace:extension}
 
 Cette section définit \fl pour un langage arbitraire $L$ et démontre que $AL(F)$ en est un point fixe minimum. De la sorte, tout langage qui n'est pas un point fixe minimum de \fl ne peut pas être $AL(F)$. Si c'est le cas, la question d'équivalence est répondue : les langages ne sont pas égaux. Il reste alors à générer un contre-exemple.
 

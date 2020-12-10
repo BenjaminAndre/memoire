@@ -1,12 +1,12 @@
-L'algorithme d'Angluin permet l'apprentissage actif d'automates déterministes finis définis dans le chapitre \ref{adf}. Ceux-ci représentant un langage régulier, celui-ci est effectivement appris. C'est cet algorithme, adapté à la situation, qui se trouve au cœur de LeVer, objet de ce mémoire.
+L'algorithme d'Angluin permet l'apprentissage actif d'automates déterministes finis définis dans la section \ref{adf}. Ceux-ci représentant un langage régulier, celui-ci est effectivement appris. C'est cet algorithme, adapté à la situation, qui se trouve au cœur de LeVer, objet de ce mémoire.
 
 La section \ref{angluin:fonc} donne une description générale de l'algorithme et de son exécution. Celui-ci repose sur différents concepts tels que :
 \begin{itemize}
-  \item le table filling algorithm de la section \ref{angluin:tfa} (permettant notemment de tester l'équivalence entre deux automates et de les minimiser au besoin)
+  \item le table filling algorithm de la section \ref{tfa} (permettant notemment de tester l'équivalence entre deux automates et de les minimiser au besoin)
   \item la relation \rl de la section \ref{angluin:rl} (portant sur des mots d'un langage) elle-même utilisée par le théorème de Myhill-Nerode
   \item le théorème de Myhill-Nerode de la section \ref{angluin:nerode}
   \item la table d'observation de la section \ref{angluin:to}, utilisée pour stocker la progression de l'algorithme
-  \item la fermeture et la cohérence définies dans la section \ref{angluin:ferm}
+  \item la fermeture et la cohérence définies dans les sections \ref{angluin:ferm} et \ref{angluin:coh}
 \end{itemize}
 
 Finalement, l'algorithme est donné dans la section \ref{angluin:algo} et sa complexité et ses limites y sont discutées.
@@ -27,32 +27,31 @@ De plus, ce professeur contient deux oracles :
 
 \begin{figure}[H]
 	\centering
-\begin{tikzpicture}
-	\tikzset{>=latex}
+  \begin{tikzpicture}
+         \tikzset{>=latex}
 
-	\draw (0,1) rectangle (5,0) node[pos=.5] {Élève ($L^*$)};
-	\draw (8,1) rectangle (13,-2);
+         \draw (0,1) rectangle (5,0) node[pos=.5] {Élève ($L^*$)};
+         \draw (8,1) rectangle (13,-2);
 
-	\draw (8.2,-0.1) rectangle (12.8,-0.9) node[pos=.5] {Oracle d'appartenance};
-	\draw (8.2,-1.1) rectangle (12.8,-1.9) node[pos=.5] {Oracle d'équivalence};
+         \draw (8.2,-0.1) rectangle (12.8,-0.9) node[pos=.5] {Oracle d'appartenance};
+         \draw (8.2,-1.1) rectangle (12.8,-1.9) node[pos=.5] {Oracle d'équivalence};
 
-	\draw (0,-1) rectangle (5, -2) node[pos=.5] {Table d'observation $O$};
+         \draw (0,-1) rectangle (5, -2) node[pos=.5] {Table d'observation $O$};
 
-	\draw (10.5, -3.5) circle (1);
-	\draw (2.5, -3.5) circle (1);
+         \draw (10.5, -3.5) circle (1);
+         \draw (2.5, -3.5) circle (1);
 
-	\node[draw=none] at (10.5, 0.5) {Professeur} ;
-	\node[draw=none] at (10.5,-3.5) {ADF};
-	\node[draw=none] at (2.5,-3.5) {$A_O$};
+         \node[draw=none] at (10.5, 0.5) {Professeur} ;
+         \node[draw=none] at (10.5,-3.5) {ADF};
+         \node[draw=none] at (2.5,-3.5) {$A_O$};
 
-	\draw[<->] (5,0.8) -- (8,0.8) node[pos=0.5,above] {appartenance ?};
-	\draw[<->] (5,0.2) -- (8,0.2) node[pos=0.5,below] {équivalence ?};
+         \draw[<->] (5,0.8) -- (8,0.8) node[pos=0.5,above] {appartenance ?};
+         \draw[<->] (5,0.2) -- (8,0.2) node[pos=0.5,below] {équivalence ?};
 
-	\draw[->] (2.5,-2) -- (2.5,-2.5);
-	\draw[<->] (10.5, -2) -- (10.5,-2.5);
-	\draw[<->] (2.5, 0) -- (2.5,-1);
-
-\end{tikzpicture}
+         \draw[->] (2.5,-2) -- (2.5,-2.5);
+         \draw[<->] (10.5, -2) -- (10.5,-2.5);
+         \draw[<->] (2.5, 0) -- (2.5,-1);
+  \end{tikzpicture}
 \caption{Vue schématique de l'algorithme d'Angluin}
 \end{figure}
 
@@ -195,12 +194,7 @@ On peut prouver que l'automate obtenu de cette façon est l'automate minimal de 
 	Cette table $O$ représente la compréhension actuelle de l'élève du langage $L$. D'itération en itération, $R_O$ représente de mieux en mieux $R_L$ jusqu'à ce que l'automate induit de cette table soit jugé équivalent par le professeur. L'automate induit l'est par l'application du corollaire \ref{col:constadf}.
 
 
-\subsection{Fermeture et cohérence}\label{angluin:ferm}
-
-Les propriété de fermeture (\ref{ss:ferm}) et de cohérence (\ref{ss:coh}) qui sont définies ici sont à respecter à chaque itération de l'algorithme d'Angluin.
-
-
-\subsection{Fermeture}\label{ss:ferm}
+\subsection{Fermeture}\label{angluin:ferm}
 La propriété de \emph{fermeture} s'exprime mathématiquement par
 
 $$ \forall u \in R, \forall a \in \Sigma, \exists v \in R, ua R_O v$$
@@ -228,7 +222,7 @@ Cette propriété peut être vérifiée par cet algorithme, expliqué de façon 
 	\caption{Vérification de la fermeture}\label{alg:fermeture}
 \end{algorithm}
 
-\subsection{Cohérence}\label{ss:coh}
+\subsection{Cohérence}\label{angluin:coh}
 
 La propriété de \emph{cohérence} se définit mathématiquement comme
 

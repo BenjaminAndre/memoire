@@ -2,7 +2,7 @@ Les automates à files définis à la section \ref{fifo} sont plus puissants que
 
 À la place, une propriété dite de sécurité est définie. Si un état respecte cette propriété, il est \emph{sûr}. Si il y a moyen de prouver que la totalité des états de l'automate respectent cette propriété, l'automate est considéré comme sûr. Si au contraire, un exemple de violation de la propriété est trouvé, l'automate peut être déclaré comme à risque.
 
-L'idée dès lors est de travailler non pas avec un système de transitions infini mais avec une représentation construite pour être finie dans un vaste ensemble de problèmes. Cette représentation est le langage de trace défini dans la section \ref{trace}.
+L'idée dès lors est de travailler non pas avec un système de transitions infini mais avec une représentation construite pour être finie dans un vaste ensemble de problèmes. Cette représentation est le langage de traces annotées défini dans la section \ref{trace}.
 
 En supposant que celui-ci est régulier, il est possible d'utiliser l'algorithme d'Angluin de la section \ref{angluin} pour l'apprendre. Cependant, ce langage n'est qu'un concept et le professeur n'a accès qu'à un automate à files $F$. Pour cette raison, les oracles d'appartenance et d'équivalence sont adaptés pour répondre à une requête entre un langage fourni par l'élève et $F$.
 
@@ -49,4 +49,4 @@ La figure \ref{fig:lever} donne une vue schématique de ce nouvel algorithme d'A
 \end{figure}
 
 
-\emph{LeVer} (Learn to Verify) est le nom de cette technique. En particulier, on peut noter sur ce schéma que l'oracle d'équivalence peut non seulement répondre oui ou non mais également interrompre l'apprentissage s'il est possible de se prononcer sur la sûreté d'un automate à files $F$. Pour rappel, $L(F)$ n'est pas régulier en général. Pouvoir se prononcer sur la sûreté de $F$ étant possible, il n'est ni utile ni forcémment possible de continuer à appliquer $L^*$ pour obtenir une meilleure approximation $L$ du langage de trace de $F$. 
+\emph{LeVer} (Learn to Verify) est le nom de cette technique. En particulier, on peut noter sur ce schéma que l'oracle d'équivalence peut non seulement répondre oui ou non mais également interrompre l'apprentissage s'il est possible de se prononcer sur la sûreté d'un automate à files $F$. Pour rappel, $L(F)$ n'est pas régulier en général. Pouvoir se prononcer sur la sûreté de $F$ étant possible, il n'est ni utile ni forcémment possible de continuer à appliquer $L^*$ pour obtenir une meilleure approximation $L$ du langage de trace de $F$.

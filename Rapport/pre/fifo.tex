@@ -1,8 +1,33 @@
-L'article \cite{Vardhan04} se concentre sur un automate plus général : l'automate à files. Les automates à files sont plus complexes que les ADF. Ainsi, plus de langages peuvent être définis, de façon plus précise. Leur puissance expressive est équivalente aux machines de Turing. Cela a un coût : pour certains problèmes il n'existe pas de réponse générale ou si celle-ci existe elle prend un temps exponentiel à construire.
+L'article \cite{Vardhan04} se concentre sur un automate plus général : l'automate à files. Les automates à files sont plus complexes que les ADF. Les langages définis par ceux-ci sont plus complexes que les langages réguliers mais toujours dans l'espace défini par $\Sigma^*$. La figure \ref{fig:lrl} propose une intuition des langages définis par les automates à files.
+
+
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}[>=latex]
+        \draw plot [smooth cycle, tension=0.75] coordinates {
+          (0.5,0)
+          (1.5,0.2)
+          (2.5,0)
+          (2.5,0.8)
+          (1.8,1.5)
+          (1.0,0.7)
+        };
+        \draw (1.50,0.75) circle (1.5);
+        \draw (1.5,0.75) -- (4.5, 0.75);
+        \draw (1,1.2) -- (-2, 1.2);
+
+        \node at (6.50,0.72) {Langage irrégulier $L$};
+        \node[align=left] at (-3.8, 1.18) {Meilleure\\ surapproximation \\ régulière de $L$};
+  \end{tikzpicture}
+  \caption{Relation entre langage régulier et langage irrégulier}\label{fig:lrl}
+\end{figure}
+
+Ainsi, de nouveaux langages peuvent être définis de façon plus précise. Leur puissance expressive est équivalente aux machines de Turing. Cela a un coût : pour certains problèmes il n'existe pas de réponse générale ou si celle-ci existe elle prend un temps exponentiel à construire.
+
 
 C'est le cas de la question de sécurité des automates à files dans ce mémoire. Cependant, le chapitre \ref{lever} décrit comment une solution peut-être construite pour tout un ensemble d'automates à files, permettant de se prononcer sur un ensemble plus large que les langages régulier. L'automate à file est dès lors un outil pertinent pour élargir l'ensemble des langages pour lesquels il est possible d'étudier la sécurité.
 
-Cette section se divise en une première partie \ref{fifo:def} donnant une définition formelle des automates à files et un exemple ainsi qu'une seconde partie sur les systèmes de transitions, représentation potentiellement infinie des différentes configurations d'un automate à files.
+Cette section se divise en une première partie \ref{fifo:def} donnant une définition formelle des automates à files et un exemple ainsi qu'une seconde partie \ref{fifo:trans} sur les systèmes de transitions, représentation potentiellement infinie des différentes configurations d'un automate à files. Finalement, la section \ref{fifo:lang} donne une définition formelle de ces nouveaux langages représentés par des automates à files.
 
 
 
@@ -143,5 +168,61 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
     \caption{Automate à files $F$}\label{fig:st}
   \end{figure}
 
+
+\end{example}
+
+
+
+% ██       █████  ███    ██  ██████
+% ██      ██   ██ ████   ██ ██
+% ██      ███████ ██ ██  ██ ██   ███
+% ██      ██   ██ ██  ██ ██ ██    ██
+% ███████ ██   ██ ██   ████  ██████
+
+\subsection{Langage tracé}\label{ss:trace}
+
+Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution.
+
+Dans un système de transitions \tsys, la fonction de transition $\rightarrow:S\times\Theta\rightarrow S$ permet de définir le passage d'un état à un autre.
+
+La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture transitive et réflexive de $\rightarrow$.
+
+Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace} et $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ est un \emph{chemin}.
+
+\begin{definition} Soit un automate à files $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
+
+  Le \emph{langage de traces} d'un automate $F$ est
+
+  $$
+  L(F)=\{\sigma\in\Theta^*|\exists s=(p,w) \text{ tel quel } s_0\xrightarrow{\sigma}s\}
+  $$
+\end{definition}
+
+\begin{example}
+  Considérons l'automate $F$ de la figure \ref{fig:fifo1}.
+
+  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas une trace. En effet, on a
+  $$
+  (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
+  $$
+
+  mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
+
+  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est une trace. En effet, on a :
+  \begin{equation*}
+    \begin{gathered}
+      (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_2}
+      (q_0,[1,\epsilon])\xrightarrow{\theta_5}
+      (q_0,[1,0])\xrightarrow{\theta_5}
+      (q_0,[1,00])\xrightarrow{\theta_6}
+      (q_0,[\epsilon,00])\xrightarrow{\theta_7}\\
+      (q_0,[\epsilon,0])\xrightarrow{\theta_1}
+      (q_0,[0,0])\xrightarrow{\theta_4}
+      (q_0,[\epsilon,0])\xrightarrow{\theta_7}
+      (q_0,[\epsilon,\epsilon])
+    \end{gathered}
+  \end{equation*}
+
+  On a bien un état $s$ (ici $s=(q_0,[\epsilon,\epsilon])=s_0$) tel que $s_0\xrightarrow{\sigma}s$.
 
 \end{example}
