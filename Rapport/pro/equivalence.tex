@@ -5,16 +5,33 @@ Comme expliqué dans l'introduction du chapitre, c'est impossible de façon gén
 Contrairement à la version originale de l'algorithme d'Angluin qui a deux possibilités (équivalence ou contre-exemple), celle-ci en a trois. L'oracle peut répondre soit que $AL(F)$ est sécurisé, soit qu'il ne l'est pas, soit que $L$ est différent de $AL(F)$ avec un contre-exemple.
 
 
-\subsection*{$L$ est-il un point fixe de $\mathcal{F}$ ?}
+\subsection{$L$ est-il un point fixe de $\mathcal{F}$ ?}
 
-Cette question se base sur la proprité de $\mathcal{F}$ disant que $\mathcal{F}(AL(F))=AL(F)$ ; que c'est une point fixe. Si $L$ n'est pas un point fixe, il n'a alors aucune chance d'être $AL(F)$. Les trois cas de la section \ref{ss:extension} donnent les différents détails.
+Cette question se base sur le théorème \ref{thm:fl} et en particulier du fait que $AL(F)$ est un point fixe. Il n'est pas possible de prouver que $L=AL(F)$ mais il est possible de montrer que $L\neq AL(F)$ en montrant que $L$ n'est pas un point fixe.
 
-Ceux-ci mentionnent trois possibilités :
+Une façon de montrer que $L\neq AL(F)$, est d'énoncer un seul élément dans $L\bigcup AL(F)-L\bigcap AL(F)=$\alfx l'union exclusive des deux ensembles. Pour rappel, $AL(F)$ est un langage contenant l'ensemble des traces valides pour l'automate à files $F$.
+
+En comparant \fl avec $L$ pour vérifier si $L$ est un point fixe de $\mathcal{F}$, plusieurs situations peuvent apparaître :
+
 \begin{itemize}
-  \item On peut directement retourner un contre-exemple
-  \item $L=AL(F)$ et la sécurité peut être calculée
-  \item $L$ est une surapproximation de $AL(F)$. A ce moment, il faut se poser les deux autres questions pour pouvoir continuer à rafiner la compréhension de la relaiton entre $L$ et $AL(F)$.
+  \item $\mathcal{F}(L)-L\neq\emptyset$. Considérons un mot $w\in\mathcal{F}(L)-L$ et montrons que $w\in$\alfx.
+  \begin{itemize}
+    \item Si $w=t_{q_0}$, c'est que $t_{q_0}\notin L$. Pourtant, par définition, $t_{q_0}\in AL(F)$. Dès lors, $w\in$\alfx
+    \item Sinon, si $w$ est une annotation correctement formatée, c'est que $L$ n'est pas un point fixe de $\mathcal{F}$. Dès lors, $w$ suffit à démontrer que $AL(F)\neq L$.
+    \item Sinon, $w$ n'est pas une annotation correctement formatée. $w$ faisant partie de \fl, cela signifie qu'il doit exister un mot $w'\in L$ tel que $w=Post(w')$. Ce $w'$ ne peut pas être une annotation valide : cela impliquerait que $w$ l'est également ce qui est posé comme faux ici. Comme $w'$ n'est pas une annotation valide pour $F$, $w'\notin AL(F)$. Comme $w'\in L$, naturellement $w'\in$\alfx.
+  \end{itemize}
+  \item $\mathcal{F}(L)\subsetneq L$. Dans ce cas, utilisons la notion de point préfixe. Un ensemble $Z$ est un \emph{point préfixe} d'une fonction $\mathcal{F}$ s'il réduit par son application : $\mathcal{F}$ ($\mathcal{F}(Z)\subseteq Z$). Selon cette définition, $L$ est un point préfixe de $\mathcal{F}$.
+  En appliquant $\mathcal{F}$ des deux côtés, ce qui préserve l'inclusion car $\mathcal{F}$ est monotone, on obtient $\mathcal{F}(\mathcal{F}(L))\subsetneq\mathcal{F}(L)$.
+
+  Donc, $\mathcal{F}(L)$ est également un point préfixe. Soit $w\in L-\mathcal{F}(L)$. Comme $w$ n'est pas dans l'intersection de ces deux point préfixes, il ne fait pas partie du point fixe minimum $AL(F)$. En effet, selon la théorie des points fixes de Knaster-Tarski (annexe \ref{app:tarski}), un point fixe minimal est également l'intersection de tous les points préfixes de $\mathcal{F}$.
+
+  \item \fl=$L$. Cela signifie que $L$ est un point fixe de $\mathcal{F}$. Cela signifie qu'il n'est pas possible de prouver que $L\neq AL(F)$ et infirmant cette propriété. Cela ne signifie par pour autant que $L=AL(F)$.
+
+  Ce pourrait très bien être un autre point fixe contenant $AL(F)$ ou un autre ensemble contenant une trace annotée menant à un état qui n'est pas sûr. Pour tenter de continuer à chercher un contre-exemple ou tester la sûreté, il faut poser d'autres questions.
+
 \end{itemize}
+
+
 
 \subsection*{$L$ intersecte-t-il avec une région à risque ?}
 

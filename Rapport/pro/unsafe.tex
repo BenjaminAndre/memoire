@@ -1,7 +1,6 @@
-Comme mentionné au début du chapitre, ce travail s'intéresse à la propriété de sécurité dans les automates à files. Contrairement aux ADFs construits dans le chapitre \ref{ch:bases}, les automates à files ont un nombre potentiellement infini d'états. Dans ces conditions, il n'est pas possible d'énumérer l'ensemble des états acceptants.
+Comme mentionné au début du chapitre, ce travail s'intéresse à la propriété de sécurité dans les automates à files. Contrairement aux ADFs construits dans la section \ref{adf}, les automates à files ont un nombre potentiellement infini d'états. Dans ces conditions, il n'est pas possible d'énumérer l'ensemble des états acceptants.
 
 Au lieu de proposer un ensemble d'état acceptants, on va fixer une propriété. Celle-ci permet de catégoriser les états qui sont souhaitables de ceux qui ne le sont pas. Par la suite, la section \ref{ss:tracesafety} propose une technique permettant de calculer l'ensemble des états indésirables à partir d'une trace annotée.
-
 
 \subsection{Définitions}
 Dans un automate à files \fifo, chaque état de contrôle $q\in Q$ est associé à un union finie de langage réguliers pour chacun des canaux $c\in C$.
