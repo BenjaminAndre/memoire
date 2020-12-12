@@ -1,57 +1,34 @@
-\begin{algo}[Appartenance à $AL(F)$]\label{alg:membership}
+\begin{algo}[Appartenance]\label{alg:membership}
   \begin{algorithmic}[1]
-    \REQUIRE une trace annotée $\gamma\in\Phi^*$ et un automate à files \fifo
+    \REQUIRE une trace annotée $\gamma\in\Phi^*$, un automate à files \fifo et un état de contrôle actif $q_a$
     \ENSURE si $\gamma\in AL(F)$ ou non
-    \IF {$\gamma$ est mal formatée}
+    \IF{$\gamma$ n'est pas correctement formattée pour $F$}
       \RETURN faux
     \ENDIF
-    \STATE candidats $\leftarrow\{(q_0,\epsilon^c)\}$
-    \FORALL {symbole $\phi \in \gamma$}
-      \IF {$\phi \in T_Q$}
-        \STATE \COMMENT {Fin du mot}
-        \FORALL {$(q,w)\in$ candidats}
-          \IF {$\phi$ est un $t_q$ correspondant à $q$}
-            \RETURN vrai
-          \ENDIF
-        \ENDFOR
-        \RETURN faux
-      \ELSE
-        \STATE \COMMENT{Exécution de l'automate sur une étape}
-        \STATE nouveau $\leftarrow\emptyset$
-        \STATE extension $\leftarrow\emptyset$
-        \FORALL {$(q,w)\in$ candidats}
-          \STATE $\phi'\leftarrow\phi$ sans l'éventuelle barre
-          \STATE \COMMENT {Permet de rejeter les chemins incorrects sans effectuer l'exécution complète}
-          \STATE ajouter $\delta(\phi', (q,w))$ à extension si $\delta$ est définie pour ces valeurs
-        \ENDFOR
-        \STATE \COMMENT {Complète avec les actions de réception possibles}
-        \WHILE {extension est non vide}
-          \STATE \COMMENT {Créer les différents cas de consommation des canaux}
-          \STATE prendre un élément $(q,w)\in$extension
-          \FORALL {canal non-nul $c$ de $w$ commençant par un symbole $s$}
-            \IF {$\exists\theta$ correspondant à l'action $c?s$ sortant de $q$}
-              \STATE \COMMENT {Comme une extension est elle-même étendue, on a récursivement les cas avec plusieurs réceptions bout à bout jusqu'à vider un canal}
-              \STATE ajouter $\delta(\theta, (q,w))$ à extension
+    \STATE $a,\gamma'\leftarrow$ premier symbole de $\gamma$ et le reste de la trace annotée
+    \IF{$a\in T_Q$}
+      \IF {$a$ correspond à $q_a$}
+        \RETURN vrai
+      \ENDIF
+    \ELSIF{$a\in\bar{\Theta}$}
+      \STATE $a'\leftarrow a$ sans la barre
+      \STATE $(p, c!m, q)\leftarrow\delta(a')$ \COMMENT{comme $a\in\bar{\Theta}$, il s'agit forcément d'une action d'envoi}
+      \IF{$p=q_a$}
+        \FORALL{$\theta_r$ consommant le symbole $m$ dans le canal $c$}
+          \FORALL{position $i$ dans $\gamma'$ sauf après le symbole terminal $t\in T_Q$}
+            \STATE $\gamma''\leftarrow\gamma'$ où $\theta_r$ a été inséré à la position $i$
+            \IF{Appartenance($\gamma''$, $F$, $q$)}
+              \RETURN vrai
             \ENDIF
           \ENDFOR
-          \STATE ajouter $(q,w)$ à nouveaux
-          \STATE retirer $(q,w)$ d'extension
-        \ENDWHILE
-        \STATE candidats $\leftarrow$ nouveaux
+        \ENDFOR
       \ENDIF
-    \ENDFOR
+    \ELSE
+      \STATE $(p,action,q)\leftarrow\delta(a)$ \COMMENT{action peut être un envoi où une réception mais ce n'est pas important puisqu'il n'est pas necéssaire de retenir le contenu des canaux}
+      \IF{$p=q_a$}
+        \RETURN Appartenance($\gamma'$, $F$, $q$)
+      \ENDIF
+    \ENDIF
+    \RETURN faux
   \end{algorithmic}
 \end{algo}
-
-
-\subsubsection*{Note d'aide à la lecture}
-
-Cet algorithme a 3 étapes principales :
-\begin{itemize}
-  \item La progression : un nouveau symbole est lu et les états qui le peuvent passent au nouvel état en suivant une transition. Les canaux sont mis à jour.
-  \item L'extension : chaque candidat génère tous les candidats atteignables en consommant ce qu'il reste dans les canaux jusqu'à ce qu'ils soient vide ou qu'aucune transition ne permette de continuer.
-  \item La vérification : une fois que l'algorithme a progressé jusqu'à la fin de $\gamma$, s'il reste des candidats, il vérifie si l'état de contrôle final correspond bien au symbole en fin de $\gamma$.
-\end{itemize}
-
-Intuitivement, si il y a $n$ états de contrôle et $m$ symboles, cet algorithme me semble être dans le pire des cas en $\mathcal{O}(mn^m)$. \todo{une vérification formelle s'il est validé}. Il est est linéaire en le nombre d'états explorés.
-Par contre comme un symbole est consommé à chaque étape, il s'arrête toujours.
