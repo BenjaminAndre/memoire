@@ -31,11 +31,15 @@ En combinant les noms de transitions, les co-noms et les symboles de contrôle, 
 
 \subsection{Trace annotée}\label{trace:annot}
 
-Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une \emph{trace annotée} à une trace d'automate à file $F$. Cette fonction est décrite par l'algorithme \ref{alg:A}.
+Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une trace annotée $\gamma\in\Phi^*$ à une trace d'automate à file $\sigma\in\Theta^*$. Cette \emph{trace annotée} est un mot sur l'alphabet d'annotation $\Phi$ tel qu'il représente au moins la trace $\sigma$. Il y a une perte d'information lors de cette transformation. $\mathcal{A}$ est la \emph{fonction d'annotation}.
+
+Intuitivement, $\mathcal{A}$ compacte une trace en remplaçant tout $\theta$ correspondant à une action d'envoi par son équivalent $\bar{\theta}$ si le symbole envoyé est consommé plus loin dans la trace, sur le même canal. Si une trace valide est annotée, il ne peut y avoir d'action de réception orpheline : le symbole a bien du être envoyé avant d'être consommé. Dès lors, la trace annotée ne comporte que des symboles correspondant à des actions d'envoi, avec une barre ou non. De plus, un symbole appartenant à $T_Q$ est ajouté à la fin pour signifier l'état de contrôle à atteint en suivant le chemin défini par la trace.
+
+Cette fonction est reprise algorithmiquement en l'algorithme \ref{alg:A}.
 
 \begin{algorithm}[H]
   	\begin{algorithmic}[1]
-    \REQUIRE un automate à files \fifo , une trace $\sigma\in L(F)^*$
+    \REQUIRE un automate à files \fifo , une trace $\sigma\in L(F)$
 		\ENSURE une trace annotée $\gamma\in\Phi^*$ représentant $\sigma$
 
     \STATE $\gamma\leftarrow\epsilon$
@@ -51,7 +55,7 @@ Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une \emph{trace 
     \STATE $\gamma\leftarrow\gamma t_q$ avec $t_q\in T_Q$ le symbole de contrôle associé à $q$
 		\RETURN $\gamma$
 	\end{algorithmic}
-	\caption{$\mathcal{A}:L(F)^*\rightarrow\Phi^*$}\label{alg:A}
+	\caption{$\mathcal{A}:L(F)\rightarrow\Phi^*$}\label{alg:A}
 \end{algorithm}
 
 Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité.

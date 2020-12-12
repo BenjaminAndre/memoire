@@ -195,6 +195,9 @@ La \emph{fonction de transition étendue} $\xrightarrow{*}$ est la fermeture tra
 
 Pour une suite de noms de transitions $\sigma=\theta_1\theta_2 ...\theta_n\in\Theta^*$, on note $(p,w)\xrightarrow{\sigma}(q,w')$ si il existe des états $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ tels que $(p,w)\xrightarrow{\theta_1}(p_1,w_1)\xrightarrow{\theta_2}...\xrightarrow{\theta_{n-1}}(p_{n-1},w_{n-1})\xrightarrow{\theta_n}(q,w')$. Dans ce cas, $\sigma$ est une \emph{trace} et $(p_1,w_1),(p_2,w_2),...,(p_{n-1},w_{n-1})$ est un \emph{chemin}.
 
+De plus, comme $\sigma$ correspond à un chemin, $\sigma$ est une \emph{trace valide}.
+
+
 \begin{definition} Soit un automate à files $F$ et l'état initial $s_0=(q_0, \epsilon^C)$. Celui-ci est le couple état de contrôle initial $q_0$ ainsi que des mots $w[c]=\epsilon$ pour tout canal $c\in C$.
 
   Le \emph{langage de traces} d'un automate $F$ est
