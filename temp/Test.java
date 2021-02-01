@@ -1,3 +1,5 @@
+package main.java;
+
 import java.io.IOException;
 
 import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFA;

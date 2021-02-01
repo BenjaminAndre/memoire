@@ -15,6 +15,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.misberner.duzzt</groupId>
+            <artifactId>duzzt-processor</artifactId>
+            <version>0.0.2</version>
+            <!-- This will make sure the dependency is non-transitive! -->
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>de.learnlib.distribution</groupId>
             <artifactId>learnlib-distribution</artifactId>
             <version>${learnlib.version}</version>
@@ -25,6 +32,11 @@
             <artifactId>learnlib-learning-examples</artifactId>
             <version>${learnlib.version}</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.5</version>
         </dependency>
     </dependencies>
 

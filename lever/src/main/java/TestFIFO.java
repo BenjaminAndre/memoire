@@ -1,16 +1,12 @@
-import java.io.IOException;
-
 import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFA;
 import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFABuilder;
 import de.learnlib.api.oracle.MembershipOracle;
-import de.learnlib.api.oracle.MembershipOracle.DFAMembershipOracle;
 import de.learnlib.datastructure.observationtable.OTUtils;
 import de.learnlib.datastructure.observationtable.writer.ObservationTableASCIIWriter;
 import de.learnlib.filter.statistic.oracle.DFACounterOracle;
 import de.learnlib.oracle.equivalence.DFAWMethodEQOracle;
 import de.learnlib.oracle.membership.SimulatorOracle;
-import de.learnlib.oracle.membership.SimulatorOracle.DFASimulatorOracle;
-import de.learnlib.util.Experiment.DFAExperiment;
+import de.learnlib.util.Experiment;
 import de.learnlib.util.statistics.SimpleProfiler;
 import net.automatalib.automata.fsa.DFA;
 import net.automatalib.automata.fsa.impl.compact.CompactDFA;
@@ -20,7 +16,12 @@ import net.automatalib.visualization.Visualization;
 import net.automatalib.words.Alphabet;
 import net.automatalib.words.impl.Alphabets;
 
-public class Test {
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class TestFIFO {
 
     private static final int EXPLORATION_DEPTH = 4;
 
@@ -34,7 +35,7 @@ public class Test {
         Alphabet<Character> inputs = target.getInputAlphabet();
 
         // simulator that answers membership
-        DFAMembershipOracle<Character> membershipOracle = new DFASimulatorOracle(target);
+        MembershipOracle.DFAMembershipOracle<Character> membershipOracle = new SimulatorOracle.DFASimulatorOracle(target);
 
         // counting queries wraps memOracle
         DFACounterOracle<Character> mqOracle = new DFACounterOracle<>(membershipOracle, "membership queries");
@@ -51,7 +52,7 @@ public class Test {
         // the learning algorithm and the conformance test.
         // The experiment will execute the main loop of
         // active learning
-        DFAExperiment<Character> experiment = new DFAExperiment<>(lstar, wMethod, inputs);
+        Experiment.DFAExperiment<Character> experiment = new Experiment.DFAExperiment<>(lstar, wMethod, inputs);
 
         // turn on time profiling
         experiment.setProfile(true);
@@ -95,16 +96,24 @@ public class Test {
     }
 
     /**
-     * creates example from Angluin's seminal paper.
+     * creates example from Andre's master thesis
      *
      * @return example dfa
      */
-    private static CompactDFA<Character> constructSUL() {
+    private static CompactFIFO<Character,Character> constructSUL() {
         // input alphabet contains characters 'a'..'b'
-        Alphabet<Character> sigma = Alphabets.characters('a', 'c');
+        Alphabet<Character> sigma = Alphabets.characters('0', '1');
+        Character[] channelNamesArray = new Character[] {'a', 'b'};
+        List<Character> channelNames = Arrays.asList(channelNamesArray);
 
         // @formatter:off
         // create automaton
+        return MyAutomatonBuilder.newFIFOAutomaton(sigma, channelNames)
+                .from("q0")
+                    .to("")
+
+                ;
+
         return AutomatonBuilders.newDFA(sigma)
                 .withInitial("q0")
                 .from("q0")
@@ -127,5 +136,6 @@ public class Test {
                 .create();
         // @formatter:on
     }
+
 
 }

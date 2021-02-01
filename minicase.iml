@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/minicase/target/classes" />
+    <output-test url="file://$MODULE_DIR$/minicase/target/test-classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/minicase">
+      <sourceFolder url="file://$MODULE_DIR$/minicase/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/minicase/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="automata-adapters-parent" />
+    <orderEntry type="module" module-name="automata-api" />
+    <orderEntry type="module" module-name="automata-archetypes-parent" />
+    <orderEntry type="module" module-name="automata-brics" />
+    <orderEntry type="module" module-name="automata-build-parent" />
+    <orderEntry type="module" module-name="automata-build-tools" />
+    <orderEntry type="module" module-name="automata-commons-parent" />
+    <orderEntry type="module" module-name="automata-commons-smartcollections" />
+    <orderEntry type="module" module-name="automata-commons-util" />
+    <orderEntry type="module" module-name="automata-core" />
+    <orderEntry type="module" module-name="automata-distribution" />
+    <orderEntry type="module" module-name="automata-dot-visualizer" />
+    <orderEntry type="module" module-name="automata-examples" />
+    <orderEntry type="module" module-name="automata-incremental" />
+    <orderEntry type="module" module-name="automata-jung-visualizer" />
+    <orderEntry type="module" module-name="automata-modelchecking-ltsmin" />
+    <orderEntry type="module" module-name="automata-modelchecking-parent" />
+    <orderEntry type="module" module-name="automata-parent" />
+    <orderEntry type="module" module-name="automata-serialization-aut" />
+    <orderEntry type="module" module-name="automata-serialization-core" />
+    <orderEntry type="module" module-name="automata-serialization-dot" />
+    <orderEntry type="module" module-name="automata-serialization-etf" />
+    <orderEntry type="module" module-name="automata-serialization-fsm" />
+    <orderEntry type="module" module-name="automata-serialization-learnlibv2" />
+    <orderEntry type="module" module-name="automata-serialization-parent" />
+    <orderEntry type="module" module-name="automata-serialization-saf" />
+    <orderEntry type="module" module-name="automata-serialization-taf" />
+    <orderEntry type="module" module-name="automata-util" />
+    <orderEntry type="module" module-name="automata-visualization-parent" />
+    <orderEntry type="module" module-name="basic" />
+    <orderEntry type="module" module-name="basic (1) (de.learnlib.archetypes)" />
+    <orderEntry type="module" module-name="complete" />
+    <orderEntry type="module" module-name="complete (1) (de.learnlib.archetypes)" />
+    <orderEntry type="module" module-name="learnlib-acex" />
+    <orderEntry type="module" module-name="learnlib-adt" />
+    <orderEntry type="module" module-name="learnlib-algorithms-active-parent" />
+    <orderEntry type="module" module-name="learnlib-algorithms-parent" />
+    <orderEntry type="module" module-name="learnlib-algorithms-passive-parent" />
+    <orderEntry type="module" module-name="learnlib-annotation-processor" />
+    <orderEntry type="module" module-name="learnlib-api" />
+    <orderEntry type="module" module-name="learnlib-archetypes-parent" />
+    <orderEntry type="module" module-name="learnlib-build-config" />
+    <orderEntry type="module" module-name="learnlib-build-parent" />
+    <orderEntry type="module" module-name="learnlib-build-tools-parent" />
+    <orderEntry type="module" module-name="learnlib-cache" />
+    <orderEntry type="module" module-name="learnlib-commons-parent" />
+    <orderEntry type="module" module-name="learnlib-counterexamples" />
+    <orderEntry type="module" module-name="learnlib-datastructure-dt" />
+    <orderEntry type="module" module-name="learnlib-datastructure-list" />
+    <orderEntry type="module" module-name="learnlib-datastructure-ot" />
+    <orderEntry type="module" module-name="learnlib-datastructure-pta" />
+    <orderEntry type="module" module-name="learnlib-datastructures-parent" />
+    <orderEntry type="module" module-name="learnlib-dhc" />
+    <orderEntry type="module" module-name="learnlib-discrimination-tree" />
+    <orderEntry type="module" module-name="learnlib-discrimination-tree-vpda" />
+    <orderEntry type="module" module-name="learnlib-distribution" />
+    <orderEntry type="module" module-name="learnlib-drivers-basic" />
+    <orderEntry type="module" module-name="learnlib-drivers-parent" />
+    <orderEntry type="module" module-name="learnlib-drivers-simulator" />
+    <orderEntry type="module" module-name="learnlib-emptiness-oracles" />
+    <orderEntry type="module" module-name="learnlib-equivalence-oracles" />
+    <orderEntry type="module" module-name="learnlib-examples" />
+    <orderEntry type="module" module-name="learnlib-filters-parent" />
+    <orderEntry type="module" module-name="learnlib-kearns-vazirani" />
+    <orderEntry type="module" module-name="learnlib-learner-it-support" />
+    <orderEntry type="module" module-name="learnlib-learning-examples" />
+    <orderEntry type="module" module-name="learnlib-lstar" />
+    <orderEntry type="module" module-name="learnlib-mapper" />
+    <orderEntry type="module" module-name="learnlib-membership-oracles" />
+    <orderEntry type="module" module-name="learnlib-nlstar" />
+    <orderEntry type="module" module-name="learnlib-oracles-parent" />
+    <orderEntry type="module" module-name="learnlib-ostia" />
+    <orderEntry type="module" module-name="learnlib-parallelism" />
+    <orderEntry type="module" module-name="learnlib-parent" />
+    <orderEntry type="module" module-name="learnlib-property-oracles" />
+    <orderEntry type="module" module-name="learnlib-reuse" />
+    <orderEntry type="module" module-name="learnlib-rpni" />
+    <orderEntry type="module" module-name="learnlib-rpni-edsm" />
+    <orderEntry type="module" module-name="learnlib-rpni-mdl" />
+    <orderEntry type="module" module-name="learnlib-settings" />
+    <orderEntry type="module" module-name="learnlib-statistics" />
+    <orderEntry type="module" module-name="learnlib-test-support" />
+    <orderEntry type="module" module-name="learnlib-test-support-parent" />
+    <orderEntry type="module" module-name="learnlib-ttt" />
+    <orderEntry type="module" module-name="learnlib-ttt-vpda" />
+    <orderEntry type="module" module-name="learnlib-util" />
+  </component>
+</module>
