@@ -51,7 +51,7 @@ public class Test {
         List<Integer> badStates = new ArrayList<>();
         badStates.add(4);
 
-        ALFEQOracle eqOracle = new ALFEQOracle(target, badStates);
+        ALFEQOracle eqOracle = new ALFEQOracle(target, null, badStates);
         Experiment.DFAExperiment experiment = new Experiment.DFAExperiment(lstar, eqOracle, phi);
 
         // run experiment

@@ -20,5 +20,47 @@
             <artifactId>slf4j-simple</artifactId>
             <version>1.7.5</version>
         </dependency>
+        <dependency>
+            <groupId>net.automatalib</groupId>
+            <artifactId>automata-core</artifactId>
+            <version>0.11.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.automatalib</groupId>
+            <artifactId>automata-util</artifactId>
+            <version>0.11.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-api</artifactId>
+            <version>0.17.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-statistics</artifactId>
+            <version>0.17.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-lstar</artifactId>
+            <version>0.17.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-membership-oracles</artifactId>
+            <version>0.17.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.learnlib</groupId>
+            <artifactId>learnlib-equivalence-oracles</artifactId>
+            <version>0.17.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

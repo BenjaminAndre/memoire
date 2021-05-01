@@ -1,9 +1,14 @@
-
+import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFA;
+import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFABuilder;
+import de.learnlib.api.oracle.MembershipOracle;
+import de.learnlib.oracle.equivalence.ALFEQOracle;
+import de.learnlib.oracle.membership.FIFOTraceSimulatorOracle;
+import de.learnlib.util.Experiment;
 import net.automatalib.automata.ca.impl.compact.CompactFIFOA;
 import net.automatalib.automata.fsa.impl.compact.CompactDFA;
 import net.automatalib.util.automata.builders.AutomatonBuilders;
-import net.automatalib.visualization.Visualization;
 import net.automatalib.words.Alphabet;
+import net.automatalib.words.PhiChar;
 import net.automatalib.words.impl.Alphabets;
 
 import java.io.IOException;
@@ -25,8 +30,21 @@ public class TestFIFO {
         System.out.println(inputs);
         System.out.println(channels);
         System.out.println(target.getInitialState());
-        Visualization.visualize(target, inputs);
+        //Visualization.visualize(target, inputs);
 
+        MembershipOracle<PhiChar, Boolean> sul = new FIFOTraceSimulatorOracle(target);
+
+        Alphabet<PhiChar> annotedAlphabet = target.getAnnotationAlphabet();
+
+        ClassicLStarDFA<PhiChar> lstar =
+              new ClassicLStarDFABuilder<PhiChar>().withAlphabet(annotedAlphabet)
+                    .withOracle(sul)
+                    .create();
+
+        ALFEQOracle<CompactDFA<PhiChar>, PhiChar> eqo = new ALFEQOracle(target, sul, null);
+
+        Experiment.LeverExperiment<PhiChar> experiment = new Experiment.LeverExperiment<PhiChar>(lstar, eqo, annotedAlphabet);
+        experiment.run();
 
         /** Le meilleur des mondes
          *
@@ -43,8 +61,13 @@ public class TestFIFO {
          *  QUID DE l'EQUIVALENCE ?
          */
 
+
+
+
+
         /**
-        // load DFA and alphabet
+        La technique initiale
+         // load DFA and alphabet
         CompactDFA<Character> target2 = constructDFASUL();
         Alphabet<Character> inputs2 = target2.getInputAlphabet();
         DFAMembershipOracle<Character> sul = new DFASimulatorOracle<>(target2);
@@ -67,6 +90,7 @@ public class TestFIFO {
 
         Visualization.visualize(result, inputs2);
          */
+        return;
     }
 
     /**

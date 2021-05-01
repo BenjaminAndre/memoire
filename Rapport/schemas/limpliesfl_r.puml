@@ -1,0 +1,31 @@
+@startuml
+skinparam linetype ortho
+
+[*] --> q0
+
+note left
+  Par respect de la définition de F(L), est-ce qu'il existe une transition tq0 depuis le premier état vers un état final ?
+  Pour le bon formattage, est-ce qu'aucune transition ne sort d'un état final et que toutes celles qui y rentrent sont de t* ?
+end note
+
+q0 --> [*] : tq0
+
+q0 -[dashed]-> p : gamma
+
+note right
+  Ainsi la dernière transition theta va de p à q. Pour chaque theta_send qui part de q dans F, est-ce l'équivalent F(L) existe ici ?
+  Peut importe le début pourvu qu'il soit bien formatté, est-ce qu'il existe aussi une transition theta_send de q à un autre état
+  lui-même suivi d'un t_etat_cible_de_theta_send vers l'état final ?
+  Si ce n'est pas le cas, on a trouvé un mot dans F(L) qui n'est pas dans L.
+end note
+
+p --> q : theta
+
+note right
+  Tout mot correctement formatté finit par un état qui a une transition t* vers l'état final.
+  Dans l'absolu, celui-ci n'a pas de transition sortante sinon on peut trouver un mot mal formatté.
+end note
+
+q -down-> [*] : tq
+
+@enduml
