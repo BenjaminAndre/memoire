@@ -1,5 +1,8 @@
 import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFA;
 import de.learnlib.algorithms.lstar.dfa.ClassicLStarDFABuilder;
+import de.learnlib.api.exception.SULException;
+import de.learnlib.api.exception.exception.SafeException;
+import de.learnlib.api.exception.exception.UnsafeException;
 import de.learnlib.api.oracle.MembershipOracle;
 import de.learnlib.oracle.equivalence.ALFEQOracle;
 import de.learnlib.oracle.membership.FIFOTraceSimulatorOracle;
@@ -12,6 +15,8 @@ import net.automatalib.words.PhiChar;
 import net.automatalib.words.impl.Alphabets;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestFIFO {
 
@@ -41,56 +46,22 @@ public class TestFIFO {
                     .withOracle(sul)
                     .create();
 
-        ALFEQOracle<CompactDFA<PhiChar>, PhiChar> eqo = new ALFEQOracle(target, sul, null);
+        // 4 is not within the states so the automaton should be safe
+        List<Integer> baddies = Arrays.asList(new Integer[]{50});
 
-        Experiment.LeverExperiment<PhiChar> experiment = new Experiment.LeverExperiment<PhiChar>(lstar, eqo, annotedAlphabet);
-        experiment.run();
+        ALFEQOracle eqo = new ALFEQOracle(target, sul, baddies);
 
-        /** Le meilleur des mondes
-         *
-         *  //get transition names (numbers)
-         *  DFAMembershipOracle<Characte> sul = new FIFOASimulatorOracle<>(target); //Yes means it can represent some execution of the FIFOA
-         *  DFACountarOracle<Character> mqOracle = new DFACounterOracle<>(sul, "membership queries"); // No modification
-         *  ClassicLStarDFA<Character> lstar =
-         *      new ClassicLStarDFABuilder<Character>().withAlphabet(transitionNames) //learning to name the transitions
-         *      .withOracle(mqOracle)
-         *      .create(); //99% same call
-         *  DFAWMethodEQOracle<Character> wMethod = new DFAWMethoEQOracle<>(mpOracle, EXPLORATION_DEPTH); // No modification
-         *  DFAEXperiment<Character> experiment = new DFAExperiment<>(lstar, wMethod, transitionNames);
-         *
-         *  QUID DE l'EQUIVALENCE ?
-         */
-
-
-
-
-
-        /**
-        La technique initiale
-         // load DFA and alphabet
-        CompactDFA<Character> target2 = constructDFASUL();
-        Alphabet<Character> inputs2 = target2.getInputAlphabet();
-        DFAMembershipOracle<Character> sul = new DFASimulatorOracle<>(target2);
-        DFACounterOracle<Character> mqOracle = new DFACounterOracle<>(sul, "membership queries");
-        ClassicLStarDFA<Character> lstar =
-                new ClassicLStarDFABuilder<Character>().withAlphabet(inputs2) // input alphabet
-                        .withOracle(mqOracle) // membership oracle
-                        .create();
-        DFAWMethodEQOracle<Character> wMethod = new DFAWMethodEQOracle<>(mqOracle, EXPLORATION_DEPTH);
-        DFAExperiment<Character> experiment = new DFAExperiment<>(lstar, wMethod, inputs2);
-
-        experiment.setProfile(true);
-        experiment.setLogModels(true);
-
-        // run experiment
-        experiment.run();
-
-        // get learned model
-        DFA<?, Character> result = experiment.getFinalHypothesis();
-
-        Visualization.visualize(result, inputs2);
-         */
-        return;
+        Experiment.LeverExperiment experiment = new Experiment.LeverExperiment(lstar, eqo, annotedAlphabet);
+        try {
+            experiment.run();
+        } catch(SULException sule) {
+            Throwable e = sule.getCause();
+            if(e instanceof SafeException) {
+                System.out.println("Automaton is safe");
+            } else if (e instanceof  UnsafeException){
+                System.out.println("Automaton is unsafe");
+            }
+        }
     }
 
     /**
