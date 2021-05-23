@@ -47,7 +47,7 @@ public class TestFIFO {
                     .create();
 
         // 4 is not within the states so the automaton should be safe
-        List<Integer> baddies = Arrays.asList(new Integer[]{50});
+        List<Integer> baddies = Arrays.asList(new Integer[]{0});
 
         ALFEQOracle eqo = new ALFEQOracle(target, sul, baddies);
 

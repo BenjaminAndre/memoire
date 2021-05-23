@@ -57,6 +57,15 @@ public class FIFOATest {
             new PhiChar(1,false, true)
     );
 
+    //t_0.t_3.t_3.s_1 VALID
+    Word<PhiChar> trace_8 = Word.fromSymbols(
+            new PhiChar(0, false, false),
+            new PhiChar(3, false, false),
+            new PhiChar(3,false, false),
+            new PhiChar(1,false, true)
+    );
+
+
     CompactFIFOA andres = TestAutomatons.andre_fifoa();
     CompactDFA xyz = TestAutomatons.dfa_xyz();
 
@@ -69,6 +78,7 @@ public class FIFOATest {
         Assert.assertTrue(andres.isValidAnnotedTrace(trace_5));
         Assert.assertTrue(andres.isValidAnnotedTrace(trace_6));
         Assert.assertTrue(andres.isValidAnnotedTrace(trace_7));
+        Assert.assertTrue(andres.isValidAnnotedTrace(trace_8));
     }
 
 
@@ -110,6 +120,7 @@ public class FIFOATest {
         Assert.assertFalse(andres.validateTrace(trace_5));
         Assert.assertTrue(andres.validateTrace(trace_6));
         Assert.assertTrue(andres.validateTrace(trace_7));
+        Assert.assertTrue(andres.validateTrace(trace_8));
     }
 
 

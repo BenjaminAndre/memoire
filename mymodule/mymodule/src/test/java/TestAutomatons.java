@@ -1,6 +1,9 @@
 import net.automatalib.automata.ca.impl.compact.CompactFIFOA;
 import net.automatalib.automata.fsa.impl.compact.CompactDFA;
+import net.automatalib.automata.fsa.impl.compact.CompactNFA;
 import net.automatalib.util.automata.builders.AutomatonBuilders;
+import net.automatalib.util.automata.fsa.DFAs;
+import net.automatalib.util.automata.fsa.NFAs;
 import net.automatalib.words.Alphabet;
 import net.automatalib.words.PhiChar;
 import net.automatalib.words.impl.Alphabets;
@@ -280,34 +283,25 @@ public class TestAutomatons {
 
         // @formatter:off
         // create automaton
-        return AutomatonBuilders.newDFA(sigma)
+        CompactNFA<PhiChar> complex = AutomatonBuilders.newNFA(sigma)
                 .withInitial(0)
-
                 .from(0)
-                .on(sigma.getSymbol(1)).loop()
-                .on(sigma.getSymbol(0)).to(2)
-                .on(sigma.getSymbol(3)).to(1)//0'
-
-                .from(2)//old 1
-                .on(sigma.getSymbol(5)).to(1)
-
-                .from(1)
+                .on(sigma.getSymbol(0)).to(1)
                 .on(sigma.getSymbol(1)).loop()
                 .on(sigma.getSymbol(3)).loop()
-                .on(sigma.getSymbol(0)).to(3)
-                .on(sigma.getSymbol(2)).to(5)
-                .on(sigma.getSymbol(6)).to(7)
-
+                .on(sigma.getSymbol(3)).to(2)
+                .from(1)
+                .on(sigma.getSymbol(5)).to(0)
+                .on(sigma.getSymbol(5)).to(3)
+                .from(2)
+                .on(sigma.getSymbol(6)).to(4)
                 .from(3)
-                .on(sigma.getSymbol(4)).to(5)
-                .on(sigma.getSymbol(5)).to(1)
-                .on(sigma.getSymbol(7)).to(7)
-
-                .from(5)
-                .on(sigma.getSymbol(6)).to(7)
-
-                .withAccepting(7)
+                .on(sigma.getSymbol(6)).to(4)
+                .withAccepting(4)
                 .create();
+
+        CompactDFA<PhiChar> determinist = DFAs.minimize(NFAs.determinize(complex));
+        return determinist;
     }
 
 }
