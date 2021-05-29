@@ -27,7 +27,7 @@ public class TestFIFO {
     public static void main(String[] args) throws IOException {
         //Load dfa and alphabet
         CompactFIFOA<Character, Character> target = andre_fifoa();
-        Alphabet<Character> inputs = target.getInputAlphabet();
+        Alphabet<Character> inputs = target.getSymbols();
         Alphabet<Character> channels = target.getChannelNames();
 
 
@@ -46,7 +46,7 @@ public class TestFIFO {
                     .create();
 
         // If it's not reachable, it is safe
-        List<Integer> baddies = Arrays.asList(new Integer[]{1});
+        List<Integer> baddies = Arrays.asList(new Integer[]{2});
 
         ALFEQOracle eqo = new ALFEQOracle(target, sul, baddies);
 

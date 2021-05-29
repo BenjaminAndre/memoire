@@ -13,8 +13,8 @@ public class AlphabetTest {
         Alphabet<PhiChar> actual = cfa.getAnnotationAlphabet();
         PhiChar[] expected = new PhiChar[] {
             // Not putting in the tau or receive in the alf language
-            new PhiChar(0,false, false),
-            new PhiChar(0, true, false),
+            new PhiChar(1,false, false),
+            new PhiChar(1, true, false),
             new PhiChar(0, false, true),
             new PhiChar(1, false, true),
         };

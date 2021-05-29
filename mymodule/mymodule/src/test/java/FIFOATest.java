@@ -7,61 +7,61 @@ import org.testng.annotations.Test;
 
 public class FIFOATest {
 
-    //t_0.t_2.s_3 INCORRECT
+    //t_1.s_3.s_3 INCORRECT
     Word<PhiChar> trace_1 = Word.fromSymbols(
-            new PhiChar(0, false, false),
-            new PhiChar(2, false, false),
+            new PhiChar(1, false, false),
+            new PhiChar(3, false, true),
             new PhiChar(3,false, true)
     );
 
-    //b_0.s_1.t_2 INCORRECT
+    //b_1.s_3.t_2 INCORRECT
     Word<PhiChar> trace_2 = Word.fromSymbols(
-            new PhiChar(0, true, false),
-            new PhiChar(1, false, true),
+            new PhiChar(1, true, false),
+            new PhiChar(3, false, true),
             new PhiChar(2,false, false)
     );
 
-    //t_1.b_4.b_1.s_3 INCORRECT
+    //t_3.b_5.b_3.s_3 INCORRECT
     Word<PhiChar> trace_3 = Word.fromSymbols(
-            new PhiChar(1, false, false),
-            new PhiChar(4, true, false),
-            new PhiChar(1,true, false),
+            new PhiChar(3, false, false),
+            new PhiChar(5, true, false),
+            new PhiChar(3,true, false),
             new PhiChar(3,false, true)
     );
 
-    //b_0.s_0 INVALID
+    //b_1.s_0 INVALID
     Word<PhiChar> trace_4 = Word.fromSymbols(
-            new PhiChar(0, true, false),
+            new PhiChar(1, true, false),
             new PhiChar(0, false, true)
     );
 
-    //b_1.t_0.s_1 INVALID
+    //b_3.t_1.s_1 INVALID
     Word<PhiChar> trace_5 = Word.fromSymbols(
-            new PhiChar(1, true, false),
-            new PhiChar(0, false, false),
+            new PhiChar(3, true, false),
+            new PhiChar(1, false, false),
             new PhiChar(1,false, true)
     );
 
-    //b_0.t_3.s_3 VALID
+    //b_1.t_7.s_3 VALID
     Word<PhiChar> trace_6 = Word.fromSymbols(
-            new PhiChar(0, true, false),
-            new PhiChar(3, false, false),
+            new PhiChar(1, true, false),
+            new PhiChar(16, false, false),
             new PhiChar(3,false, true)
     );
 
-    //b_1.b_4.t_0.s_1 VALID
+    //b_3.b_5.t_1.s_1 VALID
     Word<PhiChar> trace_7 = Word.fromSymbols(
-            new PhiChar(1, true, false),
-            new PhiChar(4, true, false),
-            new PhiChar(0,false, false),
+            new PhiChar(3, true, false),
+            new PhiChar(5+18, true, false),
+            new PhiChar(1,false, false),
             new PhiChar(1,false, true)
     );
 
-    //t_0.t_3.t_3.s_1 VALID
+    //t_1.t_0.t_0.s_1 VALID
     Word<PhiChar> trace_8 = Word.fromSymbols(
-            new PhiChar(0, false, false),
-            new PhiChar(3, false, false),
-            new PhiChar(3,false, false),
+            new PhiChar(1, false, false),
+            new PhiChar(7+9, false, false),
+            new PhiChar(7+9,false, false),
             new PhiChar(1,false, true)
     );
 
@@ -70,7 +70,7 @@ public class FIFOATest {
     CompactDFA xyz = TestAutomatons.dfa_xyz();
 
     @Test
-    public void testIsValidAnnotedTrace(){
+    public void testIsCorrectAnnotedTrace(){
         Assert.assertFalse(andres.isCorrectAnnotatedTrace(trace_1));
         Assert.assertFalse(andres.isCorrectAnnotatedTrace(trace_2));
         Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_3));//obviously invalid but fills the definition of correct
@@ -84,13 +84,16 @@ public class FIFOATest {
 
     @Test
     public void testGetConsumingTransitions() {
-        Integer[] consa0 = new Integer[]{2};
-        Integer[] consa1 = new Integer[]{5};
-        Integer[] consb0 = new Integer[]{6};
+        Integer[] consa0 = new Integer[]{0};
+        Integer[] consa1 = new Integer[]{2};
+        Integer[] consb0 = new Integer[]{4};
 
-        Assert.assertArrayEquals(consa0, andres.getConsummingTransitions('a', '0'));
-        Assert.assertArrayEquals(consa1, andres.getConsummingTransitions('a', '1'));
-        Assert.assertArrayEquals(consb0, andres.getConsummingTransitions('b', '0'));
+        Integer[] temp =  andres.getConsummingTransitions('a', '0');
+        Assert.assertArrayEquals(consa0, temp);
+        temp = andres.getConsummingTransitions('a', '1');
+        Assert.assertArrayEquals(consa1, temp);
+        temp = andres.getConsummingTransitions('b', '0');
+        Assert.assertArrayEquals(consb0, temp);
     }
 
     @Test
@@ -104,11 +107,11 @@ public class FIFOATest {
     public void testTransitionState() {
         Assert.assertEquals(andres.getTransitionOriginState(0), 0);
         Assert.assertEquals(andres.getTransitionOriginState(1), 0);
-        Assert.assertEquals(andres.getTransitionOriginState(2), 1);
-        Assert.assertEquals(andres.getTransitionOriginState(3), 1);
-        Assert.assertEquals(andres.getTransitionOriginState(4), 2);
-        Assert.assertEquals(andres.getTransitionOriginState(5), 2);
-        Assert.assertEquals(andres.getTransitionOriginState(6), 3);
+        Assert.assertEquals(andres.getTransitionOriginState(2+9), 1);
+        Assert.assertEquals(andres.getTransitionOriginState(3+9), 1);
+        Assert.assertEquals(andres.getTransitionOriginState(4+18), 2);
+        Assert.assertEquals(andres.getTransitionOriginState(5+18), 2);
+        Assert.assertEquals(andres.getTransitionOriginState(6+27), 3);
     }
 
     @Test
