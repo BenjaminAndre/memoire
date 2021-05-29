@@ -5,25 +5,25 @@ Ce chapitre a décrit l'adaptation de l'algorithme d'Angluin à l'étude de la s
   \begin{enumerate}
     \item Si l'algorithme retourne une réponse, celle-ci est correcte
     \item Si $AL(F)$ est régulier, la procédure s'arrête.
-    \item Le nombre de test d'appartenance et d'éuivalence dépend principalement de l'algorithme d'Angluin. Le temps total est borné en temps polynomial du nombre d'états de l'automate minimal pour $AL(F)$ et linéaire en le temps pris pour une requête d'appartenance à $AL(F)$
+    \item Le nombre de test d'appartenance et d'éuivalence dépend principalement de l'algorithme d'Angluin. Le temps total est borné en temps polynomial par rapport au nombre d'états de l'automate minimal pour $AL(F)$ et linéaire par rapport au temps pris pour effectuer une requête d'appartenance à $AL(F)$
   \end{enumerate}
 \end{theorem}
 
-Ce théorème rappelle la limite de la méthode. Il existe toutes une classe d'automates à files pour lesquels $AL(F)$ n'est pas régulier. À ce moment, aucune garantie ne peut-être fournie quand à l'exécution.
+Ce théorème rappelle la limite de la méthode. Il existe toute une classe d'automates à files pour lesquels $AL(F)$ n'est pas régulier. À ce moment, aucune garantie ne peut-être fournie quand à l'exécution.
 
 La preuve est disponible en annexe du travail de Vardhan et al.\cite{Vardhan04}.
 
 
-Dans les chapitres précédants, les bases théoriques sur les automates et langages ont été posées. Celles-ci ont été suivies de concepts plus étroitement liés à LeVer tels que les automates à files, les traces, traces annotées et langages associés. Un dernier élément présenté dans la section \ref{sec:unsafe} est la sécurité d'un état ou d'un automate.
+Dans les chapitres précédants, les bases théoriques sur les automates et langages ont été posées. Celles-ci ont été suivies de concepts plus étroitement liés à LeVer tels que les automates à files, les traces, traces annotées et langages associés. Le dernier élément présenté dans la section \ref{sec:unsafe} est la sécurité d'un état ou d'un automate.
 
 En appliquant l'algorithme d'Angluin \cite{Angluin87} selon la méthode LeVer \cite{Vardhan04}, il est possible de se prononcer sur la sécurité pour toute une classe d'automates à files : ceux pour lesquels le language de traces annotées est régulier.
 
 L'objectif dès lors n'est pas d'apprendre le language de l'automate à file mais le language de trace associé, et d'adapter la méthode pour répondre à la question de sécurité. En formulant les bonnes propriétés, il est également possible d'interrompre l'algorithme d'apprentissage avant terme si l'on peut se prononcer sur la sécurité de façon certaine.
 
 
-Contrairement à la version proposée dans la section \ref{sec:angluin}, ici il n'est pas possible de tester directement l'équivalence entre $L$ et le language à apprendre. En effet, ce dernier peut ne pas être régulier et de façon générale le professeur ne connaît justement pas l'automate permettant une telle comparaison si celle-ci existe.
+Contrairement à la version proposée dans la section \ref{sec:angluin}, ici il n'est pas possible de tester directement l'équivalence entre $L$ et le language à apprendre. En effet, ce dernier peut ne pas être régulier. De plus, le professeur ne connaît justement pas l'automate permettant une telle comparaison si celle-ci existe.
 
-Ici, le professeur passe par trois questions mais à aucun moment il sait dire si $L$ est exactement le language à apprendre. Il peut soit se prononcer sur la sécurité, soit dire avec certitude qu'il existe une meilleure approximation.
+Le professeur passe par trois questions mais à aucun moment il ne sait décider si $L$ est exactement le language à apprendre, $AL(F)$. Il peut soit se prononcer sur la sécurité, soit dire avec certitude qu'il existe une meilleure approximation.
 
 \begin{itemize}
 	\item \emph{L est-il un point fixe ?} Cette question fait référence à l'application de la fonction d'extension de trace de la section \ref{ss:extension}.

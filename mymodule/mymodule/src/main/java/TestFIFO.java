@@ -8,7 +8,6 @@ import de.learnlib.oracle.equivalence.ALFEQOracle;
 import de.learnlib.oracle.membership.FIFOTraceSimulatorOracle;
 import de.learnlib.util.Experiment;
 import net.automatalib.automata.ca.impl.compact.CompactFIFOA;
-import net.automatalib.automata.fsa.impl.compact.CompactDFA;
 import net.automatalib.util.automata.builders.AutomatonBuilders;
 import net.automatalib.words.Alphabet;
 import net.automatalib.words.PhiChar;
@@ -27,7 +26,7 @@ public class TestFIFO {
 
     public static void main(String[] args) throws IOException {
         //Load dfa and alphabet
-        CompactFIFOA<Character, Character> target = constructSUL();
+        CompactFIFOA<Character, Character> target = andre_fifoa();
         Alphabet<Character> inputs = target.getInputAlphabet();
         Alphabet<Character> channels = target.getChannelNames();
 
@@ -46,8 +45,8 @@ public class TestFIFO {
                     .withOracle(sul)
                     .create();
 
-        // 4 is not within the states so the automaton should be safe
-        List<Integer> baddies = Arrays.asList(new Integer[]{0});
+        // If it's not reachable, it is safe
+        List<Integer> baddies = Arrays.asList(new Integer[]{1});
 
         ALFEQOracle eqo = new ALFEQOracle(target, sul, baddies);
 
@@ -59,19 +58,31 @@ public class TestFIFO {
             if(e instanceof SafeException) {
                 System.out.println("Automaton is safe");
             } else if (e instanceof  UnsafeException){
-                System.out.println("Automaton is unsafe");
+                System.out.println("Automaton is unsafe : " + e);
             }
         }
     }
 
-    /**
-     * creates example from Andre's master thesis
-     *
-     * @return example dfa
-     */
-    private static CompactFIFOA<Character,Character> constructSUL() {
+
+    static CompactFIFOA<Character, Character> minimalist() {
+        Alphabet<Character> channelNames = Alphabets.characters('a', 'a');
+        Alphabet<Character> sigma = Alphabets.characters('0', '0');
+
+        return AutomatonBuilders.newFIFOA(channelNames, sigma)
+                .from("q0")
+                .on('a').write('0').to("q1")
+                .from("q1")
+                .on('a').read('0').to("q0")
+                .from("q2")
+                .on('a').write('0').to("q1")
+                .withInitial("q0")
+                .create();
+    }
+
+
+    static CompactFIFOA<Character,Character> andre_fifoa() {
         // input alphabet contains characters 'a'..'b'
-        Alphabet<Character> channelNames =Alphabets.characters('a', 'b');
+        Alphabet<Character> channelNames = Alphabets.characters('a', 'b');
         Alphabet<Character> sigma = Alphabets.characters('0', '1');
 
         // @formatter:off
@@ -92,36 +103,4 @@ public class TestFIFO {
                 .withInitial("q0")
                 .create();
     }
-
-    /**
-     * creates example from Angluin's seminal paper.
-     *
-     * @return example dfa
-     */
-    private static CompactDFA<Character> constructDFASUL() {
-        // input alphabet contains characters 'a'..'b'
-        Alphabet<Character> sigma = Alphabets.characters('a', 'b');
-
-        // @formatter:off
-        // create automaton
-        return AutomatonBuilders.newDFA(sigma)
-                .withInitial("q0")
-                .from("q0")
-                .on('a').to("q1")
-                .on('b').to("q2")
-                .from("q1")
-                .on('a').to("q0")
-                .on('b').to("q3")
-                .from("q2")
-                .on('a').to("q3")
-                .on('b').to("q0")
-                .from("q3")
-                .on('a').to("q2")
-                .on('b').to("q1")
-                .withAccepting("q0")
-                .create();
-        // @formatter:on
-    }
-
-
 }

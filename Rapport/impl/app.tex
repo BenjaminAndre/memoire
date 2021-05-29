@@ -1,3 +1,7 @@
+L'oracle d'appartenance est l'un des deux oracles utilisés par l'algorithme d'Angluin découvert dans la section \ref{angluin}. La section \ref{mem} mentionne le comportement de cet oracle. Cependant, elle manque de précisions permettant d'exécuter l'automate à files de façon efficace.
+
+L'algorithme d'appartenance \ref{alg:membership} répond à cette problématique.
+
 \begin{algo}[Appartenance]\label{alg:membership}
   \begin{algorithmic}[1]
     \REQUIRE une trace correctement annotée $\gamma\in\Phi^*$ , un automate à files \fifo et un état de contrôle actif $q_a$

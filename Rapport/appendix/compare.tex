@@ -1,11 +1,7 @@
-Supposons être en possession de $L$ et de $\mathcal{F}(L)$.
-Voici comment comparer les deux automates avec Learnlib.
+Supposons être en possession de $L$ et de $\mathcal{F}(L)$. L'algorithme de comparaison \ref{alg:comp} suppose l'existe d'opérations de base. Dans le cadre d'une implémentation, celles-ci doivent également être disponibles.
 
-La classe d'automatalib util.automata.fsa.DFAs propose différentes opérations booléennes telles que la conjonction, l'équivalence, la disjonction, la disjonction exclusive, et la différence avec le vide.
-
-Soient deux ADFs $A$ et $B$ ainsi que les langages qui sont représentés par ceux-ci, respectivement $L_A=L(A)$ et $L_B=L(B)$. 
-
-La librairie automatalib propose, dans sa classe util.automatalib.fsa.DFAs, les fonctions suivantes :
+Soient deux ADFs $A$ et $B$ ainsi que les langages qui sont représentés par ceux-ci, respectivement $L_A=L(A)$ et $L_B=L(B)$.
+Voici une liste des opérations necéssaires.
 
 \begin{itemize}
     \item La conjonction : $L_A\bigcap L_B$
@@ -30,8 +26,8 @@ La librairie automatalib propose, dans sa classe util.automatalib.fsa.DFAs, les 
           \end{tikzpicture}
           \caption{$L_A\bigcap L_B$ en bleu}
         \end{figure}
-    
-    \item L'équivalence : $L_A$ est-il égal à $L_B$ ?)
+
+    \item L'équivalence : $L_A$ est-il égal à $L_B$ ?
     \item La disjonction : $L_A\bigcup L_B$
         \begin{figure}[H]
             \center
@@ -75,145 +71,89 @@ La librairie automatalib propose, dans sa classe util.automatalib.fsa.DFAs, les 
           \caption{$L_A\xor L_B$ en bleu}
         \end{figure}
     \item La différence avec le vide : $L_A \backslash \emptyset$
+    \item La sélection d'un mot : $w\in L_A$
 \end{itemize}
 
-Toutes ces opérations sont implémentées pour les ADF. Elles sont alors implémentées en particulier pour le candidat $L$ à $AL(F)$ et pour $\mathcal{F}(L)$ qui est également un ADF.
-
-Il est possible de comparer $L$ et $\mathcal{F}(L)$ uniquement avec ces opérations.
-
-La comparaison est un peu plus complexe car le contre-exemple à retourner dépend de l'automate à file $F$. En effet, le contre-exemple recherché n'est pas un contre-exemple à l'égalité $L=\mathcal{F}(L)$ mais à l'égalité $L=AL(F)$.
+La comparaison est plus complexe qu'une simple équivalence car le contre-exemple à retourner dépend de l'automate à file $F$. En effet, le contre-exemple recherché n'est pas un contre-exemple à l'égalité $L=\mathcal{F}(L)$ mais à l'égalité $L=AL(F)$.
 
 \begin{algo}[Comparaison]
   \begin{algorithmic}[1]
-    \REQUIRE $L$ et son automate $A$ ($L=L(A)$) , $\mathcal{F}(L)$ et son automate $F_A$ ($\mathcal{F}(L)=L(F_A)$) des opérations sur les automates.
-    \ENSURE L'égalité en $L$ et $\mathcal{F}(L)$ ou un contre-exemple à la question $L=AL(F)$
+    \REQUIRE Un laguage de trace annotée $L$ pour un automate à files $F$, $\mathcal{F}(L)$
+    \ENSURE L'égalité entre $L$ et $\mathcal{F}(L)$ ou un contre-exemple $\gamma\in\Phi^*$ à l'égalité $L=AL(F)$
     \IF {$L=\mathcal{F}(L)$}
         \RETURN $L$ est un point fixe de $\mathcal{F}$.
     \ELSE
-        \STATE $X= L\xor\mathcal{F}(L)$ \COMMENT{$X$ est non-vide car $L!=\mathcal{F}(L)$}
-        \STATE Prenons $w\in X$
-        \IF {$w \in L$}
-            \RETURN $w$
+        \STATE $X= L\xor\mathcal{F}(L)$ \COMMENT{$X$ est non-vide car $L\neq\mathcal{F}(L)$}
+        \STATE Prenons $\gamma\in X$
+        \IF {$\gamma \in L$}
+            \RETURN $\gamma$
         \ELSE
-            \IF {$w$ est une annotation valide}
-                \RETURN $w$
+            \IF {$\gamma$ est une annotation valide}
+                \RETURN $\gamma$
             \ELSE
-                \RETURN MOTAVANTFL($A$, $F_A$, $w$, $q_0$, $\epsilon$, faux) 
+                \RETURN reverseFL($\mathcal{F}(L)$, $F$, $\gamma$)
             \ENDIF
         \ENDIF
     \ENDIF
-  \end{algorithmic}
+  \end{algorithmic}\label{alg:comp}
 \end{algo}
 
 
+A l'exception du mot $t_{q_0}$, $\mathcal{F}(L)$ contient des mots $\gamma$ tels que $\exists \gamma'\in L \exists \theta\in\Theta, \gamma=Post(\gamma',\theta)$.
 
-MOTAVANTFL est un algorithme permettant de reconstruire un mot ayant donné $w$ par l'application de la fonction $Post$. C'est son inverse. L'idée est de, pour chaque dernier $\bt$ pour un même canal $c$ et symbole $a$, explorer une autre exécution de $L$ dans lequel la barre est retirée de $\bt$. Le branchement hors du mot principal ne peut se faire qu'une fois puisqu'un seul $\theta$ est ajouté pour obtenir $w$. Cette unicité du branchement est protégée par $B$.
+Sous l'hypothèse que $\gamma$ n'est pas $t_{q_0}$, ce qui en ferait une annotation valide, rendant inutile l'appel à reverseFL, reverseFL trouve ce $\gamma'$ et $\theta$.
 
-La branche principale, qui n'a pas bifurqué, doit être raccourcie de son dernier $\theta$ et $t_q$ doit être ajusté en conséquence.
-
-
-
-\begin{algo}[MOTAVANTFL]
+\begin{algo}[reverseFL]
     \begin{algorithmic}[1]
         \REQUIRE
         \begin{itemize}
-            \item Un ADF $A$ donnant le langage $L=L(A)$
-            \item Un ADF $F_A$ tel que $L(F_A)=\mathcal{F}(L)$
-            \item Un état courant $q_c$
-            \item Un mot a analyser $w$
-            \item Le début du mot $d$
-            \item Une valeur de vérité $B$ 
+            \item Un language obtenu par la fonction $\mathcal{F}$ : $\mathcal{F}(L)$
+            \item L'automate à files concerné par $L$  : $F$
+            \item Une trace annotée $\gamma\in\Phi^*$
         \end{itemize}
-        \ENSURE un $w'$ tel que $\exists \theta, w=Post(w',\theta)$
-        \STATE $S\leftarrow\emptyset$\COMMENT{l'ensemble des solutions}
-        \STATE $a,w'\leftarrow w$ \COMMENT{$a$ est le premier symbole de $w$ et $w'$ le reste}
-        \IF {$w'=\epsilon$}
-            \RETURN $dt_{q_c}$
-        \ELSE
-            \IF {$|w'|=1$}
-                \IF {$B$ est faux}
-                    \STATE $S\leftarrow S+dt_{q_c}$
-                \ELSE
-                    \STATE $S\leftarrow S+dat_{q_c}$
-                \ENDIF
-            \ELSE
-                \IF{$a\in T_Q$}
-                    \RETURN $\emptyset$ \COMMENT{Car $w'$ ne serait pas correctement formatté}
-                \ELSE
-                    \STATE $a$ correpond à un $\theta=(p, action, q)$
-                    \IF{$p=q_c$}
-                        \IF{$a\in\bar{\Theta}$}
-                            \STATE $\exists b=(p,action,q) \in A,\bar{b}=a$
-                            \IF {$action=c!m$ et qu'il n'y a aucun $\bar{\theta}$ dans $w$ portant sur $c$ et $m$}
-                                \STATE $S \leftarrow S + MOTAVANTFL(A, F_A, q, w', db, vrai)$ 
-                            \ENDIF
-                        \ENDIF
-                        \STATE $S\leftarrow S + MOTAVANTFL(A,F_A,q,w',da,faux)$
-                    \ENDIF
-                \ENDIF
+        \ENSURE une trace annotée $\gamma'\in L$ tel que $\exists \theta, \gamma=Post(\gamma',\theta)$ s'il existe
+
+        \IF{$\gamma$ est une trace correctement annotée}
+          \STATE $\gamma' t_q \leftarrow \gamma$ avec $\gamma'\in\Phi^*,t_q\in T_Q$
+
+          \IF {$\exists \theta_\tau$ tel que $dest(\theta_\tau)=t_q$ et l'action de $\theta_\tau$ est $\tau$}
+            \IF{$\gamma'=\epsilon$ ou $dest(\gamma')=source(\theta_\tau)$}
+              \RETURN $\gamma'.source(\theta_\tau)$
             \ENDIF
-            \RETURN Tous les éléments de $s\in S$ correctement formattés
+          \ENDIF
+
+          \IF {$\gamma'=\gamma''.\phi$ avec $\gamma''\in\Phi^*$ et $\phi \in Phi$}
+            \IF {$\phi\in\Theta$ et $dest(\phi)=q$}
+              \RETURN $\gamma''.t_{source(\phi)}$
+            \ENDIF
+
+            \FORALL {symbole $\bt\in \gamma''.\phi$ de droite à gauche tels que $\bt\in$\barTheta}
+              \STATE $u_1.\bt.u_2.t_q \leftarrow \gamma$ avec $u_1,u_2 \in \Phi^*$
+              \STATE $(r, c!m, s)\leftarrow\delta(\theta)$
+              \FORALL {symbole $\theta_r\in\Theta$}
+                \IF{ $\delta(\theta_r)=(p, c?m, q)$ avec le $q$ de $t_q$}
+                  \RETURN $u_1.\theta.u_2.t_p$
+                \ENDIF
+              \ENDFOR
+            \ENDFOR
+          \ENDIF
         \ENDIF
     \end{algorithmic}
 \end{algo}
 
-% %$dt_q$ tel que $t_q\in T_Q, \exists \theta , \theta =(q_c, action, t_q), t_q$ est un point de départ pour une transition de $F_A$.
 
-\paragraph{Exemple d'application de MOTAVANTFL}
+\paragraph{Exemple d'application de reverseFL}
 
-Soit un ADF $A$ donnant le langage $L=L(A)$. Soit un ADF $F_A$ tel que $L(F_A)=\mathcal{F}(L)$.
+Soit l'automate à files $F$ dans la figure \ref{fig:fifo1}. Supposons être en possession d'un ADF $A$ tel que $L(A)=AL(F)$.
+Comme $AL(F)=\mathcal{F}(AL(F))$, reverseFL peut être employé avec $A$.
+Soit la trace annotée $\gamma=\bt_2\bt_5\bt_5\bt_1\theta_4 t_{q_0} \in AL(F)$.
 
-Considérons un appel depuis la comparaison pour le mot $w=\bt_1\bt_2\theta_3\bt_1\theta_2t_{q1} \in \mathcal{F}(L)$.
+Voici le déroulement de $reverseFL(A,F,\gamma)$.
 
-On a alors un appel sur $MOTAVANTFL(A,F_A,w,q_0,\epsilon, faux)$. 
+\begin{enumerate}
+  \item $\gamma$ fini par $\theta_4\in\Theta$ mais $dest(\theta_4)\neq q_0$
+  \item $\bt_0\in$\barTheta pour lequel il existe $\theta_3$ avec $\delta(\theta_3)=(q_1,a?0,q_3)$. $q_3\neq q_0$
+  \item $\bt_4\in$\barTheta pour lequel il existe $\theta_7$ avec $\delta(\theta_7)=(q_3,b?0,q_0)$. $q_0$ est correct. L'algorithme retourne $\gamma'=(\bt_2\bt_5).\theta_5.(\bt_1).t_{q_3}$
+\end{enumerate}
 
-
-\begin{figure}[H]
-    \centering
-    \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=4cm, semithick, bend angle=10]
-    \tikzstyle{every state}=[circle, scale=0.5]
-
-
-    \node[state,initial]    (0) {};
-    \node[state]            (1) [right of=0] {};
-    \node[state]            (3) [right of=1] {};
-    \node[state]            (2) [below of=3] {};
-    \node[state] (4) [right of=2] {};
-    \node[state] (5) [right of=3] {};
-    \node[state] (6) [right of=4] {};
-    \node[state] (7) [right of=5] {};
-    \node[state] (8) [above of=7] {};
-    \node[state] (9) [right of=6] {};
-    \node[state] (10) [right of=7] {};
-    \node[state] (11) [right of=8] {};
-    \node[state] (12) [right of=9] {};
-    \node[state] (13) [right of=11] {};
-
-    \path [line width=2pt]
-    (0) edge node {$\bt_1$} (1)
-    (1) edge node {$\bt_2$} (3)
-    (3) edge node {$\theta_3$} (5)
-    (5) edge node {$\bt_1$} (7)
-    (7) edge node {$t_q\in T_Q$} (10)
-    ;
-    \path
-    (1) edge node {$\theta_2$} (2)
-    (2) edge node {$\theta_3$} (4)
-    (4) edge node {$\bt_1$} (6)
-    (5) edge node {$\theta_1$} (8)
-    (6) edge node {$\theta_2$} (9)
-    (8) edge node {$\theta_2$} (11)
-    (9) edge node {$t_q\in T_Q$} (12)
-    (11) edge node {$t_q\in T_Q$} (13)
-    ;
-    \end{tikzpicture}
-    \caption{Arbre d'exécution de MOTAVANTFL pour $w$}\label{fig:avantfl}
-\end{figure}
-
-La figure \ref{fig:avantfl} montre comment il est possible d'explorer dans $A$ tous les chemins permettant de créer un mot $w'$ tel que $\exists\theta, w=Post(w',\theta)$. Dans le cas de cet exemple, $A$ est supposé contenir toutes les transitions de \ref{fig:avantfl}. Ce n'est peut-être pas le cas. Dans ce cas, l'exploration de la branche s'arrête. 
-
-Par le booléen $B$, on peut s'assurer de ne bifurquer qu'une fois de la branche principale, celle contenant $w$ à l'exception de son dernier symbole. En effet, bifurquer plusieurs fois donnerait un mot qui nécéssiterait plusieurs $\theta$ pour être transformé en $w$ par la fonction $Post$, ce qui n'est pas recherché.
-
-De plus, la branche principale correspond aux $\theta$ d'envoi ou vide ($\tau$). Les branches annexes, elles, correspondent à des réceptions qui ont barré un $\theta$, d'où la scission.
-
-
+Le résultat peut être vérifié simplement. $Post(\gamma',\theta_7)=\gamma$.

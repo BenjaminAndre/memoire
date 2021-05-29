@@ -1,0 +1,9 @@
+Implémenter ces différents types d'automates, les opérations associées, ainsi que les différents algorithme demande une quantité considérable de travail.
+
+Utiliser des librairies prééxistantes permet de réutiliser du code et de limiter le travail restant, plus spécifique à ce document.
+
+Une librairie en python, \href{https://pypi.org/project/automata-lib/}{automata-lib} ainsi que les librairies java \href{https://learnlib.de/projects/automatalib/}{Automatalib} et \href{https://learnlib.de/}{Learnlib} ont été considérées.
+
+automata-lib supporte tous les types d'automates necéssaires, avec des méthodes de bases telles que l'exécution pour un mot, la validité pour les automates sans files ainsi qu'une méthode de construction simple. Cependant, il manque beaucoup de fonctionnalités. Les opérations booléennes entre automates ne sont pas implémentées. La déterminisation d'un NFA ou l'algorithme d'Angluin ne sont pas proposés non plus.
+
+Pour ces raisons, le couple Automatalib-Learnlib a été préféré. Ces librairies sont plus complexes et ne supportent pas les automates à files. Cependant, toutes les autres opérations citées précédemment sont présentes. Cela permet de limiter le travail à l'implémentation des automates à files et des méthodes et algorithmes couverts dans les chapitres \ref{pro} et \ref{impl}.

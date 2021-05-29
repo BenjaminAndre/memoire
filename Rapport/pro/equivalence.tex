@@ -5,7 +5,7 @@ Comme expliqué dans l'introduction du chapitre, c'est impossible de façon gén
 Contrairement à la version originale de l'algorithme d'Angluin qui a deux possibilités (équivalence ou contre-exemple), celle-ci en a trois. L'oracle peut répondre soit que $AL(F)$ est sécurisé, soit qu'il ne l'est pas, soit que $L$ est différent de $AL(F)$ avec un contre-exemple.
 
 
-\subsection{$L$ est-il un point fixe de $\mathcal{F}$ ?}
+\subsection{$L$ est-il un point fixe de $\mathcal{F}$ ?}\ref{ss:fixe}
 
 Cette question se base sur le théorème \ref{thm:fl} et en particulier du fait que $AL(F)$ est un point fixe. Il n'est pas possible de prouver que $L=AL(F)$ mais il est possible de montrer que $L\neq AL(F)$ en montrant que $L$ n'est pas un point fixe.
 
@@ -31,9 +31,10 @@ En comparant \fl avec $L$ pour vérifier si $L$ est un point fixe de $\mathcal{F
 
 \end{itemize}
 
+La transcription en algorithme de la comparaison entre $L$ et $\mathcal{F}(L)$ pour trouver un contre-exemple à $L=AL(F)$ est donnée dans la section \ref{sec:fll}, accompagnée d'un exemple.
 
 
-\subsection*{$L$ intersecte-t-il avec une région à risque ?}
+\subsection{$L$ intersecte-t-il avec une région à risque ?}
 
 En visualisant $L$ comme étant un super-ensemble de $AL(F)$ et la région à risque comme un ensemble, il est possible de se représenter les différentes situations envisageables.
 
@@ -100,7 +101,7 @@ Pour savoir si nous sommes dans le scénario (a), (b) ou (c) de la figure \ref{f
 
 Premièrement, vérifier si $\mathcal{W}(L)$ est vide ou non. S'il est vide, nous sommes dans le scénario (a) et il est possible d'annoncer avec certitude que $F$ est sécurisé.
 
-\subsection*{Le chemin vers l'état à risque est-il valide ?}
+\subsection{Le chemin vers l'état à risque est-il valide ?}
 
 Si la réponse à la question précédente est oui, sommes-nous dans le scénario (b) ou (c) ?
 Considérons un des éléments de $\mathcal{W}(L)$. Demandons à l'oracle d'appartenance si ce mot appartient également à $AL(F)$.

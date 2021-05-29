@@ -1,0 +1,112 @@
+Cette annexe est une liste exhaustive des modifications apportées aux librairies Automatalib et Learnlib pour leur permettre de supporter l'apprentissage automatique de la sécurité d'automates à files.
+
+\section{Ajouts et modifications à Automatalib}
+Nouvelles classes avec leurs méthodes :
+\begin{itemize}
+  \item FIFOA
+  \item MutableCA (CA pour Channel Automata)
+  \item MutableFIFOA
+  \item SupportsGrowingChannelAlphabet
+  \item ChannelNamesHolder
+  \item TransitionAction
+    \begin{enumerate}
+      \item Action (enum des trois types d'action possibles)
+    \end{enumerate}
+  \item CAGraphView (aide à la visualisation d'un automate utilisant des canaux)
+  \item FIFOAVisualizationHelper (aide à la visualisation)
+  \item PhiChar (les symboles $\phi\in\Phi$ et leur correspondance dans l'automate à files $F$ concerné)
+    \begin{itemize}
+      \item Type (isTheta,isBarred,representsState)
+      \item getI (numéro du $\theta$ ou $t_q$ représenté)
+    \end{itemize}
+  \item UniversalChannelCompact
+    \begin{itemize}
+      \item Méthodes de bases de UniversalCompact
+      \item getAnnotationAlphabet (retourne $\Phi$)
+      \item getAdditionsAlphabet (retourne tous les $\theta$ pour le calcul de $\mathcal{F}(L)$)
+    \end{itemize}
+  \item AbstractFastTransition
+  \item FastFIFOA
+  \item FastFIFOAState
+  \item FastFIFOATransition
+  \item FastFIFOATransitionAction
+  \item CompactFIFOA
+    \begin{itemize}
+      \item Méthodes de base
+      \item isCorrectAnnotedTrace (la trace $\gamma$ est-elle correctement annotée pour $F$ ?)
+      \item validateTrace (la trace $\gamma$ est-elle valide pour $F$ ?)
+    \end{itemize}
+  \item FIFOBuilderImpl : utilitaire de création d'automates à files
+  \item FIFOAs
+    \begin{itemize}
+      \item applyFL (algorithme $\mathcal{F}$)
+      \item sigmaStarTP (automate pour $L=\Sigma^*.t_p$)
+      \item sigmaStarThetaSSigmaStarTP (automate pour $L=\Sigma^*.\theta_s.\Sigma^*.t_p$)
+      \item aPlusAPrime (utilitaire pour le cas de l'action de type $c?a$ lors du calcul de $\mathcal{F}(L)$)
+      \item tq0 (automate pour $L=\{t_{q_0}\}$)
+      \item fuseDFAs (regroupe une liste d'ADFs)
+      \item reverseFL
+      \item reversehcj (limitée ici à $\mathcal{W}$ défini par des langages réguliers définissant tout passage par un état de contrôle comme à risque)
+    \end{itemize}
+\end{itemize}
+
+Classes modifiées avec leur méthodes :
+\begin{itemize}
+  \item Word : insert (pour l'ajout de $\theta$ dans l'oracle d'appartenance)
+  \item WordTest : insertTest
+  \item AbstractCompact : méthodes pour récupérer un numéro d'état, de symbole ou transition
+  \item AbstractCompactSimpleDeterministic : méthodes pour obtenir les transitions ou des sous-ensembles en fonction de l'état d'origine ou de destination
+  \item CompactDFA : getLeadingTransitions (obtenir les transitions menant à un état $p$)
+  \item CompactNFA : getLeadingTransitions (obtenir les transitions menant à un état $p$)
+  \item Visualisation : méthodes relatives à la visualisation d'automates utilisant des canaux
+  \item AutomatonBuilder : méthode de création d'automates à files
+  \item NFAs : indeterminize (construire un ANF depuis un ADF)
+\end{itemize}
+
+\section{Ajouts et modifications à Learnlib}
+Nouvelles classes avec leurs méthodes :
+\begin{itemize}
+  \item SafeException
+  \item UnsafeException
+  \item FIFOAEquivalenceOracle
+  \item LeverExperiment
+  \item ALFEQOracle
+    \begin{itemize}
+      \item findCounterExemple (utilisant un automate à files)
+      \item fixpointCounterExemple (tester $L=AL(F)$)
+      \item getUnsafePath (trouver un chemin à risque grace à $\mathcal{W}$)
+      \item isPathValid (la trace est-elle correctement annotée et valide ?)
+    \end{itemize}
+  \item FIFOTraceSimulatorOracle
+    \begin{itemize}
+      \item answerQuery (tester $\gamma\in AL(F)$)
+    \end{itemize}
+\end{itemize}
+
+Classes modifiées avec leur méthodes :
+\begin{itemize}
+  \item Experiment : Experiment using a FIFOAEquivalenceOracle
+\end{itemize}
+
+
+\section{Module de démonstration}
+
+
+Classes du paquet de démonstration :
+\begin{itemize}
+  \item FIFOA : exemple complet de l'apprentissage automatique de la propriété de sécurité d'un automate à files.
+  \item TestAutomatons : ADFs et automates à files utilisés pour des tests unitaires
+  \item AlphabetTest : test unitaire de l'utilisation de $\Phi$
+  \item FIFOATest
+    \begin{itemize}
+      \item test unitaire sur les traces (sont-elles correctes ? valides ?)
+      \item test unitaires sur les méthodes utilitaires
+    \end{itemize}
+  \item FLTest
+    \begin{itemize}
+      \item tests sur les automates pour $L=Sigma^*.t_p$
+      \item tests sur les automates pour $L=\Sigma^*.\theta_s.\Sigma^*.t_p$
+      \item tests pour aplusAPrime
+      \item tests pour reverseFL
+    \end{itemize}
+\end{itemize}

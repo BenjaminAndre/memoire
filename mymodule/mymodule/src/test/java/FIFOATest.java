@@ -71,14 +71,14 @@ public class FIFOATest {
 
     @Test
     public void testIsValidAnnotedTrace(){
-        Assert.assertFalse(andres.isValidAnnotedTrace(trace_1));
-        Assert.assertFalse(andres.isValidAnnotedTrace(trace_2));
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_3));//obviously invalid but fills the definition of correct
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_4));
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_5));
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_6));
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_7));
-        Assert.assertTrue(andres.isValidAnnotedTrace(trace_8));
+        Assert.assertFalse(andres.isCorrectAnnotatedTrace(trace_1));
+        Assert.assertFalse(andres.isCorrectAnnotatedTrace(trace_2));
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_3));//obviously invalid but fills the definition of correct
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_4));
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_5));
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_6));
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_7));
+        Assert.assertTrue(andres.isCorrectAnnotatedTrace(trace_8));
     }
 
 

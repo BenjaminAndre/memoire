@@ -139,13 +139,5 @@ public class FLTest {
         Assert.assertEquals(Word.fromSymbols(expected3), FIFOAs.reverseFL(fifoa, l, Word.fromSymbols(input3)));
         Assert.assertEquals(Word.fromSymbols(expected4), FIFOAs.reverseFL(fifoa, l, Word.fromSymbols(input4)));
         Assert.assertEquals(Word.fromSymbols(expected5), FIFOAs.reverseFL(fifoa, l, Word.fromSymbols(input5)));
-
     }
-
-    @Test
-    public void testReversehcjd() {
-
-    }
-
-
 }

@@ -149,7 +149,6 @@ public class TestAutomatons {
         // @formatter:on
     }
 
-
     /**
      * creates example from Angluin's seminal paper.
      *
