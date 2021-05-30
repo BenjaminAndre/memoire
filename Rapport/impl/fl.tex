@@ -16,10 +16,10 @@ Des automates $A_\theta$ peuvent être construits pour $Post(L,\theta)$ pour cha
 
 La suite de cette section s'intéresse donc au calcul de $L'= Post(L,\theta)$ où $L$ est accepté par $A$ et $L'$ par un ADF $A'$ construit à partir de $A$.\\
 
-L'automate $A'$ peut être indéterministe. Ce n'est pas un problème car, comme l'explique la section \ref{adf:anfadf}, il existe un ADF équivalent. Dans le cadre de l'apprentissage avec Angluin, c'est cet ADF qui devient $A'$ et est utilisé pour les autres opérations.
+L'automate $A'$ peut être non-déterministe. Ce n'est pas un problème car, comme l'explique la section \ref{adf:anfadf}, il existe un ADF équivalent. Dans le cadre de l'apprentissage avec Angluin, c'est cet ADF qui devient $A'$ et est utilisé pour les autres opérations.
 
 
-Soit $\theta\in\Theta$ tel que $\delta(\theta)=(p,action,q)$. On explique ci-après es différents cas à traîter pour calculer $A_\theta$.
+Soit $\theta\in\Theta$ tel que $\delta(\theta)=(p,action,q)$. On explique ci-après les différents cas à traiter pour calculer $A_\theta$.
 
 \subsection{Si $action$ est $\tau$ ou de la forme $c!a$}
 
@@ -121,9 +121,9 @@ Si $action$ est de forme $c!a$, la transition sur $\theta$ peut être ajoutée a
 
 \subsection{Si $action$ est de la forme $c?a$}
 
-Pour qu'une réception $c?a$ d'un symbole soit possible, il faut qu'il existe un envoi qui lui soit associé. Cet envoi est noté $\theta_s$ tel que $\delta(\theta_s)=(r,c!a,s)$. De plus, il faut, comme dans la section précédante, tester si $Post(L,\theta)$ est vide ou non grâce au $t_p$ correspondant au $p$ de $\delta(\theta)$.
+Pour qu'une réception $c?a$ d'un symbole soit possible, il faut qu'il existe un envoi qui lui soit associé. Cet envoi est noté $\theta_s$ tel que $\delta(\theta_s)=(r,c!a,s)$. De plus, il faut, comme dans la section précédente, tester si $Post(L,\theta)$ est vide ou non grâce au $t_p$ correspondant au $p$ de $\delta(\theta)$.
 
-En utilisant $\theta_s$, on construit $L'=L\bigcap\Sigma^*\theta_s\Sigma^*t_p$. Un automate acceptant ce langage est donné à la figure \ref{fig:lseconde}.
+En utilisant $\theta_s$, on construit $L'=L\bigcap\Sigma^*\Theta_s\Sigma^*t_p$ où $\Theta_s$ est l'ensemble des $\theta_s$ associés à $c?a$. Un automate acceptant ce langage est donné à la figure \ref{fig:lseconde}.
 
 \begin{figure}[H]
     \centering
@@ -135,12 +135,12 @@ En utilisant $\theta_s$, on construit $L'=L\bigcap\Sigma^*\theta_s\Sigma^*t_p$. 
 
         \path
         (0) edge[loop above] node {$\Sigma$} (0)
-        (0) edge node {$\theta_s$} (1)
+        (0) edge node {$\Theta_s$} (1)
         (1) edge[loop above] node{$\Sigma$} (1)
         (1) edge node {$t_p$} (2)
         ;
     \end{tikzpicture}
-    \caption{ANF pour $L=\Sigma^*\theta_s\Sigma^*t_p$}\label{fig:lseconde}
+    \caption{ANF pour $L=\Sigma^*\Theta_s\Sigma^*t_p$}\label{fig:lseconde}
 \end{figure}
 
 Si $L'=\emptyset$, il n'existe pas de $\theta_s$ dans les chemins qui nous concernent. Il n'y aura donc pas de possibilité de consommer un symbole : $Post(L,\theta)=\emptyset$.
@@ -177,7 +177,7 @@ Sinon si $L'$ est non vide, il faut alors, à partir de l'automate $A'$ acceptan
 La figure \ref{fig:aaprime} décrit comment l'automate $A_\theta$ est construit à partir de $A'$. Premièrement, une copie de $A'$ est construite : $A'_{copie}$.
 Dans $A'$, les états finaux sont considérés comme des états non finaux. Dans $A'_{copie}$, l'état initial est considéré comme un état non initial. Finalement, dans $A'$, toute transition $\theta_s$ allant de $r$ à $s$ est remplacée par une transition sur $\bt_s$ allant de $r$ à $s'$.
 
-De cette façon, pour qu'un mot soit valide, il faut qu'il commence dans $A'$. La première occurence de $\theta_s$ a été systématiquement remplacée pour $\bt_s$ menant à $A'_{copie}$. Dans $A'_{copie}$, les autres transitions ne sont pas modifiées, laissant intact le reste du chemin. Cependant, la figure \ref{fig:aaprime} a elle seule ne suffit pas à construire $A_\theta$. Pour rester en accord avec la définition de $Post(L,\theta)$, il faut adapter le dernier symbole, ici $t_p$ en $t_q$ (figure \ref{fig:pq}).
+De cette façon, pour qu'un mot soit valide, il faut qu'il commence dans $A'$. La première occurence de $\theta_s$ a été systématiquement remplacée pour $\bt_s$ menant à $A'_{copie}$. Dans $A'_{copie}$, les autres transitions ne sont pas modifiées, laissant intact le reste du chemin. Cependant, la figure \ref{fig:aaprime} à elle seule ne suffit pas à construire $A_\theta$. Pour rester en accord avec la définition de $Post(L,\theta)$, il faut adapter le dernier symbole, ici $t_p$ en $t_q$ (figure \ref{fig:pq}).
 
 
 \begin{figure}[H]
@@ -216,10 +216,11 @@ De cette façon, pour qu'un mot soit valide, il faut qu'il commence dans $A'$. L
 
 \subsection{Exemple}
 
-Dans cette section, on illustre la construction de $\mathcal{F}(L)$ donnée dans la sectione précédente. Cette exemple se base sur l'automate à files $F$ de la figure \ref{fig:fex} ainsi que l'ADF $A$ de la figure \ref{fig:lfex} acceptant le langage de traces annotées $L$.
+Dans cette section, on illustre la construction de $\mathcal{F}(L)$ donnée dans la section précédente. Cet exemple se base sur l'automate à files $F$ de la figure \ref{fig:fex} ainsi que l'ADF $A$ de la figure \ref{fig:lfex} acceptant le langage de traces annotées $L$.
 
 \paragraph{$F$ et $L(F)$ candidat à $AL(F)$}
 \begin{figure}[H]
+  \begin{subfigure}[H]{0.5\linewidth}
     \centering
     \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=5cm, semithick, bend angle=10]
 
@@ -239,11 +240,8 @@ Dans cette section, on illustre la construction de $\mathcal{F}(L)$ donnée dans
     ;
     \end{tikzpicture}
     \caption{Automate à files $F$}\label{fig:fex}
-\end{figure}
-
-Regex pour AL(F) : $(\bar{\theta_1}|\bar{\theta_2})^*(\theta_1|\theta_2)?$
-
-\begin{figure}[H]
+\end{subfigure}
+\begin{subfigure}[H]{0.5\linewidth}
     \centering
     \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
     \tikzstyle{every state}=[circle]
@@ -268,12 +266,13 @@ Regex pour AL(F) : $(\bar{\theta_1}|\bar{\theta_2})^*(\theta_1|\theta_2)?$
     ;
     \end{tikzpicture}
     \caption{Automate $A$ acceptant $L$}\label{fig:lfex}
+  \end{subfigure}
 \end{figure}
 
 Pour simplifier la lecture de cet exemple, les états de $A$ pour lesquels il existe une transition $t_p$ vers un état final sont appelés \emph{états pré-finaux} sur $t_p$.
 
 \begin{itemize}
-  \item Soit $\theta_1$ avec $\delta(\theta_1)=(q_0,a!0,q_1)$ menant au calcul de $A_{\theta_1}$. Les états pré-finaux sur $q_0$ sont $\{0\}$. Un automate est construit pour $L'=L\bigcap \Sigma^*t_{q_0}$ : \ref{fig:tq0}.
+  \item Soit $\theta_1$ avec $\delta(\theta_1)=(q_0,a!0,q_1)$ menant au calcul de $A_{\theta_1}$. Les états pré-finaux sur $q_0$ sont $\{0\}$. Un automate est construit pour $L'=L\bigcap \Sigma^*t_{q_0}$ : celui de la figure \ref{fig:tq0}.
 
 \begin{figure}[H]
     \centering
@@ -294,7 +293,7 @@ Pour simplifier la lecture de cet exemple, les états de $A$ pour lesquels il ex
   \end{tikzpicture}\caption{Un ANF représentant $L'$}\label{fig:tq0}
 \end{figure}
 
-En suivant la règle pour les $\theta$ dont l'action est de type $c!a$, ce qui est le cas pour $\theta_1$, un nouvel état est créé entre $0$ et $3$ car il y a une trasition $t_{q_0}$ à cet endroit. Cela donne l'ANF de la figure \ref{fig:tq0b}
+En suivant la règle pour les $\theta$ dont l'action est de type $c!a$, ce qui est le cas pour $\theta_1$, un nouvel état est créé entre $0$ et $3$ car il y a une transition $t_{q_0}$ à cet endroit. Cela donne l'ANF de la figure \ref{fig:tq0b}
 
 \begin{figure}[H]
     \centering
@@ -322,7 +321,7 @@ Cet automate \ref{fig:tq0b} n'est pas déterministe mais il existe un équivalen
 
 \item Soit $\theta_3$ avec $\delta(\theta_3)=(q_1,a?0,q_3)$ menant au calcul de $A_{\theta_3}$. Les états pré-finaux sur $q_1$ sont $\{1\}$. Contrairement à $\theta_1$, $\theta_3$ est une action de réception.  Ici le seul symbole $\theta_s$ d'action $c!a$ correspondant à $\theta_3$ ($a!0$) est $\theta_1$.
 
-Dès lors, l'ANF pour $L'=L\bigcap \Sigma^*.\theta_3.\Sigma^*.t{q_1}$ est calculé.
+Dès lors, l'ANF pour $L'=L\bigcap \Sigma^*.\{\theta_3\}.\Sigma^*.t{q_1}$ est calculé.
 
 \begin{figure}[H]
     \centering
@@ -343,7 +342,7 @@ Dès lors, l'ANF pour $L'=L\bigcap \Sigma^*.\theta_3.\Sigma^*.t{q_1}$ est calcul
   \end{tikzpicture}\caption{Un ANF représentant $L'$}\label{fig:tq1}
 \end{figure}
 
-Cet automate sert à construire $Post(L,\theta_3)$ comme décrit pour les $\theta$ dont l'action est de forme $c?a$ : \ref{fig:tq1b}.
+Cet automate sert à construire $Post(L,\theta_3)$ comme décrit pour les $\theta$ dont l'action est de forme $c?a$. $Post'L,\theta_3)$ est représenté par la figure \ref{fig:tq1b}.
 
 \begin{figure}[H]
     \centering
@@ -382,4 +381,4 @@ Cet automate sert à construire $Post(L,\theta_3)$ comme décrit pour les $\thet
 \end{itemize}
 
 
-En répétant ces opérations pour les symboles $\{ \theta_2, \theta_4, \theta_5\}$, il est possible de calculer l'automate $A'$ acceptant $L'=\bigcup_{\theta\in\Theta}Post(L,\theta)$. L'union de cet automate $A'$ avec un automate acceptant $\{t_{q_0}\}$ résulte en un automate $A''$ acceptant $\mathcal{F}(L)$.
+En répétant ces opérations pour les symboles $\{ \theta_2, \theta_4, \theta_5\}$, il est possible de calculer l'automate $A'$ représentant $L'=\bigcup_{\theta\in\Theta}Post(L,\theta)$. L'union de cet automate $A'$ avec un automate représentant $\{t_{q_0}\}$ résulte en un automate $A''$ représentant $\mathcal{F}(L)$.

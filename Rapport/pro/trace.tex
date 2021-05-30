@@ -1,4 +1,4 @@
-Cette section propose un nouveau langage : les traces annotées. Il se base sur les traces et permet de retrouver celles-ci. Si ce langage de trace annotées est régulier, il peut être appris conformément à \cite{Vardhan04}. Se basant sur le langage de traces défini à la section \ref{fifo}, un nouvel alphabet est proposé en \ref{trace:alpha}. Grâce à celui-ci, un algorithme est défini en \ref{trace:annot} qui permet de construire une trace annotée à partir d'une trace. Finalement, la sous-section \ref{trace:extension} propose une fonction d'extension de trace et en propose une propriété intéressante qui permet de faciliter la réponse à l'oracle d'équivalence par le professeur de l'algorithme d'Angluin défini dans la section \ref{angluin}.
+Cette section propose un nouveau langage : les traces annotées. Il se base sur les traces et permet de retrouver celles-ci. Si ce langage de traces annotées est régulier, il peut être appris conformément à \cite{Vardhan04}. Se basant sur le langage de traces défini à la section \ref{fifo}, un nouvel alphabet est proposé en \ref{trace:alpha}. Grâce à celui-ci, un algorithme est défini en \ref{trace:annot} qui permet de construire une trace annotée à partir d'une trace. Finalement, la sous-section \ref{trace:extension} propose une fonction d'extension de trace et en propose une propriété intéressante qui permet de faciliter la réponse à l'oracle d'équivalence par le professeur de l'algorithme d'Angluin défini dans la section \ref{angluin}.
 
 
   % ████████ ██   ██ ███████ ████████  █████
@@ -11,7 +11,7 @@ Cette section propose un nouveau langage : les traces annotées. Il se base sur 
 
 \subsection{Alphabet d'annotation}\label{trace:alpha}
 
-Le langage de traces en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut en construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
+Le langage de traces en tant que tel n'apporte pas de simplification à l'automate. C'est une autre façon d'écrire un chemin. Pour permettre l'apprentissage par l'algorithme d'Angluin, il faut construire un nouveau langage, si possible régulier, qui permette de reconstruire le langage de trace. Pour ce faire, ce nouveau langage devrait pouvoir représenter tout état atteignable ainsi qu'un ou plusieurs chemins ou mots témoins permettant d'atteindre ceux-ci.
 
 Pour ce faire, pour chaque nom de transition correspondant à une action d'envoi, un \emph{co-nom} est défini :
 $$
@@ -33,7 +33,7 @@ En combinant les noms de transitions, les co-noms et les symboles de contrôle, 
 
 Soit $\mathcal{A}:L(F)\rightarrow\Phi^*$ une fonction associant une trace annotée $\gamma\in\Phi^*$ à une trace d'automate à file $\sigma\in\Theta^*$. Cette \emph{trace annotée} est un mot sur l'alphabet d'annotation $\Phi$ tel qu'il représente au moins la trace $\sigma$. Il y a une perte d'information lors de cette transformation. $\mathcal{A}$ est la \emph{fonction d'annotation}.
 
-Intuitivement, $\mathcal{A}$ compacte une trace en remplaçant tout $\theta$ correspondant à une action d'envoi par son équivalent $\bar{\theta}$ si le symbole envoyé est consommé plus loin dans la trace, sur le même canal. Si une trace valide est annotée, il ne peut y avoir d'action de réception orpheline : le symbole a bien du être envoyé avant d'être consommé. Dès lors, la trace annotée ne comporte que des symboles correspondant à des actions d'envoi, avec une barre ou non. De plus, un symbole appartenant à $T_Q$ est ajouté à la fin pour signifier l'état de contrôle à atteint en suivant le chemin défini par la trace.
+Intuitivement, $\mathcal{A}$ compacte une trace en remplaçant tout $\theta$ correspondant à une action d'envoi par son équivalent $\bar{\theta}$ si le symbole envoyé est consommé plus loin dans la trace, sur le même canal. Si une trace valide est annotée, il ne peut y avoir d'action de réception orpheline : le symbole a dû être envoyé avant d'être consommé. Dès lors, la trace annotée ne comporte que des symboles correspondant à des actions d'envoi, avec une barre ou non. De plus, un symbole appartenant à $T_Q$ est ajouté à la fin pour signifier l'état de contrôle atteint en suivant le chemin défini par la trace.
 
 Cette fonction est reprise algorithmiquement en l'algorithme \ref{alg:A}.
 
@@ -55,19 +55,19 @@ Cette fonction est reprise algorithmiquement en l'algorithme \ref{alg:A}.
     \STATE $\gamma\leftarrow\gamma t_q$ avec $t_q\in T_Q$ le symbole de contrôle associé à $q$
 		\RETURN $\gamma$
 	\end{algorithmic}
-	\caption{$\mathcal{A}:L(F)\rightarrow\Phi^*$}\label{alg:A}
+	\caption{$\mathcal{A}:\Theta^*\rightarrow\Phi^*$}\label{alg:A}
 \end{algorithm}
 
-Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des exécutions valides de l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité.
+Soit $AL(F)=\{\mathcal{A}(\sigma)|\sigma \in L(F)\}$ le \emph{langage de traces annotées} de l'automate $F$. $AL(F)$ est un ensemble de traces annotées correspondant à des traces valides pour l'automate $F$. Intuitivement, $AL(F)$ contient l'ensemble des états atteignables par $F$ ainsi que les traces annotées servant de témoins de cette atteignabilité.
 
 Soit un mot $\gamma \in \Phi^*$. $\gamma$ est \emph{correctement formaté} si il finit par un symbole de $T_Q$ et aucune autre occurence d'un symbole de $T_Q$ n'apparaît dans le mot. Soit un langage arbitraire $L$. $L$ est \emph{correctement formaté} si tous les mots $\gamma\in L$ le sont.
 
 
 \begin{example}
-Soit l'automate $F$ représenté par la figure \ref{fig:fifoAB}. Soient les traces $\sigma_1=\theta_2\theta_8$ et $\sigma_2=\theta_1\theta_3\theta_5\theta_2$. Alors, les traces annotées de ces traces sont : $\mathcal{A}(\sigma_1)=\theta_2\theta_8t_{(q_1,q_B)}=\gamma_1$ et $\mathcal{A}(\sigma_2)=\bar{\theta_1}\bar{\theta_5}t_{(q_0,q_B)}=\gamma_2$.
+Soit l'automate $F$ représenté par la figure \ref{fig:fifo1}. Soient les traces $\sigma_1=\theta_2\theta_8$ et $\sigma_2=\theta_1\theta_3\theta_5\theta_2$. Alors, les traces annotées de ces traces sont : $\mathcal{A}(\sigma_1)=\theta_2\theta_8t_{(q_1,q_B)}=\gamma_1$ et $\mathcal{A}(\sigma_2)=\bar{\theta_1}\bar{\theta_5}t_{(q_0,q_B)}=\gamma_2$.
 Bien qu'elles soient toutes deux correctement formatées, $\gamma_1$ ne correspond à aucune exécution valide de $F$. Dès lors, $\gamma_1$ n'appartient pas au langage de traces annotées de $AL(F)$ contrairement à $\gamma_2$.
 
-Soit le mot $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'est pas correctement formatée : il est impossible que cette trace annotée appartienne à $AL(F)$.
+Soit la trace annotée $\gamma_3=t_{q_0,q_A}\theta_2 t_{q_0,q_B} \in \Phi^*$. $\gamma_3$ n'est pas correctement formatée : il est impossible que cette trace annotée appartienne à $AL(F)$.
 \end{example}
 
 
@@ -100,4 +100,4 @@ Posons $Post(\gamma)=\bigcup_{\theta\in\Theta}Post(\gamma,\theta)$ et $Post(L)=\
   Soit \fl$=Post(L)\cup\{t_{q_0}\}$ où $q_0$ est l'état de contrôle initial. \fl est une opération monotone sur les ensembles c'est-à-dire qu'elle préserve l'inclusion d'ensembles. De plus, $AL(F)$ est le plus petit point fixe de \fl.
 \end{theorem}
 
-La preuve de ce théorème est disponible en annexe de \cite{Vardhan04}. Un algorithme détaillant comment calculer $\mathcal{F}(L)$ est fourni en annexe \ref{app:exemple}, accompagné d'un exemple.
+La preuve de ce théorème est disponible en annexe de \cite{Vardhan04}. Un algorithme détaillant comment calculer $\mathcal{F}(L)$ est détaillé dans en section \ref{sec:fl}.

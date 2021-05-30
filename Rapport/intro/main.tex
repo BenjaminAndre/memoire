@@ -1,20 +1,16 @@
-Onzième version du document.
-
 Le but de ce mémoire dont le titre est une traduction de "Actively learning to verify safety for FIFO automata" \cite{Vardhan04} est de comprendre et implémenter l'article en question.
 
-Les automates à files sont des objets mathématiques permettant de représenter différents problèmes et sont particulièrement adapté à la représentation de protocoles de communications ou de programmes informatiques communiquant par un réseau.
+Les automates à files sont des objets mathématiques permettant de représenter différents problèmes et sont particulièrement adaptés à la représentation de protocoles de communications ou de programmes informatiques communiquant par un réseau.
 
-Une des opérations qui peut leur être appliquée est la vérification de la sûreté : est-il possible que l'automate à file finisse dans une configuration que je juge comme étant indésirable ? Cela peut servir à detecter des bugs dans ces programmes de façon formelle.
+Une des opérations qui peut leur être appliquée est la vérification de la sûreté : est-il possible que l'automate à files finisse dans une configuration jugée comme étant indésirable ? Cela peut servir à detecter des bugs dans ces programmes de façon formelle.
 
-Dans le cas d'un modèle fini, une exploration exhaustive est possible. Cependant, les automates à files présentent une infinité de configurations possibles en général. Dès lors, une solution plus élaborée doit être envisagée. C'est ce que présente \cite{Vardhan04} en appliquant et adaptant un algorithme de machine learning pour répondre à la question de sûreté. Le processus consiste à fournir une représentation de l'automate à apprendre, de supposer que celle-ci est finie, et d'explorer celle-ci pour répondre si l'automate à apprendre est sûr ou non.
+Dans le cas d'un modèle fini, une exploration exhaustive est possible. Cependant, les automates à files présentent une infinité de configurations possibles dans la cas général. Dès lors, une solution plus élaborée doit être envisagée. C'est ce que présente \cite{Vardhan04} en appliquant et en adaptant un algorithme de machine learning pour répondre à la question de sûreté. Le processus consiste à fournir une représentation de l'automate à apprendre, de supposer que celle-ci est finie, et d'explorer celle-ci pour se prononcer sur la sûreté.
 
 Pour tout cela, de nombreuses notions sont necéssaires. Le chapitre \ref{pre} introduit celles existant indépendamment de l'article, touchant à la notion d'automate à files et à l'apprentissage d'automates ayant un nombre fini de configurations.
 
-Ensuite, le chapitre \ref{pro} décrit les nouvelles techniques et adaptations proposée par \cite{Vardhan04}, une définition de la sûreté ainsi que l'algorithme de machine learning complet permettant de se prononcer sur la sûreté d'un automate à files.
+Ensuite, le chapitre \ref{pro} décrit les nouvelles techniques et adaptations proposées par \cite{Vardhan04}, une définition de la sûreté ainsi que l'algorithme de machine learning complet permettant de se prononcer sur la sûreté d'un automate à files.
 
 
-Le chapitre \ref{impl} décrit les conditions d'implémentation, les logiciels utilisés et fournit les résultats avant de discuter de leur signification dans le contexte de ce problème.
+Le chapitre \ref{impl} décrit les conditions d'implémentation, les logiciels utilisés et décrit des expérimentations servant à tester l'implémentation.
 
 Finalement, le chapitre \ref{ccl} reprend des éléments des différents chapitres pour nuancer les propos et proposer des pistes d'amélioration et d'exploration.
-
-Différents algorithmes et théorèmes sont soit référencés soit proposés en annexe.

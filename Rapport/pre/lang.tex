@@ -15,15 +15,15 @@ Un ensemble quelconque de mots sur $\Sigma$ est un \emph{langage}, noté $L \sub
 
 \begin{example}[Langages] Voici des exemples utilisant plusieurs modes de définition. $\Sigma$ y est implicite mais peut être donné explicitement.
 	\begin{itemize}
-		\item $L=\{12,35,42,7,0\}$, un langage défini explicitement
-		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro, un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste
+		\item $L=\{12,35,42,7,0\}$, un langage défini explicitement.
+		\item $L=\{0^k1^j|k+j=7\}$, les mots de 7 symboles sur $\Sigma=\{0,1\}$ commençant par zéro, un ou plusieurs $0$ et finissant par zéro, un ou plusieurs $1$. Ici, $L$ est donné par notation ensembliste.
 		\item $L$ contient tous les noms de villes belges. Ici $L$ est défini en langage courant.
-		\item $\emptyset$ est un langage sur tout alphabet.
+		\item $\emptyset$ est un langage sur tout l'alphabet.
 		\item $L=\{\epsilon\}$ ne contient que le mot vide, et est un langage sur tout alphabet.
 	\end{itemize}
 \end{example}
 
-Soient $L$ et $M$ deux langages. Le langage $L \cup M = \{w | w \in L\vee w \in M\}$ est l'\emph{union} de ces deux langages. Il est composé des mots venant d'un des deux langages.
+Soient $L$ et $M$ deux langages. Le langage $L \cup M = \{w | w \in L\vee w \in M\}$ est l'\emph{union} de ces deux langages. Il est composé des mots venant d'un des deux langages. Le langage $L\cap M =\{w | w\in L \wedge w\in M\}$ est l'\emph{intersection} de ces deux langages. Il est composé des mots appartenant simultanément aux deux langages.
 
 Le langage composé de tous les mots produits par la concaténation d'un mot de $L$ avec un mot de $M$ est une \emph{concaténation} de ces deux langages et s'écrit $LM = \{vw | v \in L \wedge w \in M\}$.
 

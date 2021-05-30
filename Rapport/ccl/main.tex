@@ -1,7 +1,11 @@
-\section{Rappel de la problématique}
+Au cours des différents chapitres, la sûreté d'un automate à files a été définie et les algorithmes permettant de l'évaluer par apprentissage actif ont été développés.
 
-\section{Résumé des notions rencontrées}
+Pour arriver à ce résultat, de nombreuses notions ont été rencontrées. Le chapitre \ref{pre} a introduit les notions de langage (dont les langages réguliers liés aux expressions régulières) ainsi que les automates finis les représentant. Des algorithmes permettant de construire un automate déterministe à partir d'un automate non-déterministe, et d'en minimiser un ont été détaillés. La complexité y a été analysée, soulignant qu'ils sont utilisables en pratique. Ensuite, la section \ref{angluin} a défini l'algorithme d'Angluin ainsi que les éléments necéssaires à son fonctionnement. C'est cet algorithme qui est utilisé pour l'apprentissage actif d'automate. La dernière notion introduite dans ce chapitre est l'automate à files, plus puissant que l'automate fini, mais plus complexe.
 
-\section{Apports}
+C'est pourquoi le chapitre \ref{pro} s'est intéressé à la méthode LeVer \cite{Vardhan04}, permettant d'étudier la sûreté d'automates à files avec l'algorithme d'Angluin. Pour ce faire, les concepts de trace, trace annotée, fonction d'annotation et de région à risque ont été introduits.
 
-\section{Suites possibles}
+Cependant, malgré le fait que la méthode soit complète, l'implémentation demande plus de précision sur des opérations servant de base à LeVer. En java avec les librairies Automatalib et Learnlib, comme expliqué dans le chapitre \ref{impl}, la méthode a été implémentée. \ref{impl} détaille également les algorithmes qui ont dû être développés pour traduire des opérations abstraites sur les langages en opérations concrètes sur des automates. Ce chapitre se fini sur quelques expérimentations pour ce convaincre du bon fonctionnement de l'implémentation, en plus des tests unitaires.
+
+La sûreté d'automates à files pouvant être apprise automatiquement, toute une classe de problèmes peut être étudiée formellement. C'est principalement le cas de machines communiquant en réseau.
+
+Malgré l'attention portée à la complexité algorithmique, il est très certainement possible d'optimiser l'implémentation afin d'accélérer l'apprentissage. En fonction de la complexité de l'automate à files étudié, cela peut devenir necéssaire. De plus, la sûreté n'est implémentée que de façon minimale. Une extension à la définition complète de $\mathcal{W}(L)$, donné à la fin de la section \ref{safety}, serait une continuation logique de l'implémentation.

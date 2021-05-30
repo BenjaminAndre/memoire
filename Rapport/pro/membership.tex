@@ -1,5 +1,5 @@
 Lorsqu'un mot $\gamma$ est fourni à l'oracle d'appartenance la question est de savoir s'il apparatient à $AL(F)$, le langage de trace annotée. Comme l'oracle ne possède pas d'automate pour représenter ce langage, il doit répondre en se basant sur $F$.
 
-Ainsi, un mot $\gamma$ appartient à $AL(F)$ s'il représente au moins un chemin $\sigma$ valide dans $F$. $\gamma\notin AL(F)$ s'il n'est pas correctement formatté.
+Ainsi, un mot $\gamma$ appartient à $AL(F)$ s'il représente au moins un chemin $\sigma$ valide pour $F$. $\gamma\notin AL(F)$ s'il n'est pas correctement formaté.
 
 Simuler l'automate à files $F$, symbole par symbole, permet de tester si $\gamma$ représente bien une exécution valide. La section \ref{sec:app} apporte un algorithme efficace pour simuler les différentes exécutions possibles pour une trace annotée.

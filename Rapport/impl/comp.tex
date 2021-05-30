@@ -1,10 +1,10 @@
-Supposons être en possession de $L$ et de $\mathcal{F}(L)$. Nous décrivons ici comment implémenter la comparaison de \fl avec $L$ selon les critères énonces dans la section \ref{ss:fixe}.
+Supposons être en possession de $L$ et de $\mathcal{F}(L)$. Nous décrivons ici comment implémenter la comparaison de \fl avec $L$ selon les critères énoncés dans la section \ref{ss:fixe}.
 
 
 L'algorithme de comparaison \ref{alg:comp} suppose l'existence d'opérations de base. Dans le cadre d'une implémentation, celles-ci doivent également être disponibles.
 
-Soient deux ADFs $A$ et $B$ ainsi que les langages qui sont représentés par ceux-ci, respectivement $L_A=L(A)$ et $L_B=L(B)$.
-Voici une liste des opérations necéssaires.
+Soient deux ADF $A$ et $B$ ainsi que les langages qui sont représentés par ceux-ci, respectivement $L_A=L(A)$ et $L_B=L(B)$.
+Voici une liste des opérations nécéssaires.
 
 \begin{itemize}
     \item La conjonction : $L_A\bigcap L_B$
@@ -77,11 +77,11 @@ Voici une liste des opérations necéssaires.
     \item La sélection d'un mot : $w\in L_A$
 \end{itemize}
 
-La comparaison de $\mathcal{F}(L)$ avec $L$est plus complexe qu'une simple équivalence car le contre-exemple à retourner dépend de l'automate à files $F$. En effet, le contre-exemple recherché n'est pas un contre-exemple à l'égalité $L=\mathcal{F}(L)$ mais à l'égalité $L=AL(F)$. (Voir section \ref{ss:fixe})
+La comparaison de $\mathcal{F}(L)$ avec $L$ est plus complexe qu'une simple équivalence car le contre-exemple à retourner dépend de l'automate à files $F$. En effet, le contre-exemple recherché n'est pas un contre-exemple à l'égalité $L=\mathcal{F}(L)$ mais à l'égalité $L=AL(F)$. (Voir section \ref{ss:fixe})
 
 \begin{algo}[Comparaison]
   \begin{algorithmic}[1]
-    \REQUIRE Un laguage de trace annotée $L$ pour un automate à files $F$, $\mathcal{F}(L)$
+    \REQUIRE Un langage de traces annotées $L$ pour un automate à files $F$, $\mathcal{F}(L)$
     \ENSURE L'égalité entre $L$ et $\mathcal{F}(L)$ ou un contre-exemple $\gamma\in\Phi^*$ à l'égalité $L=AL(F)$
     \IF {$L=\mathcal{F}(L)$}
         \RETURN $L$ est un point fixe de $\mathcal{F}$.
@@ -110,7 +110,7 @@ Sous l'hypothèse que $\gamma$ n'est pas $t_{q_0}$, ce qui en ferait une annotat
     \begin{algorithmic}[1]
         \REQUIRE
         \begin{itemize}
-            \item Un language obtenu par la fonction $\mathcal{F}$ : $\mathcal{F}(L)$
+            \item Un langage obtenu par la fonction $\mathcal{F}$ : $\mathcal{F}(L)$
             \item L'automate à files concerné par $L$  : $F$
             \item Une trace annotée $\gamma\in\Phi^*$
         \end{itemize}
@@ -159,4 +159,4 @@ Voici le déroulement de $reverseFL(A,F,\gamma)$.
   \item $\bt_4\in$\barTheta pour lequel il existe $\theta_7$ avec $\delta(\theta_7)=(q_3,b?0,q_0)$. $q_0$ est correct. L'algorithme retourne $\gamma'=(\bt_2\bt_5).\theta_5.(\bt_1).t_{q_3}$
 \end{enumerate}
 
-Le résultat peut être vérifié simplement. $Post(\gamma',\theta_7)=\gamma$.
+Le résultat peut être vérifié simplement : $Post(\gamma',\theta_7)=\gamma$.

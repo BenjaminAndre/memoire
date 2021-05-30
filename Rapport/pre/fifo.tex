@@ -22,10 +22,10 @@ L'article \cite{Vardhan04} se concentre sur un automate plus général : l'autom
   \caption{Relation entre langage régulier et langage irrégulier}\label{fig:lrl}
 \end{figure}
 
-Ainsi, de nouveaux langages peuvent être définis de façon plus précise. Leur puissance expressive est équivalente aux machines de Turing. Cela a un coût : pour certains problèmes il n'existe pas de réponse générale ou si celle-ci existe elle prend un temps exponentiel à construire.
+Ainsi, de nouveaux langages peuvent être définis de façon plus précise. Cela a un coût : pour certains problèmes il n'existe pas de réponse générale ou si celle-ci existe elle prend un temps exponentiel à construire.
 
 
-C'est le cas de la question de sécurité des automates à files dans ce mémoire. Cependant, le chapitre \ref{lever} décrit comment une solution peut-être construite pour tout un ensemble d'automates à files, permettant de se prononcer sur un ensemble plus large que les langages régulier. L'automate à file est dès lors un outil pertinent pour élargir l'ensemble des langages pour lesquels il est possible d'étudier la sécurité.
+C'est le cas de la question de sûreté des automates à files dans ce mémoire. Cependant, le chapitre \ref{pro} décrit comment une solution peut-être construite pour tout un ensemble d'automates à files, permettant de se prononcer sur un ensemble plus large que les langages régulier. L'automate à file est dès lors un outil pertinent pour élargir l'ensemble des langages pour lesquels il est possible d'étudier la sécurité.
 
 Cette section se divise en une première partie \ref{fifo:def} donnant une définition formelle des automates à files et un exemple ainsi qu'une seconde partie \ref{fifo:trans} sur les systèmes de transitions, représentation potentiellement infinie des différentes configurations d'un automate à files. Finalement, la section \ref{fifo:lang} donne une définition formelle de ces nouveaux langages représentés par des automates à files.
 
@@ -64,7 +64,7 @@ Cette section se divise en une première partie \ref{fifo:def} donnant une défi
 
 
 \begin{example}
-  Soit un automate à files $F$ donné à la figure \ref{fig:fifo1}.
+  Soit un automate à files $F$ représenté par la figure \ref{fig:fifo1}.
 
   \begin{figure}[H]
     \centering
@@ -104,7 +104,7 @@ Cette section se divise en une première partie \ref{fifo:def} donnant une défi
 \subsection{Système de transitions}\label{fifo:trans}
 
 
-Un automate $F$ défini un \emph{système de transitions} \tsys. $\mathcal{T}$ est l'objet qui permet de passer d'un \emph{état} à un autre.
+Un automate $F$ définit un \emph{système de transitions} \tsys. $\mathcal{T}$ est l'objet qui permet de passer d'un \emph{état} à un autre. C'est ce système de transitions qui est potentiellement infini mais qui doit être étudié pour se pronconcer sur la sûreté d'un automate à files.
 
 En effet, il existe les états de contrôles $q\in Q$, mais les états au sens d'un automate à files sont de forme $s \in S=Q\times(\Sigma^*)^C$. En particulier, $s=(q,w)$ avec $q\in Q$ un état de contrôle et $w\in (\Sigma^*)^C$ est un vecteur qui fait correspondre à chaque canal $c\in C$ un mot $w[c] \in \Sigma^*$ représentant le contenu de ce canal. Intuitivement, un état $s$ est composé d'un état de contrôle et du contenu des différents canaux.
 
@@ -117,6 +117,9 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
   \item Si $\delta(\theta)=(p,\tau,q)$ alors $(p,w)\xrightarrow{\theta}(q,w')$ si et seulement si $w=w'$
 \end{itemize}
 
+L'état initial de \tsys est $s_0=(q_0, \epsilon^c)$ où $\epsilon^c$ décrit chaque canal $c$ comme étant vide.
+
+
 \begin{example}
 
   Reprenons l'automate à files $F$ de la figure \ref{fig:fifo1}. Un système de transitions $\mathcal{T}$ peut lui être associé.
@@ -128,7 +131,7 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
   Intuitivement, la première transition $\theta_1$ ajoute le symbole $0$ en tête du canal $a$ en passant de l'état $q_0$ à l'état $q_1$. La transition $\theta_4$, elle, permet de passer de l'état $q_1$ à $q_3$ en consommant $0$ en tête du canal $a$.
 
 
-  Comme ce système de transitions $\mathcal{T}$ est infini et sans état initial, seule une représentation partielle est possible. La figure \ref{fig:st} offre cette représentation autour de $s=(q_0,[\epsilon,\epsilon])$. Noter qu'il existe une transition entrante vers $s$ car la configuration $s'=(q_3,[\epsilon, 0])$ est possible et que la lecture de $\theta_7$ retourne pour $s'$ une configuration identique à $s$.
+  Comme ce système de transitions $\mathcal{T}$ est potentiellement infini, seule une représentation partielle est possible. La figure \ref{fig:st} offre cette représentation autour de $s=(q_0,[\epsilon,\epsilon])$. Noter qu'il existe une transition entrante vers $s$ car la configuration $s'=(q_3,[\epsilon, 0])$ est possible et que la lecture de $\theta_7$ retourne pour $s'$ une configuration identique à $s$.
 
   \begin{figure}[H]
     \centering
@@ -137,7 +140,7 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
       \tikzstyle{every state}=[rectangle, rounded corners=.2cm]
 
 
-      \node[state] (A)                                   {$(q_0,[\epsilon,\epsilon])$};
+      \node[state,initial] (A)                                   {$(q_0,[\epsilon,\epsilon])$};
       \node[state] (B) [above right= 0.5cm and 1 cm of A]  {$(q_1,[0,\epsilon])$};
       \node[state] (C) [below right= 0.5cm and 1 cm of A]  {$(q_2,[1,\epsilon])$};
       \node[state] (D) [above      = 1cm            of B]  {$(q_1,[0,1])$};
@@ -148,7 +151,7 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
       \node[state] (H) [above      = 1cm            of D] {\dots};
       \node[state] (I) [right      = 1cm            of D] {\dots};
       \node[state] (J) [right      = 1cm            of E] {\dots};
-      \node[state] (K) [left       = 1cm            of A] {\dots};
+      \node[state] (K) [below       = 1cm            of A] {\dots};
 
 
       \path
@@ -164,7 +167,7 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
       (K) edge node {$\theta_7$} (A)
       ;
     \end{tikzpicture}
-    \caption{Automate à files $F$}\label{fig:st}
+    \caption{Système de transitions de l'automate à files $F$ de la figure \ref{fig:fifo1}}\label{fig:st}
   \end{figure}
 
 
@@ -178,7 +181,7 @@ $\mathcal{T}$ respecte trois règles, correspondant chacune à un des types d'ac
 % ██      ██   ██ ██  ██ ██ ██    ██
 % ███████ ██   ██ ██   ████  ██████
 
-\subsection{Langage tracé}\label{ss:trace}
+\subsection{Langage de traces}\label{fifo:lang}
 
 Une façon de définir un langage à partir d'un automate à files est de s'intéresser aux noms des transitions suivies lors de l'exécution.
 
@@ -203,14 +206,14 @@ De plus, comme $\sigma$ correspond à un chemin, $\sigma$ est une \emph{trace va
 \begin{example}
   Considérons l'automate $F$ de la figure \ref{fig:fifo1}.
 
-  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas une trace. En effet, on a
+  Pour celui-ci, $\sigma=\theta_1\theta_4\theta_7$ n'est pas une trace valide. En effet, on a
   $$
   (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_1}(q_1,[0,\epsilon])\xrightarrow{\theta_4}(q_3,[\epsilon,\epsilon])
   $$
 
-  mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. En effet, pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
+  mais, il n'existe pas d'état $s$ tel que $(q_3,[\epsilon,\epsilon])\xrightarrow{\theta_7}s$. Pour appliquer cette transition, il aurait fallu que le canal $b$ contienne un symbole $0$. Ce n'est pas le cas.
 
-  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est une trace. En effet, on a :
+  Par contre, $\sigma=\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_4\theta_7$ est une trace valide. En effet, on a :
   \begin{equation*}
     \begin{gathered}
       (q_0,[\epsilon,\epsilon])\xrightarrow{\theta_2}

@@ -1,10 +1,10 @@
-Les automates à files définis à la section \ref{fifo} sont plus puissants que les ADF définis dans la section \ref{adf}. En effet, les systèmes de transitions associés ont potentiellement une infinité de configurations. Dans ces conditions, il n'est pas possible de faire une exploration exhaustive des états pour trouver lesquels sont acceptants.
+Les automates à files définis à la section \ref{fifo} sont plus puissants que les ADF définis dans la section \ref{adf}. En effet, les systèmes de transitions associés ont potentiellement une infinité de configurations. Dans ces conditions, il n'est pas possible de faire une exploration exhaustive des états.
 
-À la place, une propriété dite de sécurité est définie. Si un état respecte cette propriété, il est \emph{sûr}. Si il y a moyen de prouver que la totalité des états de l'automate respectent cette propriété, l'automate est considéré comme sûr. Si au contraire, un exemple de violation de la propriété est trouvé, l'automate peut être déclaré comme à risque.
+À la place, une propriété dite de sûreté est définie. Si un état respecte cette propriété, il est \emph{sûr}. Si il y a moyen de prouver que la totalité des états de l'automate respectent cette propriété, l'automate est considéré comme sûr. Si au contraire, un exemple de violation de la propriété est trouvé, l'automate peut être déclaré comme à risque.
 
 L'idée dès lors est de travailler non pas avec un système de transitions infini mais avec une représentation construite pour être finie dans un vaste ensemble de problèmes. Cette représentation est le langage de traces annotées défini dans la section \ref{trace}.
 
-En supposant que celui-ci est régulier, il est possible d'utiliser l'algorithme d'Angluin de la section \ref{angluin} pour l'apprendre. Cependant, ce langage n'est qu'un concept et le professeur n'a accès qu'à un automate à files $F$. Pour cette raison, les oracles d'appartenance et d'équivalence sont adaptés pour répondre à une requête entre un langage fourni par l'élève et $F$.
+En supposant que celui-ci est régulier, il est possible d'utiliser l'algorithme d'Angluin de la section \ref{angluin} pour construire un ADF $A$. Cependant, ce langage n'est qu'un concept et le professeur n'a accès qu'à un automate à files $F$. Pour cette raison, les oracles d'appartenance et d'équivalence sont adaptés pour répondre à une requête entre un langage fourni par l'élève et $F$ sans reposer sur un ADF.
 
 La figure \ref{fig:lever} donne une vue schématique de ce nouvel algorithme d'Angluin modifié.
 
@@ -39,7 +39,7 @@ La figure \ref{fig:lever} donne une vue schématique de ce nouvel algorithme d'A
 	\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
 	\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
 
-	\node[draw=none] at (11.25, 1.15) {Automate sécurisé};
+	\node[draw=none] at (11.25, 1.15) {Automate sûr};
 	\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
 
 

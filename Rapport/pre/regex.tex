@@ -1,6 +1,6 @@
 Certains langages peuvent être exprimés par une \emph{expression régulière}.
 
-Une expression régulière est un mot utilisant les symboles à représenter ainsi que les symboles (,),*,| qui sont réservés pour différentes opérations. Une expression régulière est construite à partir d'élements atomiques (les symboles du langage à représenter) et assemblés pour obtenir des langages plus complexes. Un language qui peut-être représenté par une expression régulière est dit \emph{langage régulier}.
+Une expression régulière est un mot utilisant les symboles à représenter ainsi que les symboles (,),*,| qui sont réservés pour différentes opérations. Une expression régulière est construite à partir d'éléments atomiques (les symboles du langage à représenter) assemblés pour obtenir des langages plus complexes. Un langage qui peut-être représenté par une expression régulière est dit \emph{langage régulier}.
 
 Si plusieurs expressions régulières peuvent être composées en une expression plus complexe, une expression régulière peut aussi être décomposée en ses différents composants.
 
@@ -14,14 +14,14 @@ Certains langages peuvent être construits directement sans passer par l'inducti
 \end{itemize}
 
 
-\textbf{Induction}
+\textbf{Pas de récurrence}
 Les autres langages réguliers sont construits suivant différentes règles d'induction présentées par ordre décroissant de priorité :
 
 \begin{itemize}
 	\item Si $E$ est une expression régulière, alors $(E)$ est une expression régulière et $L((E)) = L(E)$.
 	\item Si $E$ est une expression régulière, alors $E^*$ est une expression régulière représentant la fermeture de $L(E)$, à savoir $L(E^*) = L(E)^*$.
 	\item Si $E$ et $F$ sont des expressions régulières, alors $EF$ est une expression régulière décrivant la concaténation des deux langages représentés, à savoir $L(EF)=L(E)L(F)$.
-	\item Si $E$ et $F$ sont des expressions régulières, alors $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. Ici encore, l'opération est associative et la priorité est à gauche.
+	\item Si $E$ et $F$ sont des expressions régulières, alors $E+F$ est une expression régulière donnant l'union des deux langages représentés, à savoir $L(E+F)=L(E)\cup L(F)$. L'opération est associative et la priorité est à gauche.
 \end{itemize}
 
 \begin{example}[Expressions régulières]
@@ -29,7 +29,7 @@ Les autres langages réguliers sont construits suivant différentes règles d'in
 	\begin{itemize}
 		\item Le mot $ba$ fait partie de $L$. En effet, $ba=b\epsilon a \epsilon=(b)b^0a(a+b)^0$, ce qui respecte bien la définition de $E$.
 		\item Le mot $ababbab$ fait partie de $L$. A nouveau, $ababbab=ab\epsilon a (a+b)(a+b)(a+b)(a+b)=(ab)b^0a(a+b)^4$.
-		\item Le mot $aa$ ne fait \textbf{pas} partie de $L$. Supposons par l'absurde que $aa \in L$. Alors il existerait une façon de décomposer $E$ en $aa$. Or, les premiers symboles doivent être soit $b$, soit $ab$. Il y a contradiction. Donc, $aa \notin L$.
+		\item Le mot $aa$ ne fait \textbf{pas} partie de $L$. Supposons par l'absurde que $aa \in L$, alors il existerait une façon de décomposer $E$ en $aa$. Or, les premiers symboles doivent être soit $b$, soit $ab$. Il y a contradiction. Donc, $aa \notin L$.
 	\end{itemize}
 	\label{ex:regex}
 \end{example}

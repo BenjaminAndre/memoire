@@ -5,25 +5,25 @@ Comme expliqué dans l'introduction du chapitre, c'est impossible de façon gén
 Contrairement à la version originale de l'algorithme d'Angluin qui a deux possibilités (équivalence ou contre-exemple), celle-ci en a trois. L'oracle peut répondre soit que $AL(F)$ est sécurisé, soit qu'il ne l'est pas, soit que $L$ est différent de $AL(F)$ avec un contre-exemple.
 
 
-\subsection{$L$ est-il un point fixe de $\mathcal{F}$ ?}\ref{ss:fixe}
+\subsection{$L$ est-il un point fixe de $\mathcal{F}$ ?}\label{ss:fixe}
 
 Cette question se base sur le théorème \ref{thm:fl} et en particulier du fait que $AL(F)$ est un point fixe. Il n'est pas possible de prouver que $L=AL(F)$ mais il est possible de montrer que $L\neq AL(F)$ en montrant que $L$ n'est pas un point fixe.
 
-Une façon de montrer que $L\neq AL(F)$, est d'énoncer un seul élément dans $L\bigcup AL(F)-L\bigcap AL(F)=$\alfx l'union exclusive des deux ensembles. Pour rappel, $AL(F)$ est un langage contenant l'ensemble des traces valides pour l'automate à files $F$.
+Une façon de montrer que $L\neq AL(F)$, est d'énoncer un seul élément dans $L\bigcup AL(F)-L\bigcap AL(F)=$\alfx, \emph{l'union exclusive} des deux ensembles. Pour rappel, $AL(F)$ est un langage contenant l'ensemble des traces valides pour l'automate à files $F$.
 
 En comparant \fl avec $L$ pour vérifier si $L$ est un point fixe de $\mathcal{F}$, plusieurs situations peuvent apparaître :
 
 \begin{itemize}
-  \item $\mathcal{F}(L)-L\neq\emptyset$. Considérons un mot $w\in\mathcal{F}(L)-L$ et montrons que $w\in$\alfx.
+  \item $\mathcal{F}(L)-L\neq\emptyset$. Considérons une trace annotée $\gamma\in\mathcal{F}(L)-L$ et montrons que $\gamma\in$\alfx.
   \begin{itemize}
-    \item Si $w=t_{q_0}$, c'est que $t_{q_0}\notin L$. Pourtant, par définition, $t_{q_0}\in AL(F)$. Dès lors, $w\in$\alfx
-    \item Sinon, si $w$ est une annotation valide, c'est que $L$ n'est pas un point fixe de $\mathcal{F}$. Dès lors, $w$ suffit à démontrer que $AL(F)\neq L$.
-    \item Sinon, $w$ n'est pas une annotation valide. $w$ faisant partie de \fl, cela signifie qu'il doit exister un mot $w'\in L$ tel que $w=Post(w')$. Ce $w'$ ne peut pas être une annotation valide : cela impliquerait que $w$ l'est également ce qui est posé comme faux ici. Comme $w'$ n'est pas une annotation valide pour $F$, $w'\notin AL(F)$. Comme $w'\in L$, naturellement $w'\in$\alfx.
+    \item Si $\gamma=t_{q_0}$, c'est que $t_{q_0}\notin L$. Pourtant, par définition, $t_{q_0}\in AL(F)$. Dès lors, $\gamma\in$\alfx
+    \item Sinon, si $\gamma$ est une annotation valide, c'est que $L$ n'est pas un point fixe de $\mathcal{F}$. Dès lors, $\gamma$ suffit à démontrer que $AL(F)\neq L$.
+    \item Sinon, $w$ n'est pas une annotation valide. $\gamma$ faisant partie de \fl, cela signifie qu'il doit exister une trace annotée $\gamma'\in L$ telle que $\gamma=Post(\gamma')$. Ce $\gamma'$ ne peut pas être une annotation valide : cela impliquerait que $\gamma$ l'est également ce qui est posé comme faux ici. Comme $\gamma'$ n'est pas une annotation valide pour $F$, $\gamma'\notin AL(F)$. Comme $\gamma'\in L$, naturellement $\gamma'\in$\alfx.
   \end{itemize}
   \item $\mathcal{F}(L)\subsetneq L$. Dans ce cas, utilisons la notion de point préfixe. Un ensemble $Z$ est un \emph{point préfixe} d'une fonction $\mathcal{F}$ s'il réduit par son application : $\mathcal{F}$ ($\mathcal{F}(Z)\subseteq Z$). Selon cette définition, $L$ est un point préfixe de $\mathcal{F}$.
   En appliquant $\mathcal{F}$ des deux côtés, ce qui préserve l'inclusion car $\mathcal{F}$ est monotone, on obtient $\mathcal{F}(\mathcal{F}(L))\subsetneq\mathcal{F}(L)$.
 
-  Donc, $\mathcal{F}(L)$ est également un point préfixe. Soit $w\in L-\mathcal{F}(L)$. Comme $w$ n'est pas dans l'intersection de ces deux point préfixes, il ne fait pas partie du point fixe minimum $AL(F)$. En effet, selon la théorie des points fixes de Knaster-Tarski (annexe \ref{app:tarski}), un point fixe minimal est également l'intersection de tous les points préfixes de $\mathcal{F}$.
+  Donc, $\mathcal{F}(L)$ est également un point préfixe. Soit $\gamma\in L-\mathcal{F}(L)$. Comme $\gamma$ n'est pas dans l'intersection de ces deux point préfixes, il ne fait pas partie du point fixe minimum $AL(F)$. En effet, selon la théorie des points fixes de Knaster-Tarski (annexe \ref{app:tarski}), un point fixe minimal est également l'intersection de tous les points préfixes de $\mathcal{F}$.
 
   \item \fl=$L$. Cela signifie que $L$ est un point fixe de $\mathcal{F}$. Cela signifie qu'il n'est pas possible de prouver que $L\neq AL(F)$ et infirmant cette propriété. Cela ne signifie par pour autant que $L=AL(F)$.
 
@@ -99,7 +99,7 @@ En visualisant $L$ comme étant un super-ensemble de $AL(F)$ et la région à ri
 
 Pour savoir si nous sommes dans le scénario (a), (b) ou (c) de la figure \ref{fig:inter}, deux tests sont à effectuer.
 
-Premièrement, vérifier si $\mathcal{W}(L)$ est vide ou non. S'il est vide, nous sommes dans le scénario (a) et il est possible d'annoncer avec certitude que $F$ est sécurisé.
+Premièrement, vérifier si l'intersection avec la région à risque $\mathcal{W}(L)$ est vide ou non. S'il est vide, nous sommes dans le scénario (a) et il est possible d'annoncer avec certitude que $F$ est sécurisé.
 
 \subsection{Le chemin vers l'état à risque est-il valide ?}
 
@@ -108,6 +108,6 @@ Considérons un des éléments de $\mathcal{W}(L)$. Demandons à l'oracle d'appa
 
 Si ce n'est pas le cas, c'est que $L\neq AL(F)$ et que l'algorithme d'Angluin peut continuer grâce au contre-exemple fourni. Ici, il peut s'agir soit d'un scénario (b) soit d'un scénario (c) puisqu'un autre mot de $\mathcal{W}(L)$ pourrait appartenir à $AL(F)$. Cela correspondrait à prendre un mot de la zone bleue claire dans (c).
 
-Améliorer l'approximation d'$AL(F)$ permet justement de mieux discriminer ces deux scénarios sans devoir consulter la totalité de $\mathcal{W}(L)$.
+Améliorer l'approximation d'$AL(F)$ permet justement de mieux discerner ces deux scénarios sans devoir consulter la totalité de $\mathcal{W}(L)$.
 
 Si par contre le mot étudié appartient aussi à $AL(F)$, on a un mot étant à la fois dans $AL(F)$ et dans la région à risque. $F$ est déclaré à risque et le mot est retourné comme contre-exemple. Il s'agit du scénario (c).

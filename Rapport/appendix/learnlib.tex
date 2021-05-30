@@ -1,112 +1,71 @@
 Cette annexe est une liste exhaustive des modifications apportées aux librairies Automatalib et Learnlib pour leur permettre de supporter l'apprentissage automatique de la sécurité d'automates à files.
 
 \section{Ajouts et modifications à Automatalib}
-Nouvelles classes avec leurs méthodes :
+
+Automatalib est, comme son nom l'indique, la librairie responsable de toutes les opérations sur les automates.
+
+Voici une liste exhaustive des ajouts et modifications apportés :
 \begin{itemize}
-  \item FIFOA
-  \item MutableCA (CA pour Channel Automata)
-  \item MutableFIFOA
-  \item SupportsGrowingChannelAlphabet
-  \item ChannelNamesHolder
-  \item TransitionAction
-    \begin{enumerate}
-      \item Action (enum des trois types d'action possibles)
-    \end{enumerate}
-  \item CAGraphView (aide à la visualisation d'un automate utilisant des canaux)
-  \item FIFOAVisualizationHelper (aide à la visualisation)
-  \item PhiChar (les symboles $\phi\in\Phi$ et leur correspondance dans l'automate à files $F$ concerné)
+  \item Une énumeration Action a été développée, listant les types d'action ($?,!,\tau$)
+  \item Une classe Theta a été créée. Celle-ci permet d'abstraire une transition $(p,action,q)$ en un nom de transition $\theta$
+  \item Une nouvelle méthode dans Alphabets, permettant de calculer l'ensemble $\Theta$ en fonction des canaux et symboles utilisés.
+  \item Une classe PhiChar, symbolisant les symboles $\phi\in\Phi$
+  \item Une interface MutableFIFOA, définissant le contrat d'un automate à files. Il doit entre autre permettre d'obtenir son alphabet d'annotation $\Phi$.
+  \item Une interface FIFOA, continuant le contrat à la validation de trace annotée; vérifiant au passage si elles sont correctement annotées.
+  \item Une nouvelle méthode permettant d'insérer un symbole dans un mot Word à une place arbitraire, utile pour tester différentes permutations.
+  \item Des méthodes permettant d'obtenir les transitions entrantes pour un symbole donné, dans CompactDFA et CompactNFA. Ces méthodes sont utilisées lors du calcul de $\mathcal{F}(L)$
+  \item Une classe CompactFIFOA, remplissant les deux contrats FIFOA et MutableFIFOA. De plus, elle offre une méthode utilitaire permettant de retrouver l'ensemble de $\theta_s$ associés à une action $c!m$ précise. Cette classe hérite de CompactDFA, représentant l'automate à file comme un ADF dont les symbole de transition sont des $\theta$.
+  \item Des nouvelles méthodes dans AbstractCompact et AbstractCompactSimpleDeterministic simplifiant la manipulation bas niveau requise par les différents algorithmes.
+  \item Une classe FIFOBuilder récupérant le système d'annotation et de syntaxe de la librairie pour générer les classes offrant une syntaxe simple pour la création d'un automate à files. Voici l'expression régulière définissant les opérations acceptées pour construire un automate à files \emph{(from (((on (write|read))|pass) (loop|to))+)* withInitial create}
+  \item Une classe FIFOAs offrant les principaux algorithmes détaillés dans le chapitre \ref{impl}. On y trouve :
     \begin{itemize}
-      \item Type (isTheta,isBarred,representsState)
-      \item getI (numéro du $\theta$ ou $t_q$ représenté)
+      \item applyFL pour $\mathcal{F}(L)$.
+      \item sigmaStarTP créant un automate représentant $L=\Sigma^*t_p$.
+      \item sigmaStarThetaSSigmaStarTP créant un automate représentant $L=\Sigma^*\Theta_s\Sigma^*t_p$.
+      \item aPlusAPrime gérant le cas où l'action est de la forme $c?m$ lors du calcul de \fl.
+      \item reverseFL implémentant l'algorithme du même nom.
+      \item reversehcj implémentant la verison de $\mathcal{W}(L)$ limitée au test du passage par une liste d'états de contrôle.
     \end{itemize}
-  \item UniversalChannelCompact
-    \begin{itemize}
-      \item Méthodes de bases de UniversalCompact
-      \item getAnnotationAlphabet (retourne $\Phi$)
-      \item getAdditionsAlphabet (retourne tous les $\theta$ pour le calcul de $\mathcal{F}(L)$)
-    \end{itemize}
-  \item AbstractFastTransition
-  \item FastFIFOA
-  \item FastFIFOAState
-  \item FastFIFOATransition
-  \item FastFIFOATransitionAction
-  \item CompactFIFOA
-    \begin{itemize}
-      \item Méthodes de base
-      \item isCorrectAnnotedTrace (la trace $\gamma$ est-elle correctement annotée pour $F$ ?)
-      \item validateTrace (la trace $\gamma$ est-elle valide pour $F$ ?)
-    \end{itemize}
-  \item FIFOBuilderImpl : utilitaire de création d'automates à files
-  \item FIFOAs
-    \begin{itemize}
-      \item applyFL (algorithme $\mathcal{F}$)
-      \item sigmaStarTP (automate pour $L=\Sigma^*.t_p$)
-      \item sigmaStarThetaSSigmaStarTP (automate pour $L=\Sigma^*.\theta_s.\Sigma^*.t_p$)
-      \item aPlusAPrime (utilitaire pour le cas de l'action de type $c?a$ lors du calcul de $\mathcal{F}(L)$)
-      \item tq0 (automate pour $L=\{t_{q_0}\}$)
-      \item fuseDFAs (regroupe une liste d'ADFs)
-      \item reverseFL
-      \item reversehcj (limitée ici à $\mathcal{W}$ défini par des langages réguliers définissant tout passage par un état de contrôle comme à risque)
-    \end{itemize}
+  \item Une méthode dans DFAs pour fusionner de nombreux ADF. C'est utile pour calculer $\bigcup_{\theta\in\Theta}A_\theta$.
+  \item Une méthode dans NFAs pour convertir un ADF en ANF équivalent.
 \end{itemize}
 
-Classes modifiées avec leur méthodes :
-\begin{itemize}
-  \item Word : insert (pour l'ajout de $\theta$ dans l'oracle d'appartenance)
-  \item WordTest : insertTest
-  \item AbstractCompact : méthodes pour récupérer un numéro d'état, de symbole ou transition
-  \item AbstractCompactSimpleDeterministic : méthodes pour obtenir les transitions ou des sous-ensembles en fonction de l'état d'origine ou de destination
-  \item CompactDFA : getLeadingTransitions (obtenir les transitions menant à un état $p$)
-  \item CompactNFA : getLeadingTransitions (obtenir les transitions menant à un état $p$)
-  \item Visualisation : méthodes relatives à la visualisation d'automates utilisant des canaux
-  \item AutomatonBuilder : méthode de création d'automates à files
-  \item NFAs : indeterminize (construire un ANF depuis un ADF)
-\end{itemize}
 
 \section{Ajouts et modifications à Learnlib}
-Nouvelles classes avec leurs méthodes :
-\begin{itemize}
-  \item SafeException
-  \item UnsafeException
-  \item FIFOAEquivalenceOracle
-  \item LeverExperiment
-  \item ALFEQOracle
-    \begin{itemize}
-      \item findCounterExemple (utilisant un automate à files)
-      \item fixpointCounterExemple (tester $L=AL(F)$)
-      \item getUnsafePath (trouver un chemin à risque grace à $\mathcal{W}$)
-      \item isPathValid (la trace est-elle correctement annotée et valide ?)
-    \end{itemize}
-  \item FIFOTraceSimulatorOracle
-    \begin{itemize}
-      \item answerQuery (tester $\gamma\in AL(F)$)
-    \end{itemize}
-\end{itemize}
 
-Classes modifiées avec leur méthodes :
+De façon similaire, Learnlib contient entre autres la logique liée à l'apprentissage actif.
+
+Voici une liste exhaustive des modifications et ajouts proposés pour Learnlib.
+
 \begin{itemize}
-  \item Experiment : Experiment using a FIFOAEquivalenceOracle
+  \item Une exception SafeException permettant d'interrompre l'apprentissage (algorithme d'Angluin) s'il est possible de déclarer l'automate à files comme étant sûr.
+  \item Une exception UnsafeException remplissant le même rôle dans le cas où l'automate à files est déclaré comme étant à risque.
+  \item Une classe FIFOTraceSimulatorOracle permettant de répondre à l'oracle d'appartenance en simulant l'exécution d'une trace annotée dans l'automate à files.
+  \item Une interface FIFOAEquivalenceOracle décrivant le contrat d'un oracle d'équivalence pour un automate à files. En pratique, c'est le même contrat que pour un automate fini, mais le typage oblige à créer une interface supplémentaire.
+  \item Une classe ALFEQOracle implémentant le contrat précédant. Pour ce faire, différentes méthodes internes sont ajoutées, cherchant un contre-exemple à $L=AL(F)$, proposant un mot dans $\mathcal{W}(L)$ et vérifiant si celui-ci est valide. En pratique, cette classe utilise principalement la logique offerte par FIFOAs dans la librairie Automatalib.
+  \item Une classe LeverExperiment faisant le lien entre les différentes classes implémentées et le moteur logique de Learnlib pour l'algorithme $L^*$.
 \end{itemize}
 
 
-\section{Module de démonstration}
+\section{Projet de démonstration}
 
+En plus des librairies Automatalib et Learnlib, un projet de démonstration est proposé. Celui-ci reprend les exemples cités dans la section \ref{sec:exps}. De plus, il propose une série de tests unitaires.
 
-Classes du paquet de démonstration :
+Voici la liste des ajouts du projet de démonstration :
 \begin{itemize}
-  \item FIFOA : exemple complet de l'apprentissage automatique de la propriété de sécurité d'un automate à files.
-  \item TestAutomatons : ADFs et automates à files utilisés pour des tests unitaires
-  \item AlphabetTest : test unitaire de l'utilisation de $\Phi$
-  \item FIFOATest
+  \item Une classe TestFIFOA fournissant un exemple complet de l'apprentissage automatique de la sûreté d'un automate à files. Aide aussi à mettre en évidence le processus par lequel un lecteur peut faire appel aux différents algorithmes pour étudier l'automate à files de son choix.
+  \item Une classe TestAutomatons listant les ADF et automates à files utilisés pour des tests unitaires.
+  \item Une class AlphabetTest composée de tests unitaires de l'utilisation de $\Phi$
+  \item Une classe FIFOATest composée de différents tests unitaires :
     \begin{itemize}
-      \item test unitaire sur les traces (sont-elles correctes ? valides ?)
-      \item test unitaires sur les méthodes utilitaires
+      \item Des tests sur les traces. Sont-elles correctes ? Sont-elles valides ?
+      \item Des tests sur les différentes méthodes utilitaires.
     \end{itemize}
-  \item FLTest
+  \item Finalement, une classe FLTest testant les différents segments servant à calculer \fl :
     \begin{itemize}
-      \item tests sur les automates pour $L=Sigma^*.t_p$
-      \item tests sur les automates pour $L=\Sigma^*.\theta_s.\Sigma^*.t_p$
-      \item tests pour aplusAPrime
-      \item tests pour reverseFL
+      \item Des tests sur les automates pour $L=Sigma^*.t_p$.
+      \item Des tests sur les automates pour $L=\Sigma^*.\Theta_s.\Sigma^*.t_p$.
+      \item Des tests pour aplusAPrime.
+      \item Des tests pour reverseFL.
     \end{itemize}
 \end{itemize}
