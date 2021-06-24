@@ -1,0 +1,1432 @@
+\documentclass[french,compress]{beamer}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage[utf8]{inputenc}
+\usepackage{longtable}
+\usepackage[T1]{fontenc}
+\usepackage{epigraph}
+\usepackage{fancyhdr}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{eurosym}
+\usepackage{calc}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage[Algorithme]{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumerate}
+\usepackage[french]{babel}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+\usepackage{etoolbox,refcount}
+\usepackage{listings}
+\usepackage{amssymb}
+\usepackage{subcaption}
+\usepackage{lmodern}
+\usepackage{thmtools}
+\usepackage{tikz-cd}
+\usepackage{xcolor, colortbl}
+\usepackage[title]{appendix}
+
+%
+%%%%%%% Sub librairies
+
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{decorations.pathreplacing,shapes,arrows,positioning}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{snakes}
+\usetikzlibrary{shapes,fit}
+\usetikzlibrary{positioning}
+\usetikzlibrary{automata,arrows,trees,positioning,shapes,calc}
+
+%
+%%%%% Custom commands
+%
+
+
+
+\lstset{
+	keywordstyle=\color{red},
+	basicstyle=\scriptsize\ttfamily,
+	commentstyle=\ttfamily\itshape\color{gray},
+	stringstyle=\ttfamily,
+	showstringspaces=false,
+	breaklines=true,
+	frameround=ffff,
+	rulecolor=\color{black}
+}
+
+
+%  █████  ██       ██████   ██████
+% ██   ██ ██      ██       ██    ██
+% ███████ ██      ██   ███ ██    ██
+% ██   ██ ██      ██    ██ ██    ██
+% ██   ██ ███████  ██████   ██████
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Requis:}}
+\renewcommand{\algorithmicensure}{\textbf{Promet:}}
+\renewcommand{\algorithmicend}{\textbf{fin}}
+\renewcommand{\algorithmicif}{\textbf{si}}
+\renewcommand{\algorithmicthen}{\textbf{alors}}
+\renewcommand{\algorithmicelse}{\textbf{sinon}}
+\renewcommand{\algorithmicelsif}{\algorithmicelse\ \algorithmicif}
+\renewcommand{\algorithmicendif}{\algorithmicend\ \algorithmicif}
+\renewcommand{\algorithmicfor}{\textbf{pour}}
+\renewcommand{\algorithmicforall}{\textbf{pour chaque}}
+\renewcommand{\algorithmicdo}{\textbf{faire}}
+\renewcommand{\algorithmicendfor}{\algorithmicend\ \algorithmicfor}
+\renewcommand{\algorithmicwhile}{\textbf{tant que}}
+\renewcommand{\algorithmicendwhile}{\algorithmicend\ \algorithmicwhile}
+\renewcommand{\algorithmicloop}{\textbf{boucle}}
+\renewcommand{\algorithmicendloop}{\algorithmicend\ \algorithmicloop}
+\renewcommand{\algorithmicrepeat}{\textbf{répéter}}
+\renewcommand{\algorithmicuntil}{\textbf{jusqu'à}}
+\renewcommand{\algorithmicprint}{\textbf{afficher}}
+\renewcommand{\algorithmicreturn}{\textbf{retourner}}
+\renewcommand{\algorithmictrue}{\textbf{vrai}}
+\renewcommand{\algorithmicfalse}{\textbf{faux}}
+
+\renewcommand{\algorithmicand}{\textbf{et}}
+\renewcommand{\algorithmicor}{\textbf{ou}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\todo}[1]{\textcolor{red}{\emph{\textbf{TODO} : #1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ██   ██ ███████ ██      ██████
+% ██   ██ ██      ██      ██   ██
+% ███████ █████   ██      ██████
+% ██   ██ ██      ██      ██
+% ██   ██ ███████ ███████ ██
+
+
+
+\newcommand{\hdelta}{\hat{\delta}}
+\newcommand{\automaton}{$A=(Q,\Sigma, q_0, \delta, F)$\ }
+\newcommand{\automatonbis}{$B=(Q_B,\Sigma_b, q_b, \delta_b, F_b)$\ }
+\newcommand{\fifo}{$F=(Q,C, \Sigma, q_0, \Theta, \delta)$\ }
+\newcommand{\fifoA}{$A=(Q_A,C, \Sigma, q_{0A}, \Theta_A, \delta_A)$\ }
+\newcommand{\fifoB}{$B=(Q_B,C, \Sigma, q_{0B}, \Theta_B, \delta_B)$\ }
+\newcommand{\tsys}{$\mathcal{T}=(S,\Theta, \rightarrow)$\ }
+\newcommand{\barTheta}{$\bar{\Theta}$\ }
+
+\newcommand{\rf}{$R_F$\ } % F comme états finaux
+\newcommand{\ra}{$R_A$\ } % comme ça on sait de quel automate on parle
+\newcommand{\rl}{$R_L$\ } % comme ça on sait de quel langage on parle
+\newcommand{\ro}{$R_O$\ } % comme ça on sait de quelle table O on parle
+\newcommand{\fl}{$\mathcal{F}(L)$\ }
+\newcommand{\wl}{$\mathcal{W}(L)$\ }
+\newcommand{\xor}{\oplus}
+\newcommand{\alfx}{$AL(F)\xor L$\ }
+\newcommand{\bt}{\bar{\theta}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usetheme[navigation]{UMONS}
+%\usetheme[navigation, no-subsection, no-totalframenumber]{UMONS}
+
+\newcommand{\IR}{\mathbb{R}}
+
+
+\title{Vérification de la sécurité d'automates à files par apprentissage actif}
+\author[B. André]{Benjamin André}
+\institute[(Info)]{%
+	Département d'Informatique\\
+	Université de Mons
+	\\[2ex]
+	\includegraphics[height=4ex]{res/UMONS}\hspace{2em}%
+	\raisebox{-1ex}{\includegraphics[height=6ex]{res/UMONS_FS}}
+}
+
+\begin{document}
+	
+	\begin{frame}[plain]
+		\titlepage
+	\end{frame}
+	
+	\begin{frame}
+		\tableofcontents
+	\end{frame}
+	
+	
+	\section{Introduction}
+	\subsection{Automates à files}
+		\begin{frame}
+			\frametitle{Automates à files}
+			\vspace{-0.5cm}
+			\only<1>{\vspace{-1.3cm}
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+					
+					\tikzstyle{every state}=[circle]
+					
+					\node[initial,state] (A)                    {$q_0$};
+					\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+					\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+					\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+					
+					\path
+					(A) edge node {$\theta_1(a!0)$} (B)
+					(A) edge node[below left] {$\theta_2(a!1)$} (C)
+					(B) edge node {$\theta_4(a?0)$} (D)
+					(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+					(C) edge node[below right] {$\theta_6(a?1)$} (D)
+					(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+					(D) edge node[above] {$\theta_7(b?0)$} (A)
+					;
+				\end{tikzpicture}
+			\end{figure}
+			}
+		
+			\only<2>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state,fill=green!60!white] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\epsilon$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<3>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						1\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<4>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						1\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<5>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|c|}
+						\hline
+						0&0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<6>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state,fill=green!60!white]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|c|}
+						\hline
+						0&0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<7>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state,fill=green!60!white] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<8>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state,fill=green!60!white]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<9>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state,fill=green!60!white]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_3$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						0\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|c|}
+						\hline
+						0&1\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<10>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state,fill=green!60!white]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_3\theta_4$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|c|}
+						\hline
+						0&1\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		
+			\only<11>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state,fill=green!60!white] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_3\theta_4\theta_7$$
+				\vspace{-0.9cm}
+				\begin{figure}
+					a:
+					\begin{tabular}{|c|}
+						\hline
+						$\epsilon$\\
+						\hline
+					\end{tabular}
+				\end{figure}
+				\vspace{-0.5cm}
+				\begin{figure}
+					b:
+					\begin{tabular}{|c|}
+						\hline
+						1\\
+						\hline
+					\end{tabular}
+				\end{figure}
+			}
+		\end{frame}
+	
+		
+	
+	
+	
+	
+	
+	\subsection{Sécurité}
+		\begin{frame}
+			\frametitle{Sécurité}
+			\vspace{-0.5cm}
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+					
+					\tikzstyle{every state}=[circle]
+					
+					\node[initial,state,fill=red!60!white] (A)                    {$q_0$};
+					\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+					\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+					\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+					
+					\path
+					(A) edge node {$\theta_1(a!0)$} (B)
+					(A) edge node[below left] {$\theta_2(a!1)$} (C)
+					(B) edge node {$\theta_4(a?0)$} (D)
+					(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+					(C) edge node[below right] {$\theta_6(a?1)$} (D)
+					(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+					(D) edge node[above] {$\theta_7(b?0)$} (A)
+					;
+				\end{tikzpicture}
+			\end{figure}
+			$$?$$
+			\vspace{-0.9cm}
+			\begin{figure}
+				a:
+				\begin{tabular}{|c|}
+					\hline
+					\rowcolor{red!60!white}
+					$\epsilon$\\
+					\hline
+				\end{tabular}
+			\end{figure}
+			\vspace{-0.5cm}
+			\begin{figure}
+				b:
+				\begin{tabular}{|c|c|}
+					\hline
+					\rowcolor{red!60!white}
+					1 & 1\\
+					\hline
+				\end{tabular}
+			\end{figure}
+	\end{frame}
+
+
+	\subsection{Complexité}
+	\begin{frame}
+		\frametitle{Complexité}
+		\vspace{-1cm}
+		\begin{figure}[H]
+			\centering
+			\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,scale=0.6, every node/.style={scale=0.6}]
+				
+				\tikzstyle{every state}=[rectangle, rounded corners=.2cm]
+				
+				
+				\node[state,initial] (A)                                   {$(q_0,[\epsilon,\epsilon])$};
+				\node[state] (B) [above right= 0.5cm and 1 cm of A]  {$(q_1,[0,\epsilon])$};
+				\node[state] (C) [below right= 0.5cm and 1 cm of A]  {$(q_2,[1,\epsilon])$};
+				\node[state] (D) [above      = 1cm            of B]  {$(q_1,[0,1])$};
+				\node[state] (E) [      right=           1 cm of B]  {$(q_3,[\epsilon,\epsilon])$};
+				
+				\node[state] (F) [below      = 1cm            of C] {\dots};
+				\node[state] (G) [right      = 1cm            of C] {\dots};
+				\node[state] (H) [above      = 1cm            of D] {\dots};
+				\node[state] (I) [right      = 1cm            of D] {\dots};
+				\node[state] (J) [right      = 1cm            of E] {\dots};
+				\node[state] (K) [below       = 1cm            of A] {\dots};
+				
+				
+				\path
+				(A) edge node {$\theta_1$} (B)
+				(A) edge node {$\theta_2$} (C)
+				(B) edge node {$\theta_3$} (D)
+				(B) edge node {$\theta_4$} (E)
+				(C) edge node {$\theta_5$} (F)
+				(C) edge node {$\theta_6$} (G)
+				(D) edge node {$\theta_3$} (H)
+				(D) edge node {$\theta_4$} (I)
+				(E) edge node {$\theta_7$} (J)
+				(K) edge node {$\theta_7$} (A)
+				;
+			\end{tikzpicture}
+		\end{figure}
+	\end{frame}
+
+	\subsection{Apprentissage actif}
+		\begin{frame}
+			\frametitle{Apprentissage actif}
+			
+			\begin{figure}[H]
+				\centering
+				\begin{tikzpicture}[scale=0.8, every node/.style={scale=0.8}]
+					\tikzset{>=latex}
+					
+					\draw (0,1) rectangle (5,0) node[pos=.5] {Élève ($L^*$)};
+					\draw (8,1) rectangle (13,-2);
+					
+					\draw (8.2,-0.1) rectangle (12.8,-0.9) node[pos=.5] {Oracle d'appartenance};
+					\draw (8.2,-1.1) rectangle (12.8,-1.9) node[pos=.5] {Oracle d'équivalence};
+					
+					\draw (10.5, -3.5) circle (1);
+					\draw (2.5, -3.5) circle (1);
+					
+					\node[draw=none] at (10.5, 0.5) {Professeur} ;
+					\node[draw=none] at (10.5,-3.5) {ADF};
+					\node[draw=none] at (2.5,-3.5) {$A_O$};
+					
+					\draw[<->] (5,0.8) -- (8,0.8) node[pos=0.5,above] {appartenance ?};
+					\draw[<->] (5,0.2) -- (8,0.2) node[pos=0.5,below] {équivalence ?};
+					
+					\draw[<->] (10.5, -2) -- (10.5,-2.5);
+					\draw[<->] (2.5, 0) -- (2.5,-2.5);
+				\end{tikzpicture}
+			\end{figure}
+		\end{frame}	
+	
+	\section{Méthode utilisée}
+	
+	\subsection{Apprentissage de AL(F)}
+	\begin{frame}
+		\frametitle{Apprentissage de AL(F)}
+		\vspace{-1cm}
+		\begin{figure}[H]
+			\centering
+			
+			\resizebox{\textwidth}{!}{
+				\begin{tikzpicture}
+					\tikzset{>=latex}
+					
+					\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+					\draw (5,0) rectangle (17.5,-4);
+					\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+					
+					\draw (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+					\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+					\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+					
+					\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+					
+					\draw (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+					\draw (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+					\draw (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+					
+					\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+					\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+					\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+					\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+					\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+					
+					\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+					\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+					
+					\node[draw=none] at (11.25, 1.15) {Automate sûr};
+					\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+					
+					
+				\end{tikzpicture}
+			}
+		\end{figure}		
+	\end{frame}
+	
+	\subsection{Langage de traces annotées}
+		\begin{frame}
+			\frametitle{Langage de traces annotées}
+			
+			\vspace{-0.5cm}
+			\only<1>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state,fill=green!60!white] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\epsilon$$
+				\vspace{-0.5cm}
+				$$\epsilon$$
+			}
+			
+			\only<2>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2$$
+				\vspace{-0.5cm}
+				$$\theta_2$$
+			}
+			
+			\only<3>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5$$
+				\vspace{-0.5cm}
+				$$\theta_2\theta_5$$
+			}
+			
+			\only<4>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state,fill=green!60!white]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5$$
+				\vspace{-0.5cm}
+				$$\theta_2\theta_5\theta_5$$
+			}
+			
+			\only<5>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state,fill=green!60!white]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6$$
+				\vspace{-0.5cm}
+				$$\bt_2\theta_5\theta_5$$
+			}
+			
+			\only<6>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2.5cm, semithick, bend angle=10,  scale=0.7, every node/.style={scale=0.7}]
+						
+						\tikzstyle{every state}=[circle]
+						
+						\node[initial,state,fill=green!60!white] (A)                    {$q_0$};
+						\node[state]         (B) [above right= 1cm and 3 cm of A] {$q_1$};
+						\node[state]         (C) [below right= 1cm and 3 cm of A] {$q_2$};
+						\node[state]         (D) [above right= 1cm and 3 cm of C] {$q_3$};
+						
+						\path
+						(A) edge node {$\theta_1(a!0)$} (B)
+						(A) edge node[below left] {$\theta_2(a!1)$} (C)
+						(B) edge node {$\theta_4(a?0)$} (D)
+						(B) edge[loop above] node {$\theta_3(b!1)$} (B)
+						(C) edge node[below right] {$\theta_6(a?1)$} (D)
+						(C) edge [loop below] node{$\theta_5(b!0)$} (C)
+						(D) edge node[above] {$\theta_7(b?0)$} (A)
+						;
+					\end{tikzpicture}
+				\end{figure}
+				$$\theta_2\theta_5\theta_5\theta_6\theta_7$$
+				\vspace{-0.5cm}
+				$$\bt_2\bt_5\theta_5$$
+			}			
+		\end{frame}
+	
+	
+
+	\subsection{Oracle d'appartenance}
+		\begin{frame}
+			\frametitle{Oracle d'appartenance}
+			
+			
+			$$\bt_2\bt_5\bt_5\bt_1\theta_3$$
+			
+			
+			$$\downarrow Existe?$$
+			
+			$$\theta_2\theta_5\theta_5\theta_6\theta_7\theta_1\theta_3\theta_4\theta_7$$
+			
+			
+			
+		\end{frame}
+	
+		\begin{frame}
+			\frametitle{Oracle d'appartenance}
+			% MAIS ATTENDEZ, REVENONS AU SCHEMA D'AVANT. CA VEUT DIRE QU'UN DES "BLOCS" EST BON NON ?
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+			
+		\end{frame}
+	
+	
+	\subsection{Point fixe}
+		\begin{frame}
+			\frametitle{Point fixe}
+			
+			\only<1>{$$\mathcal{F}(L)$$}
+			
+			\only<2>{
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state,accepting] (1)   [right of=0] {};
+						\node[ellipse] [left of=0] {};
+						\path
+						(0) edge node {$t_p$} (1)
+						;
+						\draw (-1,0) ellipse[x radius=1.5,y radius=1];
+					\end{tikzpicture}
+					\caption{Avant}
+				\end{subfigure}\hfill
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state] (1) [right of=0] {};
+						\node[state,accepting] (2)   [right of=1] {};
+						
+						\path
+						(0) edge node {$\theta$} (1)
+						(1) edge node {$t_q$} (2)
+						;
+						\draw (-1,0) ellipse[x radius=1.5,y radius=1];
+					\end{tikzpicture}
+					\caption{Après}
+				\end{subfigure}
+				\caption{$Post(L',\theta)$ avec $\theta$ de forme $c!a$}
+			\end{figure}
+			}
+		
+			\only<3>{
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state,accepting] (1)   [right of=0] {};
+						\node[ellipse] [left of=0] {};
+						\path
+						(0) edge node {$t_p$} (1)
+						;
+						\draw (-1,0) ellipse[x radius=1.5,y radius=1];
+					\end{tikzpicture}
+					\caption{Avant}
+				\end{subfigure}\hfill
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state,accepting] (1)   [right of=0] {};
+						\node[ellipse] [left of=0] {};
+						\path
+						(0) edge node {$t_q$} (1)
+						;
+						\draw (-1,0) ellipse[x radius=1.5,y radius=1];
+					\end{tikzpicture}
+					\caption{Après}
+				\end{subfigure}
+				\caption{$Post(L',\theta)$ avec $\theta$ de forme $\tau$}
+			\end{figure}
+			}
+		
+			\only<4>{
+				\begin{figure}[H]
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {$r$};
+						\node[state] (1) [right of=0] {$s$};
+						
+						\node[state] (2) [right=4.5cm of 0] {$r'$};
+						\node[state] (3) [right of=2] {$s'$};
+						
+						\path
+						(0) edge[bend right=30] node {$\bt_s$} (3)
+						(2) edge node {$\theta_s$} (3)
+						;
+						\path [dashed]
+						(0) edge node {$\theta_s$} (1)
+						;
+						\draw (-1,-1.5) rectangle ++(3,3);
+						\draw (4,-1.5) rectangle ++(3,3);
+						
+						\node at(0.5,-2) {$A'$};
+						\node at(5.5,-2) {$A'_{copie}$};
+						
+					\end{tikzpicture}
+					\caption{Première étape de $Post(L',\theta)$ avec $\theta$ de forme $c?a$}
+				\end{figure}		
+			}
+		
+			\only<5>{
+			\begin{figure}[H]
+				\centering
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state,accepting] (1)   [right of=0] {};
+						\path
+						(0) edge node {$t_p$} (1)
+						;
+						\draw (-2,-1) rectangle ++(4,2);
+					\end{tikzpicture}
+					\caption{Avant}
+				\end{subfigure}\hfill
+				\begin{subfigure}{0.5\linewidth}
+					\centering
+					\begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=3cm, semithick, bend angle=10]
+						\tikzstyle{every state}=[circle,scale=0.5]
+						\node[state] (0) {};
+						\node[state,accepting] (1)   [right of=0] {};
+						
+						\path
+						(0) edge node {$t_q$} (1)
+						;
+						\draw (-2,-1) rectangle ++(4,2);
+					\end{tikzpicture}
+					\caption{Après}
+				\end{subfigure}
+				\caption{Fin du calcul de $Post(L',\theta)$ avec $\theta$ de la forme $c?a$}
+			\end{figure}
+			}
+			
+			
+		\end{frame}
+	
+	
+			\begin{frame}
+			\frametitle{Point fixe}
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw [fill=black!30!green] (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+			
+		\end{frame}
+	
+	\subsection{Intersection avec la zone à risque}
+		\begin{frame}
+			\frametitle{Intersection avec la zone à risque}
+		\end{frame}
+	
+		\begin{frame}
+			\frametitle{Intersection avec la zone à risque}
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw [fill=black!30!green] (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw [fill=black!30!green] (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+			
+		\end{frame}
+	
+	
+	\subsection{Validité du chemin}
+		\begin{frame}
+			\frametitle{Validité du chemin}
+		\end{frame}
+	
+		\begin{frame}
+			% AYANT CODE CETTE REPONSE, BOOM, ON A UN BLOC VERT EN PLUS
+			\frametitle{Validité du chemin}
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw [fill=black!30!green] (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw [fill=black!30!green] (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw  [fill=black!30!green] (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+		\end{frame}
+
+		\begin{frame}
+			% MAIS ATTENDEZ ! COMME TOUT EST BON DANS L'ORACLE D'EQUIVALENCE, L'ORACLE EST PRET NON ?
+			\frametitle{Validité du chemin}
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw [fill=black!30!green] (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw  (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw  (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw   (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+			
+		\end{frame}
+	
+	
+		\begin{frame}
+			% MAIS ATTENDEZ ! J'UTILISE UNE LIBRAIRIE QUI A DEJA CODE ANGLUIN. TOUT LE TRAVAILLE FAIT PRECEDEMMENT PAYE ICI !!!!
+			\frametitle{Validité du chemin}
+			
+			\vspace{-1cm}
+			\begin{figure}[H]
+				\centering
+				
+				\resizebox{\textwidth}{!}{
+					\begin{tikzpicture}
+						\tikzset{>=latex}
+						
+						\draw [fill=black!30!green] (-3,-2.9) rectangle (0,-4.4) node[pos=.5] {Élève ($L^*$)};
+						\draw [fill=black!30!green] (5,0) rectangle (17.5,-4);
+						\draw[->] (0,-3.1) -- (5.3,-3.1) node[pos=0.5,below,text width=4cm] {L est-il le language à apprendre ?};
+						
+						\draw [fill=black!30!green] (-3,-0.3) rectangle (0,-1.5) node[pos=.5,text width=3cm,align=center] {Oracle\\ d'appartenance};
+						\draw[->] (-1.4,-2.9) -- (-1.4,-1.5) node[pos=0.5,right,text width=5cm] {$\gamma$ appartient-il au language à apprendre ?};
+						\draw[<-] (-1.6,-2.9) -- (-1.6,-1.5) node[pos=0.5,left] {oui/non};
+						
+						\node[draw=none] at (11.25, -3.7) {Oracle d'équivalence};
+						
+						\draw  (5.3, -0.3) rectangle (8.6, -3.2) node[pos=0.5,text width=3cm,align=center] {L est-il un point fixe ?};
+						\draw  (9.4, -0.3) rectangle (12.9, -3.2) node[pos=0.5,text width=3cm,align=center] {L intersecte-t-il une région à risque ?};
+						\draw   (13.7, -0.3) rectangle (17.2, -3.2) node[pos=0.5,text width=3cm,align=center] {Le chemin vers l'état à risque est-il valide ?};
+						
+						\draw[->] (8.6, -1.75) -- (9.4,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (12.9, -1.75) -- (13.7,-1.75) node[pos=0.5,below] {oui};
+						\draw[->] (15.45, -4.3) -- (0, -4.3) node[pos=0.35,below] {non,contre-exemple fourni};
+						\draw[-] (7.05, -3.2) -- (7.05, -4.3);
+						\draw[-] (15.45, -3.2) -- (15.45, -4.3);
+						
+						\draw[->] (11.25,-0.3) -- (11.25,0.9)node[pos=0.5,left] {non};
+						\draw[->] (15.45,-0.3) -- (15.45,0.9)node[pos=0.5,left] {oui};
+						
+						\node[draw=none] at (11.25, 1.15) {Automate sûr};
+						\node[draw=none,text width=4.5cm] at (15.45, 1.36) {Automate à risque, contre-exemple fourni};
+						
+						
+					\end{tikzpicture}
+				}
+			\end{figure}
+		\end{frame}
+	
+	
+	
+	\section{Conclusion}
+		\begin{frame}
+			\frametitle{Conclusion}
+		\end{frame}
+	
+\newpage
+\bibliographystyle{siam}
+\bibliography{refs.bib}
+	
+	
+\end{document}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
